@@ -300,10 +300,13 @@ website} cheatsheet for a summary on writing Rmd writing tips.
 \subsection{A Review of Portfolio Construction
 Algorithms}\label{a-review-of-portfolio-construction-algorithms}}
 
-\emph{introduction} Since Harry Markovitz's (1952) seminal work on mean
-variance portfolios scholars around the globe have been aspiring to
-develop a robust algorithm capable of \textbf{\emph{ex ante}} situating
-a portfolio on the efficient frontier
+\hypertarget{introduction-1}{%
+\subsubsection{Introduction}\label{introduction-1}}
+
+Since Harry Markovitz's (1952) seminal work on mean variance portfolios
+scholars around the globe have been aspiring to develop a robust
+algorithm capable of \textbf{\emph{ex ante}} situating a portfolio on
+the efficient frontier
 (\protect\hyperlink{ref-Markovitz}{\textbf{Markovitz?}}). There are now
 a wide array of alternatives, with many more in the making.
 
@@ -339,10 +342,12 @@ inverse variance, hierarchical risk parity, ERC and the minimum variance
 portfolios. \emph{The theoretical underpinnings of each will be reviewed
 as well as their relative performance in historical back tests}.
 
-\emph{Minimum Variance} Portfolio optimisers designed to exhibit the
-minimum variance have garnered allot of attention for themselves,
-largely to their tendency to achieve surprisingly high returns in
-historical back tests
+\hypertarget{minimum-variance}{%
+\subsubsection{Minimum Variance}\label{minimum-variance}}
+
+Portfolio optimisers designed to exhibit the minimum variance have
+garnered allot of attention for themselves, largely to their tendency to
+achieve surprisingly high returns in historical back tests
 (\protect\hyperlink{ref-clarke2011}{\textbf{clarke2011?}}). This
 performance has been attributed to the surprising fact that both low
 volatility stocks tend to earn returns in excess of the market, and that
@@ -398,11 +403,27 @@ investable securities.
 
 \textbf{mention first rule of investing??}
 
-\emph{Hierarchical Risk Parity (HRP)} Due to the multitude of robustness
-issues related to traditional portfolio optimisers,
-(\protect\hyperlink{ref-lopez}{\textbf{lopez?}}) developed a new
-approach incorporating machine-learning methods and graph theory
-(\protect\hyperlink{ref-arevalo}{\textbf{arevalo?}}).
+\hypertarget{equally-weighted-risk-contributions-erc}{%
+\subsubsection{Equally-Weighted Risk Contributions
+(ERC)}\label{equally-weighted-risk-contributions-erc}}
+
+The ERC portfolio is another optimiser that avoids using expected
+returns and is therefore said to be more robust
+(\protect\hyperlink{ref-maillard}{\textbf{maillard?}}). The basic idea
+behind the ERC is to weight the portfolio such that each security
+contributes equally to risk
+(\protect\hyperlink{ref-maillard}{\textbf{maillard?}}). The ERC
+portfolio \(x=(x_1,x_2,...,x_n)\) consisting of n assets is designed as
+follows:
+
+\hypertarget{hierarchical-risk-parity-hrp}{%
+\subsubsection{Hierarchical Risk Parity
+(HRP)}\label{hierarchical-risk-parity-hrp}}
+
+Due to the multitude of robustness issues related to traditional
+portfolio optimisers, (\protect\hyperlink{ref-lopez}{\textbf{lopez?}})
+developed a new approach incorporating machine-learning methods and
+graph theory (\protect\hyperlink{ref-arevalo}{\textbf{arevalo?}}).
 (\protect\hyperlink{ref-lopez}{\textbf{lopez?}}) argues that the ``lack
 of hierarchical structure in a correlation matrix allows weights to vary
 freely in unintended way'' and that this contributes to the instability
@@ -432,10 +453,14 @@ procedure works in three stages:
   allocation (\protect\hyperlink{ref-lopez}{\textbf{lopez?}}).
 \end{enumerate}
 
+Note that each of the three steps \emph{(or just step 1 and 3??)} can be
+completed with an range of alternative techniques, which in turn effect
+the solution.
+
 (\protect\hyperlink{ref-lopez}{\textbf{lopez?}}) carried out an in
 sample simulation study comparing the respective allocations of the
 long-only minimum variance, IVP and HRP portfolios using a covariance
-matrix with a condition number that is ``not unfavourable'' to the
+matrix using a condition number that is ``not unfavourable'' to the
 minimum variance portfolio. The simulated data consisted of 10000
 observations across 10 variables. The following findings were made: The
 minimum variance portfolio concentrated 92.66\% of funds in the top 5
@@ -453,7 +478,9 @@ idiosyncratic risk incidents within its top holdings
 validated by the finding that HRP achieved significantly lower out of
 sample variance compared to the minimum variance portfolio.
 
-\emph{Inverse Variance Portfolio (IVP)}
+\hypertarget{inverse-variance-portfolio-ivp}{%
+\subsubsection{Inverse Variance Portfolio
+(IVP)}\label{inverse-variance-portfolio-ivp}}
 
 \hypertarget{data}{%
 \section*{Data}\label{data}}
