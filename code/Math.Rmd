@@ -1,0 +1,28 @@
+---
+title: "Untitled"
+author: "Nathan Potgieetr"
+date: "03/01/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Equally Risk Contributions (ERC)
+
+The ERC portfolio is another optimiser that intentionally avoids using expected returns and is therefore said to be more robust to estimation error [@maillard2010]. The basic idea behind the ERC is to weight the portfolio such that each security contributes equally to risk, which in turn maximises risk diversification [@maillard2010]. Generally speaking the ERC acts similar to a weight constrained minimum variance portfolio, with constraints ensuring that adequate diversification is maintained. The weights of the ERC portfolio $x=(x_1,x_2,...,x_n)$ consisting of n assets is calculated as follows.
+
+let $\sigma_i^2$ resemble asset i's variance, $\sigma_{ij}$ the covariance between asset i and j and $\sum$ be the markets variance covariance matrix. Portfolio risk can now be written as $sigma(x)=\sqrt{x^T\sum x}=\sum_i\sum_{j\neq i}x_ix_j\sigma_{ij}$ [@maillard2010]. The marginal risk contribution $\partial_{x_i}\sigma(x)$ can then be defined as follows [@maillard2010]:
+
+$\partial_{x_i}\sigma(x)=\frac{\partial\sigma(x)}{\partial x_i}=\frac{x_i\sigma_i^2+\sum_{j\neq i}x_j\sigma_{ij}}{\sigma(x)}$
+
+
+Therefore, $\partial_{x_i}\sigma(x)$ refers to the change in portfolio volatility resulting from a small change in asset i's weight. ERC uses this definition to guide its algorithms central objective to equate the risk contribution for each asset in the portfolio _ex ante_. If we define $(\sum x)_i$ as the $i^{th}$ row resulting from the product of $\sum$ with x and note that $\partial_{x_i}\sigma(x)=(\sum x)_i$, then the optimal ERC weight can be written as [@maillard2010]:
+
+$x^*=\{x \ \epsilon[0,1]^n:\sum x_i=1, x_i \times (\sum x)_i=x_j \times (\sum x)_j \ \forall  \ i,j \}$
+
+@choueifaty2013 conducted an empirical back test comparing the relative performance if numerous portfolio optimisers. They used historical data from the MSCI World world index and considered the largest 50% of assets at each semi-annual rebalance date. The covariance matrices used in the portfolio optimisers were estimated using a years worth of data. 
+
+
+

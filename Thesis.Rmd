@@ -3,7 +3,7 @@
 # Remove comments and add values where applicable.
 # The descriptions below should be self-explanatory
 
-title: "Evaluating Portfolio Optimisters with Simulated Markets Exhibiting Left-Tail Dependence"
+title: "Helping You Write Academic Papers in R using Texevier"
 #subtitle: "This will appear as Right Header"
 
 documentclass: "elsarticle"
@@ -130,58 +130,73 @@ To reference a section, you have to set a label using ``\\label'' in R, and then
 
 Writing in Rmarkdown is surprizingly easy - see [this website](https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf) cheatsheet for a summary on writing Rmd writing tips.
 
+# Aims and Objectives
+
+This work aims to use Monte Carlo Methods to uncover the relationship between a market's covariance structure and the risk return properties of various portfolio optimisation algorithms. This will be achieved through the following objectives.
+
+1. Design and create five distinct \emph{ad hoc} _20 by 20_ correlation matrices, each corresponding to a different risk structure or market type. These will range from a structure possessing no clusters to those possessing hierarchical clustering.
+
+2. Use the R package _MCmarket_ to perform Monte Carlo Simulations for each of the five _ad hoc_ correlation matrices. The markets will be designed to have student t multivariate distributions, with 3 degrees of freedom, the returns will each be univariate normally distributed with a periodic mean of 0.02 and standard deviation of 0.1. Each market type will be simulated 10 000 times across 300 periods. 
+
+3. Use the simulated markets to calculate the returns obtained from the portfolio optimisers. The first 50 periods will be used estimate the _ex ante_ covariance matrix and the portfolio returns will be calculated on the remaining 250 periods. (should properly incorporate rebalancing!!!!!!! every 50 periods?). The 
+
+4. The performance of each portfolio optimiser will then be compared and contrasted using various portfolio risk/return analytics. Portfolio optimisers will be compared with each other within market types and with themselves across markets types.  
+
+
 # Litrature Review
 
-## A Review of Portfolio Construction Algorithms
+## A Review of Portfolio Optimisation Algorithms
 
 ### Introduction
 
-Since Harry Markovitz's (1952) seminal work on mean variance portfolios scholars around the globe have been aspiring to develop a robust algorithm capable of ___ex ante___ situating a portfolio on the efficient frontier [@Markovitz]. There are now a wide array of alternatives, with many more in the making.
+Since Harry Markovitz's (1952) seminal work on mean variance portfolios scholars around the globe have been aspiring to develop a robust algorithm capable of _ex ante_ situating a portfolio on the efficient frontier [@Markovitz]. There are now a wide array of alternatives, with many more in the making.
 
 These optimisers however are not without their flaws. Mean variance optimisers rely heavily on the accuracy of return forecasts, where small errors often lead to vastly different returns [@lopez]. Furthermore, quadratic programming methods used in portfolio optimisation require the inversion of some positive-definite covariance matrix, which can be susceptible to error if the covariance matrix suffers from a high condition number ^[A condition number is defined as the absolute value of the ratio between a covariance matrix's largest and smallest eigenvalues [@lopez]] [@lopez; @lopez2012]. Diagonal matrices have the smallest condition number which increases as more correlated variables are added. A small change in correlation within any given entry can greatly alter the inverse of a high conditional number matrix, __which in turn can greatly effect the portfolio weights__ [@lopez]. For a given sample size, larger co-variance matrices are prone to more noise in estimation. This si essentially due to a reduction in degrees of freedom as a sample of at least $1/2N(N+1)$ independent and identically distributed (iid) observations are required to estimate an $N\times N$ covariance matrix. This issues is exacerbated by the fact that a markets covariance structure tends to vary over time [@lopez].
 
 Due to the sensitivity issues surrounding errors in the expected return estimation, this work will only discuss the portfolio optimisation techniques that forego this input. These include the naive equal weight, inverse variance, hierarchical risk parity, ERC and the minimum variance portfolios. _The theoretical underpinnings of each will be reviewed as well as their relative performance in historical back tests_.
 
+### Naive Equal Weight
+
+Perhaps the oldest and most simple portfolio diversification heuristic constitutes holding a weight of $1/N$ of the $N$ total assets available to the investor[@demiguel2009]. This portfolio is commonly called the equal weight or 1/N portfolio, its failure to recognise the importance of covariation between assets has resulted in it also being referred to as the naive portfolio. It commonly used as a benchmark index. Despite its simplistic nature empirical studies tend to find a statistically insignificant difference in Sharp ratio between the naive portfolio and more advanced portfolio optimisers, these include but are not limited to the mean-variance, minimum-variance and Bayes-Stein portfolio's [@demiguel2009]. It is also know to perform surprisingly well form a total return perspective.
+
 ### Minimum Variance
-Portfolio optimisers designed to exhibit the minimum variance have garnered allot of attention for themselves, largely to their tendency to achieve surprisingly high returns in historical back tests [@clarke2011]. This performance has been attributed to the surprising fact that both low volatility stocks tend to earn returns in excess of the market, and that high beta stocks tend not to be rewarded by higher returns [@clark2011; @fama1992]. These minimum variance portfolios tend to achieve cumulative returns equal to or slightly greater than market portfolio's whilst maintaining consistently lower variance and achieving a noticeable improvement in downside risk mitigation in times of crisis [@clarke].
+
+Portfolio optimisers designed to exhibit the minimum variance have garnered a lot of attention for themselves, largely to their tendency to achieve surprisingly high returns in historical back tests [@clarke2011]. This performance has been attributed to the surprising fact that both low volatility stocks tend to earn returns in excess of the market, and that high beta stocks tend not to be rewarded by higher returns [@clark2011; @fama1992]. These minimum variance portfolios tend to achieve cumulative returns equal to or slightly greater than market portfolio's whilst maintaining consistently lower variance and achieving a noticeable improvement in downside risk mitigation in times of crisis [@clarke].
 
 _Who developed the min variance portfolio??_
-
-The weight attributed to an given security in the long-only minimum-variance portfolio is given in Eq. \ref{minvar_eq} [@clarke].
-
-\begin{align} 
-\label{minvar_eq} w_i=\sigma^2_{MV}/\sigma^2_{\epsilon i}(1-\beta_i/\beta_{L})\ \ for \ \ \beta_i<\beta_L \ \ else\ w_i=0
-\end{align}
-
-where
-
-+ $\sigma^2_{LMV}$ is the ex ante return variance of the long-only minimum variance portfolio.
-+ $\sigma^2_{\epsilon i}$ is the ex ante idiosyncratic return variance for security i.
-+ $\beta_i$ ex ante market beta for security i.
-+ $\beta_{L}$ is the long-only threshold beta.
-
-The simplicity of Eq. \ref{minvar_eq} can be attributed to the simplifying assumption of single index risk and the expected returns being absent from the objective function. Eq. \ref{minvar_eq} indicates that asset weights depend on two portfolio specific risk parameters, the ex ante variance of the long-only portfolio and the long only threshold beta, and two security specific risk parameters, the market beta and the idiosyncratic return variance [@clarke]. High market beta and idiosyncratic variance reduce an assets optimal weight towards zero, while a market beta greater than long-only threshold results in a optimal weight of zero [@clark]. Interestingly empirical results indicate that the long-only minimum variance portfolio tends to apply a zero weight to approximately 80% of investable securities. 
+@ -162,10 +164,10 @@ The simplicity of Eq. \ref{minvar_eq} can be attributed to the simplifying assum
 
 __mention first rule of investing??__
 
-### Equally-Weighted Risk Contributions (ERC)
-The ERC portfolio is another optimiser that avoids using expected returns and is therefore said to be more robust [@maillard]. The basic idea behind the ERC is to weight the portfolio such that each security contributes equally to risk [@maillard]. The ERC portfolio $x=(x_1,x_2,...,x_n)$ consisting of n assets is designed as follows: 
+### Equally Risk Contributions (ERC)
+
+The ERC portfolio is another optimiser that intentionally avoids using expected returns and is therefore said to be more robust to estimation error [@maillard2010]. The basic idea behind the ERC is to weight the portfolio such that each security contributes equally to risk, which in turn maximises risk diversification [@maillard2010]. Generally speaking the ERC acts similar to a weight constrained minimum variance portfolio, with constraints ensuring that adequate diversification is maintained. The weights of the ERC portfolio $x=(x_1,x_2,...,x_n)$ consisting of n assets is calculated as follows: 
+
+_PUT MATH PARAGRAPH HERE_
+
+Therefore, _partial risk cont equation__ refers to the change in portfolio volatility resulting from a small change in asset i's weight. ERC uses this definition to guide its algorithms central objective to equate the risk contribution for each asset in the portfolio _ex ante_. 
+
+
+
 
 ### Hierarchical Risk Parity (HRP)
+
 Due to the multitude of robustness issues related to traditional portfolio optimisers, @lopez developed a new approach incorporating machine-learning methods and graph theory [@arevalo]. @lopez argues that the "lack of hierarchical structure in a correlation matrix allows weights to vary freely in
-unintended way" and that this contributes to the instability issues. His HRP algorithm requires only a singular covariance matrix and can utilize the information within without the need for the positive definite property [@lopex]. This procedure works in three stages:
+unintended way" and that this contributes to the instability issues. His HRP algorithm requires only a singular covariance matrix and can utilize the information within without the need for the positive definite property [@lopez]. This procedure works in three stages:
 
-1) Tree clustering: This involves utilizing a hierarchical tree clustering method such that security weights can be determined downstream through a tree graph [@lopez]. 
-
-2) Quasi-diagonalization: this stage reorganizes the covariances matrix so that similar securities are placed near one another while dissimilar securities are far apart. This is done through an algorithm that situates the largest covariances near the diagonal and smaller covariances further away [@lopez].
-
-3) Recursive bisection: Portfolio funds are then allocated top down through the tree structure such that riskier clusters receive fewer funds. This can be accomplished through the inverse-variance allocation [@lopez].
-
-Note that each of the three steps _(or just step 1 and 3??)_ can be completed with an range of alternative techniques, which in turn effect the solution.
+@ -179,7 +181,7 @@ Note that each of the three steps _(or just step 1 and 3??)_ can be completed wi
 
 @lopez carried out an in sample simulation study comparing the respective allocations of the long-only minimum variance, IVP and HRP portfolios using a covariance matrix using a condition number that is "not unfavourable" to the minimum variance portfolio. The simulated data consisted of 10000 observations across 10 variables. The following findings were made: The minimum variance portfolio concentrated 92.66% of funds in the top 5 holdings and assigned a zero weight to 3 assets. _Conversly_, HRP only assigned 62.5% of its funds to the top 5 holdings [@lopez]. The minimum variance portfolio's objective function causes it to build highly concentrated portfolio's in favour of a small reduction in volatility; the HRP portfolio had only a slightly higher volatility [@lopez]. This apparent diversification advantage achieved by the minimum variance portfolio is rather deceptive as the portfolio remains highly susceptible to idiosyncratic risk incidents within its top holdings [@lopez]. This claim was further validated by the finding that HRP achieved significantly lower out of sample variance compared to the minimum variance portfolio. 
 
 ### Inverse Variance Portfolio (IVP)
+
+# Methadology
+
+# Results and Discussion
+
+# Conclusion 
+
+
 
 
 # Data  {-}

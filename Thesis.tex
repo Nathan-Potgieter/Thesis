@@ -183,8 +183,7 @@
 
 \begin{frontmatter}  %
 
-\title{Evaluating Portfolio Optimisters with Simulated Markets
-Exhibiting Left-Tail Dependence}
+\title{Helping You Write Academic Papers in R using Texevier}
 
 % Set to FALSE if wanting to remove title (for submission)
 
@@ -262,8 +261,7 @@ Multivariate GARCH \sep Kalman Filter \sep Copula \\ \vspace{0.3cm}
 \label{Introduction}}{Introduction }}\label{introduction}}
 
 References are to be made as follows:
-\protect\hyperlink{ref-fama1997}{Fama \& French}
-(\protect\hyperlink{ref-fama1997}{1997: 33}) and
+(\protect\hyperlink{ref-fama1997}{\textbf{fama1997?}}) and
 \protect\hyperlink{ref-grinold2000}{Grinold \& Kahn}
 (\protect\hyperlink{ref-grinold2000}{2000}) Such authors could also be
 referenced in brackets (\protect\hyperlink{ref-grinold2000}{Grinold \&
@@ -293,20 +291,56 @@ Writing in Rmarkdown is surprizingly easy - see
 \href{https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf}{this
 website} cheatsheet for a summary on writing Rmd writing tips.
 
+\hypertarget{aims-and-objectives}{%
+\section{Aims and Objectives}\label{aims-and-objectives}}
+
+This work aims to use Monte Carlo Methods to uncover the relationship
+between a market's covariance structure and the risk return properties
+of various portfolio optimisation algorithms. This will be achieved
+through the following objectives.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Design and create five distinct \emph{ad hoc} \emph{20 by 20}
+  correlation matrices, each corresponding to a different risk structure
+  or market type. These will range from a structure possessing no
+  clusters to those possessing hierarchical clustering.
+\item
+  Use the R package \emph{MCmarket} to perform Monte Carlo Simulations
+  for each of the five \emph{ad hoc} correlation matrices. The markets
+  will be designed to have student t multivariate distributions, with 3
+  degrees of freedom, the returns will each be univariate normally
+  distributed with a periodic mean of 0.02 and standard deviation of
+  0.1. Each market type will be simulated 10 000 times across 300
+  periods.
+\item
+  Use the simulated markets to calculate the returns obtained from the
+  portfolio optimisers. The first 50 periods will be used estimate the
+  \emph{ex ante} covariance matrix and the portfolio returns will be
+  calculated on the remaining 250 periods. (should properly incorporate
+  rebalancing!!!!!!! every 50 periods?). The
+\item
+  The performance of each portfolio optimiser will then be compared and
+  contrasted using various portfolio risk/return analytics. Portfolio
+  optimisers will be compared with each other within market types and
+  with themselves across markets types.
+\end{enumerate}
+
 \hypertarget{litrature-review}{%
 \section{Litrature Review}\label{litrature-review}}
 
-\hypertarget{a-review-of-portfolio-construction-algorithms}{%
-\subsection{A Review of Portfolio Construction
-Algorithms}\label{a-review-of-portfolio-construction-algorithms}}
+\hypertarget{a-review-of-portfolio-optimisation-algorithms}{%
+\subsection{A Review of Portfolio Optimisation
+Algorithms}\label{a-review-of-portfolio-optimisation-algorithms}}
 
 \hypertarget{introduction-1}{%
 \subsubsection{Introduction}\label{introduction-1}}
 
 Since Harry Markovitz's (1952) seminal work on mean variance portfolios
 scholars around the globe have been aspiring to develop a robust
-algorithm capable of \textbf{\emph{ex ante}} situating a portfolio on
-the efficient frontier
+algorithm capable of \emph{ex ante} situating a portfolio on the
+efficient frontier
 (\protect\hyperlink{ref-Markovitz}{\textbf{Markovitz?}}). There are now
 a wide array of alternatives, with many more in the making.
 
@@ -342,6 +376,23 @@ inverse variance, hierarchical risk parity, ERC and the minimum variance
 portfolios. \emph{The theoretical underpinnings of each will be reviewed
 as well as their relative performance in historical back tests}.
 
+\hypertarget{naive-equal-weight}{%
+\subsubsection{Naive Equal Weight}\label{naive-equal-weight}}
+
+Perhaps the oldest and most simple portfolio diversification heuristic
+constitutes holding a weight of \(1/N\) of the \(N\) total assets
+available to the investor(\protect\hyperlink{ref-demiguel2009}{DeMiguel,
+Garlappi \& Uppal, 2009}). Due to its failure to recognise the
+importance of covariation between assets this strategy will henceforth
+be referred to as the naive portfolio, it is also commonly called the
+equal weight or 1/N portfolio and is commonly used as a benchmark.
+Despite its simplistic nature empirical studies tend to find an
+insignificant difference in Sharp ratio between the naive portfolio and
+more advanced portfolio optimisers, these include but are not limited to
+the mean-variance, minimum-variance and Bayes-Stein portfolio's
+(\protect\hyperlink{ref-demiguel2009}{DeMiguel, Garlappi \& Uppal,
+2009}).
+
 \hypertarget{minimum-variance}{%
 \subsubsection{Minimum Variance}\label{minimum-variance}}
 
@@ -360,46 +411,9 @@ lower variance and achieving a noticeable improvement in downside risk
 mitigation in times of crisis
 (\protect\hyperlink{ref-clarke}{\textbf{clarke?}}).
 
-\emph{Who developed the min variance portfolio??}
-
-The weight attributed to an given security in the long-only
-minimum-variance portfolio is given in Eq. \ref{minvar_eq}
-(\protect\hyperlink{ref-clarke}{\textbf{clarke?}}).
-
-\begin{align} 
-\label{minvar_eq} w_i=\sigma^2_{MV}/\sigma^2_{\epsilon i}(1-\beta_i/\beta_{L})\ \ for \ \ \beta_i<\beta_L \ \ else\ w_i=0
-\end{align}
-
-where
-
-\begin{itemize}
-\tightlist
-\item
-  \(\sigma^2_{LMV}\) is the ex ante return variance of the long-only
-  minimum variance portfolio.
-\item
-  \(\sigma^2_{\epsilon i}\) is the ex ante idiosyncratic return variance
-  for security i.
-\item
-  \(\beta_i\) ex ante market beta for security i.
-\item
-  \(\beta_{L}\) is the long-only threshold beta.
-\end{itemize}
-
+\emph{Who developed the min variance portfolio??} @ -162,10 +164,10 @@
 The simplicity of Eq. \ref{minvar_eq} can be attributed to the
-simplifying assumption of single index risk and the expected returns
-being absent from the objective function. Eq. \ref{minvar_eq} indicates
-that asset weights depend on two portfolio specific risk parameters, the
-ex ante variance of the long-only portfolio and the long only threshold
-beta, and two security specific risk parameters, the market beta and the
-idiosyncratic return variance
-(\protect\hyperlink{ref-clarke}{\textbf{clarke?}}). High market beta and
-idiosyncratic variance reduce an assets optimal weight towards zero,
-while a market beta greater than long-only threshold results in a
-optimal weight of zero (\protect\hyperlink{ref-clark}{\textbf{clark?}}).
-Interestingly empirical results indicate that the long-only minimum
-variance portfolio tends to apply a zero weight to approximately 80\% of
-investable securities.
+simplifying assum
 
 \textbf{mention first rule of investing??}
 
@@ -407,14 +421,25 @@ investable securities.
 \subsubsection{Equally-Weighted Risk Contributions
 (ERC)}\label{equally-weighted-risk-contributions-erc}}
 
-The ERC portfolio is another optimiser that avoids using expected
-returns and is therefore said to be more robust
-(\protect\hyperlink{ref-maillard}{\textbf{maillard?}}). The basic idea
-behind the ERC is to weight the portfolio such that each security
-contributes equally to risk
-(\protect\hyperlink{ref-maillard}{\textbf{maillard?}}). The ERC
-portfolio \(x=(x_1,x_2,...,x_n)\) consisting of n assets is designed as
-follows:
+The ERC portfolio is another optimiser that intentionally avoids using
+expected returns and is therefore said to be more robust
+(\protect\hyperlink{ref-maillard2010}{Maillard, Roncalli \& Teı̈letche,
+2010}). The basic idea behind the ERC is to weight the portfolio such
+that each security contributes equally to risk, which in turn maximises
+risk diversification (\protect\hyperlink{ref-maillard2010}{Maillard,
+Roncalli \& Teı̈letche, 2010}). Generally speaking the ERC is similar to
+a weight constrained minimum variance portfolio, with constraints
+ensuring that adequate diversification is maintained. The weights of the
+ERC portfolio \(x=(x_1,x_2,...,x_n)\) consisting of n assets is
+calculated as follows:
+
+\emph{PUT MATH PARAGRAPH HERE}
+
+Therefore, \_partial risk cont equation\_\_ refers to the change in
+portfolio volatility resulting from a small change in asset i's weight.
+ERC uses this definition to guide its algorithms central objective to
+equate the risk contribution for each asset in the portfolio \emph{ex
+ante}.
 
 \hypertarget{hierarchical-risk-parity-hrp}{%
 \subsubsection{Hierarchical Risk Parity
@@ -429,33 +454,11 @@ of hierarchical structure in a correlation matrix allows weights to vary
 freely in unintended way'' and that this contributes to the instability
 issues. His HRP algorithm requires only a singular covariance matrix and
 can utilize the information within without the need for the positive
-definite property (\protect\hyperlink{ref-lopex}{\textbf{lopex?}}). This
+definite property (\protect\hyperlink{ref-lopez}{\textbf{lopez?}}). This
 procedure works in three stages:
 
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi})}
-\item
-  Tree clustering: This involves utilizing a hierarchical tree
-  clustering method such that security weights can be determined
-  downstream through a tree graph
-  (\protect\hyperlink{ref-lopez}{\textbf{lopez?}}).
-\item
-  Quasi-diagonalization: this stage reorganizes the covariances matrix
-  so that similar securities are placed near one another while
-  dissimilar securities are far apart. This is done through an algorithm
-  that situates the largest covariances near the diagonal and smaller
-  covariances further away
-  (\protect\hyperlink{ref-lopez}{\textbf{lopez?}}).
-\item
-  Recursive bisection: Portfolio funds are then allocated top down
-  through the tree structure such that riskier clusters receive fewer
-  funds. This can be accomplished through the inverse-variance
-  allocation (\protect\hyperlink{ref-lopez}{\textbf{lopez?}}).
-\end{enumerate}
-
-Note that each of the three steps \emph{(or just step 1 and 3??)} can be
-completed with an range of alternative techniques, which in turn effect
-the solution.
+@ -179,7 +181,7 @@ Note that each of the three steps \emph{(or just step
+1 and 3??)} can be completed wi
 
 (\protect\hyperlink{ref-lopez}{\textbf{lopez?}}) carried out an in
 sample simulation study comparing the respective allocations of the
@@ -481,6 +484,15 @@ sample variance compared to the minimum variance portfolio.
 \hypertarget{inverse-variance-portfolio-ivp}{%
 \subsubsection{Inverse Variance Portfolio
 (IVP)}\label{inverse-variance-portfolio-ivp}}
+
+\hypertarget{methadology}{%
+\section{Methadology}\label{methadology}}
+
+\hypertarget{results-and-discussion}{%
+\section{Results and Discussion}\label{results-and-discussion}}
+
+\hypertarget{conclusion}{%
+\section{Conclusion}\label{conclusion}}
 
 \hypertarget{data}{%
 \section*{Data}\label{data}}
@@ -598,11 +610,6 @@ Equations should be written as such:
 
 If you would like to see the equations as you type in Rmarkdown, use \$
 symbols instead (see this for yourself by adjusted the equation):
-
-\[
-\beta = \sum_{i = 1}^{\infty}\frac{\alpha^2}{\sigma_{t-1}^2} \\
-\int_{x = 1}^{\infty}x_{i} = 1
-\]
 
 Note again the reference to equation \ref{eq1}. Writing nice math
 requires practice. Note I used a forward slashes to make a space in the
@@ -873,8 +880,8 @@ To add lists, simply using the following notation
   \LaTeX environments!
 \end{itemize}
 
-\hypertarget{conclusion}{%
-\section{Conclusion}\label{conclusion}}
+\hypertarget{conclusion-1}{%
+\section{Conclusion}\label{conclusion-1}}
 
 I hope you find this template useful. Remember, stackoverflow is your
 friend - use it to find answers to questions. Feel free to write me a
@@ -892,9 +899,10 @@ in your bibtex file will not be included in References).
 
 \hypertarget{refs}{}
 \begin{CSLReferences}{1}{0}
-\leavevmode\hypertarget{ref-fama1997}{}%
-Fama, E.F. \& French, K.R. 1997. Industry costs of equity. \emph{Journal
-of financial economics}. 43(2):153--193.
+\leavevmode\hypertarget{ref-demiguel2009}{}%
+DeMiguel, V., Garlappi, L. \& Uppal, R. 2009. Optimal versus naive
+diversification: How inefficient is the 1/n portfolio strategy?
+\emph{The review of Financial studies}. 22(5):1915--1953.
 
 \leavevmode\hypertarget{ref-grinold2000}{}%
 Grinold, R.C. \& Kahn, R.N. 2000. Active portfolio management.
@@ -903,6 +911,11 @@ Grinold, R.C. \& Kahn, R.N. 2000. Active portfolio management.
 Katzke, N.F. 2017. \emph{{Texevier}: {P}ackage to create elsevier
 templates for rmarkdown}. Stellenbosch, South Africa: Bureau for
 Economic Research.
+
+\leavevmode\hypertarget{ref-maillard2010}{}%
+Maillard, S., Roncalli, T. \& Teı̈letche, J. 2010. The properties of
+equally weighted risk contribution portfolios. \emph{The Journal of
+Portfolio Management}. 36(4):60--70.
 
 \end{CSLReferences}
 
