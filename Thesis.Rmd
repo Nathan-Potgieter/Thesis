@@ -122,13 +122,9 @@ write_rds(Example_data, path = "data/Example_data.rds")
 
 # Introduction \label{Introduction}
 
-References are to be made as follows: @fama1997[p. 33] and @grinold2000 Such authors could also be referenced in brackets [@grinold2000] and together [@fama1997 \& @grinold2000]. Source the reference code from scholar.google.com by clicking on ``cite'' below article name. Then select BibTeX at the bottom of the Cite window, and proceed to copy and paste this code into your ref.bib file, located in the directory's Tex folder. Open this file in Rstudio for ease of management, else open it in your preferred Tex environment. Add and manage your article details here for simplicity - once saved, it will self-adjust in your paper.
+path dependence; first rule of investment management
 
-> I suggest renaming the top line after \@article, as done in the template ref.bib file, to something more intuitive for you to remember. Do not change the rest of the code. Also, be mindful of the fact that bib references from google scholar may at times be incorrect. Reference Latex forums for correct bibtex notation.
-
-To reference a section, you have to set a label using ``\\label'' in R, and then reference it in-text as e.g. referencing a later section, Section \ref{Meth}.
-
-Writing in Rmarkdown is surprizingly easy - see [this website](https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf) cheatsheet for a summary on writing Rmd writing tips.
+Due to the aforementioned sensitivity issues surrounding errors in the expected return estimation, this work will only cover the portfolio optimisation techniques that intentionally forego this input. These include the naive equal weight, inverse variance, hierarchical risk parity, ERC and the minimum variance portfolios. _The theoretical underpinnings of each will be reviewed as well as their relative performance in historical back tests_.
 
 # Aims and Objectives
 
@@ -136,7 +132,7 @@ This work aims to use Monte Carlo Methods to uncover the relationship between a 
 
 1. Design and create five distinct \emph{ad hoc} _20 by 20_ correlation matrices, each corresponding to a different risk structure or market type. These will range from a structure possessing no clusters to those possessing hierarchical clustering.
 
-2. Use the R package _MCmarket_ to perform Monte Carlo Simulations for each of the five _ad hoc_ correlation matrices. The markets will be designed to have student t multivariate distributions, with 3 degrees of freedom, the returns will each be univariate normally distributed with a periodic mean of 0.02 and standard deviation of 0.1. Each market type will be simulated 10 000 times across 300 periods. 
+2. Use the R package _MCmarket_ to perform Monte Carlo Simulations for each of the five _ad hoc_ correlation matrices [REFERENCE MYSELF]. The markets will be designed to have student t multivariate distributions, with 3 degrees of freedom, the returns will each be univariate normally distributed with a periodic mean of 0.02 and standard deviation of 0.1. Each market type will be simulated 10 000 times across 300 periods. 
 
 3. Use the simulated markets to calculate the returns obtained from the portfolio optimisers. The first 50 periods will be used estimate the _ex ante_ covariance matrix and the portfolio returns will be calculated on the remaining 250 periods. (should properly incorporate rebalancing!!!!!!! every 50 periods?). The 
 
@@ -149,312 +145,73 @@ This work aims to use Monte Carlo Methods to uncover the relationship between a 
 
 ### Introduction
 
-Since Harry Markovitz's (1952) seminal work on mean variance portfolios scholars around the globe have been aspiring to develop a robust algorithm capable of _ex ante_ situating a portfolio on the efficient frontier [@Markovitz]. There are now a wide array of alternatives, with many more in the making.
+Since Harry Markovitz's (1952) seminal work on the mean-variance portfolios scholars from around the globe have been aspiring to develop a robust algorithm capable of _ex ante_ situating a portfolio on the efficient frontier  [@markowitz]. There are now a wide array of available alternatives portfolio optimisers. They range from simple heuristic based approaches to advanced mathematical algorithms based on quadratic optimisation, random matrix theory and machine learning methods; many more are still in the making.
 
-These optimisers however are not without their flaws. Mean variance optimisers rely heavily on the accuracy of return forecasts, where small errors often lead to vastly different returns [@lopez]. Furthermore, quadratic programming methods used in portfolio optimisation require the inversion of some positive-definite covariance matrix, which can be susceptible to error if the covariance matrix suffers from a high condition number ^[A condition number is defined as the absolute value of the ratio between a covariance matrix's largest and smallest eigenvalues [@lopez]] [@lopez; @lopez2012]. Diagonal matrices have the smallest condition number which increases as more correlated variables are added. A small change in correlation within any given entry can greatly alter the inverse of a high conditional number matrix, __which in turn can greatly effect the portfolio weights__ [@lopez]. For a given sample size, larger co-variance matrices are prone to more noise in estimation. This si essentially due to a reduction in degrees of freedom as a sample of at least $1/2N(N+1)$ independent and identically distributed (iid) observations are required to estimate an $N\times N$ covariance matrix. This issues is exacerbated by the fact that a markets covariance structure tends to vary over time [@lopez].
+These optimisers however are not without their flaws. Mean-variance optimisers, in particular, rely heavily on the accuracy of return forecasts, where small changes in the expected return input can lead to large changes in portfolio weights [@lopez]. Due to this issue only so-called risk based portfolio's that intentionally avoid using expected return forecasts are discussed in this work as they are said to be more robust to estimation error [@maillard2010]. Furthermore, quadratic programming methods used in portfolio optimisation require the inversion of some positive-definite covariance matrix, which can be susceptible to error if the covariance matrix suffers from a high condition number. where a condition number is defined as the absolute value of the ratio between a covariance matrix's largest and smallest eigenvalues [@lopez; @lopez2012]. Diagonal matrices have the smallest condition number which increases as more correlated variables are added. When working with high conditional number matrices a small change in a single entry's estimated covariance can greatly alter its inverse of, which in turn can effect the portfolio weights [@lopez]. This is exacerbated by the fact that covariance matrices themselves are prone to estimation error. For a given sample size, larger dimension co-variance matrices are prone to more noise in estimation. This is essentially due to a reduction in degrees of freedom as a sample of at least $1/2N(N+1)$ independent and identically distributed (iid) observations are required to estimate an $N\times N$ covariance matrix. Furthermore, financial market covariance structures tend to vary over time and have been know to change rapidly during so-called regime changes [@lopez].  __[Regime changes]__
 
-Due to the sensitivity issues surrounding errors in the expected return estimation, this work will only discuss the portfolio optimisation techniques that forego this input. These include the naive equal weight, inverse variance, hierarchical risk parity, ERC and the minimum variance portfolios. _The theoretical underpinnings of each will be reviewed as well as their relative performance in historical back tests_.
+### Naive Equal Weight (EW)
 
-### Naive Equal Weight
+Perhaps the oldest and most simple portfolio diversification heuristic constitutes holding a weight of $1/N$ of the $N$ total assets available to the investor [@demiguel2009]. This portfolio is commonly called the equal weight or 1/N portfolio, its failure to recognise the importance of covariation between assets has resulted in it also being referred to as the naive portfolio. It commonly used as a benchmark index. 
 
-Perhaps the oldest and most simple portfolio diversification heuristic constitutes holding a weight of $1/N$ of the $N$ total assets available to the investor[@demiguel2009]. This portfolio is commonly called the equal weight or 1/N portfolio, its failure to recognise the importance of covariation between assets has resulted in it also being referred to as the naive portfolio. It commonly used as a benchmark index. Despite its simplistic nature empirical studies tend to find a statistically insignificant difference in Sharp ratio between the naive portfolio and more advanced portfolio optimisers, these include but are not limited to the mean-variance, minimum-variance and Bayes-Stein portfolio's [@demiguel2009]. It is also know to perform surprisingly well form a total return perspective.
+Despite its simplistic nature empirical studies tend to find a statistically insignificant difference in Sharp ratio between the naive portfolio and more advanced portfolio optimisers. This finding was made in @demiguel2009 who looked at the mean-variance, minimum-variance and Bayes-Stein portfolio's, where EW also performed surprisingly well form a total return perspective.
 
-### Minimum Variance
+### Minimum Variance (MV)
 
-Portfolio optimisers designed to exhibit the minimum variance have garnered a lot of attention for themselves, largely to their tendency to achieve surprisingly high returns in historical back tests [@clarke2011]. This performance has been attributed to the surprising fact that both low volatility stocks tend to earn returns in excess of the market, and that high beta stocks tend not to be rewarded by higher returns [@clark2011; @fama1992]. These minimum variance portfolios tend to achieve cumulative returns equal to or slightly greater than market portfolio's whilst maintaining consistently lower variance and achieving a noticeable improvement in downside risk mitigation in times of crisis [@clarke].
+Portfolio optimisers designed to exhibit the minimum variance have garnered a lot of attention for themselves, largely to their tendency to achieve surprisingly high returns in historical back tests [@clarke2011]. This performance has been attributed to the fact that low volatility stocks tend to earn returns in excess of the market, and high beta stocks tend not to be rewarded by higher returns [@clarke2011; @fama1992]. These minimum variance portfolios tend to achieve cumulative returns equal to or slightly greater than market capitalization weighted portfolio's whilst maintaining consistently lower variance and achieving a noticeable improvement in downside risk mitigation even during times of financial crisis [@clarke2011]. __The MV portfolio (discussed in this section) is the only portfolio on the efficient frontier that does not depend on expected return forecasts[@lopez].__
 
-_Who developed the min variance portfolio??_
-@ -162,10 +164,10 @@ The simplicity of Eq. \ref{minvar_eq} can be attributed to the simplifying assum
+The minimum variance portfolio selects security weights such that the resulting portfolio weights correspond to the portfolio with the lowest possible in sample volatility. Therefore, it has the lowest expected volatility and is, in theory, safest/least risky portfolio [@rawl2012]. Its primary input is a variance covariance matrix, which it uses in its optimisation to overweight low volatility and low correlation securities [@rawl2012]. This approach often works well out of sample, but is known to achieve minor reductions in _ex ante_ portfolio volatility by greatly favouring a small number of low volatility/correlation securities [@lopez [p. 68]]. This tendency to produce highly concentrated portfolio's can cause serious out of sample diversification problem as the sample becomes increasingly susceptible to measurement error. 
 
-__mention first rule of investing??__
+Let $\sum$ indicate the markets variance covariance matrix and $w=\{w_i,..., w_N \}$ be a vector of length N containing individual security weights, then the vector containing MV portfolio can be written as [@rawl2012]:
 
-### Equally Risk Contributions (ERC)
+$w^*=arg\min(w'\sum w)\ \ \ s.t.\ \sum^N_iw_i=1$
 
-The ERC portfolio is another optimiser that intentionally avoids using expected returns and is therefore said to be more robust to estimation error [@maillard2010]. The basic idea behind the ERC is to weight the portfolio such that each security contributes equally to risk, which in turn maximises risk diversification [@maillard2010]. Generally speaking the ERC acts similar to a weight constrained minimum variance portfolio, with constraints ensuring that adequate diversification is maintained. The weights of the ERC portfolio $x=(x_1,x_2,...,x_n)$ consisting of n assets is calculated as follows: 
+### Inverse-Varience (IV) Weighting
 
-_PUT MATH PARAGRAPH HERE_
+__The inverse-variance (IV), equal risk contrition (ERC) and maximum diversification (MD) portfolio's each assume that adequate diversification can be obtained by allocating equal risk to each investable security.__
 
-Therefore, _partial risk cont equation__ refers to the change in portfolio volatility resulting from a small change in asset i's weight. ERC uses this definition to guide its algorithms central objective to equate the risk contribution for each asset in the portfolio _ex ante_. 
+The IV portfolio, also known as the equal-risk budget (ERB), portfolio aims to allocate an equal risk budget to each investable security [@leote]. Where the risk budget is defined as the the product of a the security's weight and volatility. Therefore, if we define $\sigma_i$ as security i's volatility, then marginal volatility is equally distributed across N securities by setting security weights as such:
+
+$w_{iv}=(\frac{1/\sigma_1}{\sum^N_{j=1} 1/\sigma}, ...,\frac{1/\sigma_N}{\sum^N_{j=1} 1/\sigma} )$
+
+### Equal Risk Contribution (ERC)
+
+The ERC portfolio is similar to the IV, but also takes covariance into account [@leote]. The basic idea behind the ERC is to weight the portfolio such that each security contributes equally to risk, which in turn maximises risk diversification [@maillard2010]. Generally speaking the ERC acts similar to a weight constrained minimum variance portfolio, with constraints ensuring that adequate diversification is maintained. The weights of the ERC portfolio $x=(x_1,x_2,...,x_n)$ consisting of n assets is calculated as follows.
+
+let $\sigma_i^2$ resemble asset i's variance, $\sigma_{ij}$ the covariance between asset i and j and $\sum$ be the markets variance covariance matrix. Portfolio risk can now be written as $sigma(x)=\sqrt{x^T\sum x}=\sum_i\sum_{j\neq i}x_ix_j\sigma_{ij}$ [@maillard2010]. The marginal risk contribution $\partial_{x_i}\sigma(x)$ can then be defined as follows [@maillard2010]:
+
+$\partial_{x_i}\sigma(x)=\frac{\partial\sigma(x)}{\partial x_i}=\frac{x_i\sigma_i^2+\sum_{j\neq i}x_j\sigma_{ij}}{\sigma(x)}$
 
 
+Therefore, $\partial_{x_i}\sigma(x)$ refers to the change in portfolio volatility resulting from a small change in asset i's weight. ERC uses this definition to guide its algorithms central objective to equate the risk contribution for each asset in the portfolio _ex ante_. If we define $(\sum x)_i$ as the $i^{th}$ row resulting from the product of $\sum$ with x and note that $\partial_{x_i}\sigma(x)=(\sum x)_i$, then the optimal ERC weight can be written as [@maillard2010]:
 
+$x^*=\{x \ \epsilon[0,1]^n:\sum x_i=1, x_i \times (\sum x)_i=x_j \times (\sum x)_j \ \forall  \ i,j \}$
+
+@choueifaty2013 conducted an empirical back test comparing the relative performance if numerous portfolio optimisers between 1999 and 2010. They used historical data from the MSCI World world index and considered the largest 50% of assets at each semi-annual rebalance date. At each rebalance date the covariance matrices, used as inputs in the portfolio optimisers, were estimated using the passed years worth of data [@choueifaty2013]. This was done to reduce noise in estimation. All portfolio's were restricted to long only. The MV portfolio achieved an annual return of 6.7% and outperformed the ERC and EW portfolio's who returned 6.3% and 5.8% respectively. Unsurprisingly, the MV portfolio possessed the lowest daily volatility (10%) followed by the ERC and then the EW portfolio's (with 12.9% and 16.4% respectively). Accordingly the MV portfolio scored the highest sharp ratio (0.36) followed by the ERC and EW portfolio's (0.24 and 0.16 respectively). 
+
+### Maximum Diversification (MD)
+
+'The MD strategy, introduced by Choueifaty and Coignard [2008], invests in the portfolio that
+maximizes a diversification ratio. The ratio
+is the sum of the risk budget allocated to each
+stock in the portfolio divided by the portfolio
+volatility. This strategy should invest in stocks
+that are less correlated to other stocks.' (copy pasted)
 
 ### Hierarchical Risk Parity (HRP)
 
-Due to the multitude of robustness issues related to traditional portfolio optimisers, @lopez developed a new approach incorporating machine-learning methods and graph theory [@arevalo]. @lopez argues that the "lack of hierarchical structure in a correlation matrix allows weights to vary freely in
-unintended way" and that this contributes to the instability issues. His HRP algorithm requires only a singular covariance matrix and can utilize the information within without the need for the positive definite property [@lopez]. This procedure works in three stages:
+Due to the multitude of robustness issues related to traditional portfolio optimisers, @lopez developed a new approach incorporating machine-learning methods and graph theory [@arevalo]. @lopez argues that the "lack of hierarchical structure in a correlation matrix allows weights to vary freely in unintended ways" and that this contributes to the instability issues. His HRP algorithm requires only a singular covariance matrix and can utilize the information within without the need for the positive definite property [@lopez]. This procedure works in three stages:
 
-@ -179,7 +181,7 @@ Note that each of the three steps _(or just step 1 and 3??)_ can be completed wi
+@lopez carried out an in sample simulation study comparing the respective allocations of the long-only minimum variance, IVP and HRP portfolios using a covariance matrix using a condition number that is "not unfavourable" to the minimum variance portfolio. The simulated data consisted of 10000 observations across 10 variables. The following findings were made: The minimum variance portfolio concentrated 92.66% of funds in the top 5 holdings and assigned a zero weight to 3 assets. _Conversly_, HRP only assigned 62.5% of its funds to the top 5 holdings [@lopez]. The minimum variance portfolio's objective function causes it to build highly concentrated portfolio's in favour of a small reduction in volatility; the HRP portfolio had only a slightly higher volatility [@lopez]. This apparent diversification advantage achieved by the minimum variance portfolio is rather deceptive as the portfolio remains highly susceptible to idiosyncratic risk incidents within its top holdings [@lopez]. This claim was further validated by the finding that HRP achieved significantly lower out of sample variance compared to the minimum variance portfolio.
 
-@lopez carried out an in sample simulation study comparing the respective allocations of the long-only minimum variance, IVP and HRP portfolios using a covariance matrix using a condition number that is "not unfavourable" to the minimum variance portfolio. The simulated data consisted of 10000 observations across 10 variables. The following findings were made: The minimum variance portfolio concentrated 92.66% of funds in the top 5 holdings and assigned a zero weight to 3 assets. _Conversly_, HRP only assigned 62.5% of its funds to the top 5 holdings [@lopez]. The minimum variance portfolio's objective function causes it to build highly concentrated portfolio's in favour of a small reduction in volatility; the HRP portfolio had only a slightly higher volatility [@lopez]. This apparent diversification advantage achieved by the minimum variance portfolio is rather deceptive as the portfolio remains highly susceptible to idiosyncratic risk incidents within its top holdings [@lopez]. This claim was further validated by the finding that HRP achieved significantly lower out of sample variance compared to the minimum variance portfolio. 
+". Markowitz’s curse is that the more correlated investments are, the
+greater is the need for a diversified portfolio—and yet
+the greater are that portfolio’s estimation errors. [@lopez]"
 
 ### Inverse Variance Portfolio (IVP)
 
 # Methadology
 
 # Results and Discussion
-
-# Conclusion 
-
-
-
-
-# Data  {-}
-
-Notice how I used the curly brackets and dash to remove the numbering of the data section.
-
-Discussion of data should be thorough with a table of statistics and ideally a figure.
-
-In your tempalte folder, you will find a Data and a Code folder. In order to keep your data files neat, store all of them in your Data folder. Also, I strongly suggest keeping this Rmd file for writing and executing commands, not writing out long pieces of data-wrangling. In the example below, I simply create a ggplot template for scatter plot consistency. I suggest keeping all your data in a data folder.
-
-<!-- The following is a code chunk. It must have its own unique name (after the r), or no name. After the comma follows commands for R which are self-explanatory. By default, the code and messages will not be printed in your pdf, just the output: -->
-
-```{r Figure1,  warning =  FALSE, fig.align = 'center', fig.cap = "Caption Here \\label{Figure1}", fig.ext = 'png', fig.height = 3, fig.width = 6}
-
-  # This is just a random plot to show you a plot. This is done if the getwd() does not point to your Template's directory.
-  # Set WD below to your project's working directory.
-
-  g <-
-  ggplot(data = mtcars) +
-  geom_point(aes(x = disp, y = hp, color = cyl)) +
-  theme_bw() +
-  # theme(legend.position = "none") +
-  theme(plot.title = element_text(size = 10)) +
-  theme(axis.title = element_text(size = 10),
-        axis.title.x = element_text()) +
-  labs(y = "y-axis", x = "x-axis", title = "Some amazing plot")
-
-g
-
-```
-
-To make your graphs look extra nice in latex world, you could use Tikz device. Replace dev - 'png' with 'tikz' in the chunk below. Notice this makes the build time longer and produces extra tex files - so if you are comfortable with this, set your device to Tikz and try it out:
-
-```{r Figure2, warning =  FALSE, fig.align = 'center', fig.cap = "Caption Here \\label{Figure2}", fig.height = 3, fig.width = 6, dev = 'png'}
-
-ExampleData <- read_rds( "data/Example_data.rds")
-
-source("code/Example_Plot_Scatter.R") # Load a function from your 'code' folder. This e.g. plots scatters to your own preferences.
-source( "code/Data_Create.R") #
-
-ExampleData <- Data_Create(N = 100) # Same as the ExampleData loaded above - this is just a function to create the stored data.
-
-g <- Example_Plot_Scatter(DataInput = ExampleData,
-                          X = "Height_Score",
-                          Y = "Weight_Score",
-                          Z = "Agility_Score",
-                          Theme = theme_bw(), # run ?ggthemes for other themes.
-                          Title = "", # I prefer to use the caption set above.
-                          Ylab = "Height",
-                          Xlab = "Lenght",
-                          LegendTitle = "Agility",
-                          TitleSize = 10,
-                          LabSize = 10)
-
-g
-
-# Although the functions above are really simple, the principle is simple: containing calculations and data wrangling in their own functions will make this template much cleaner and more manageable.
-# When you start working, delete these meaningless functions and replace with your own...
-
-```
-
-To reference the plot above, add a ``\\label'' after the caption in the chunk heading, as done above. Then reference the plot as such: As can be seen, Figures \ref{Figure1}  and \ref{Figure2} are excellent, with Figure \ref{Figure2} being particularly aesthetically pleasing due to its device setting of Tikz. The nice thing now is that it correctly numbers all your figures (and sections or tables) and will update if it moves. The links are also dynamic.
-
-I very strongly suggest using ggplot2 (ideally in combination with dplyr) using the ggtheme package to change the themes of your figures.
-
-Also note the information that I have placed above the chunks in the code chunks for the figures. You can edit any of these easily - visit the Rmarkdown webpage for more information.
-
-# Splitting a page
-
-You can also very easily split a page using the format below:
-
-
-:::::: {.columns data-latex="[T]"}
-::: {.column data-latex="{0.7\textwidth}"}
-```{r, echo=FALSE, fig.width=4, fig.height=4}
-par(mar = c(4, 4, .2, .1))
-plot(cars, pch = 19)
-```
-:::
-::: {.column data-latex="{0.05\textwidth}"}
-\
-<!-- an empty Div (with a white space), serving as
-a column separator -->
-:::
-::: {.column data-latex="{0.2\textwidth}"}
-<!-- To make this text a bit smaller, use \scriptsize, \small, \footnotesize or \normal. There are other size too - google latex sizes. -->
-\scriptsize
-
-## Data {-}
-The figure on the left-hand side shows the `cars` data.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-enim ad minim veniam, quis nostrud exercitation ullamco laboris
-nisi ut aliquip ex ea commodo consequat.
-:::
-::::::
-
-
-#  Methodology \label{Meth}
-
-## Subsection
-Ideally do not overuse subsections. It equates to bad writing.^[This is an example of a footnote by the way. Something that should also not be overused.]
-
-## Math section
-
-Equations should be written as such:
-
-\begin{align}
-\beta = \sum_{i = 1}^{\infty}\frac{\alpha^2}{\sigma_{t-1}^2} \label{eq1} \\
-\int_{x = 1}^{\infty}x_{i} = 1 \notag
-\end{align}
-
-If you would like to see the equations as you type in Rmarkdown, use $ symbols instead (see this for yourself by adjusted the equation):
-
-$$
-\beta = \sum_{i = 1}^{\infty}\frac{\alpha^2}{\sigma_{t-1}^2} \\
-\int_{x = 1}^{\infty}x_{i} = 1
-$$
-
-Note again the reference to equation \ref{eq1}. Writing nice math requires practice. Note I used a forward slashes to make a space in the equations. I can also align equations using  __\&__, and set to numbering only the first line. Now I will have to type ``begin equation'' which is a native \LaTeX command. Here follows a more complicated equation:
-
-
-\begin{align}
-	y_t &= c + B(L) y_{t-1} + e_t   \label{eq2}    \\ \notag
-	e_t &= H_t^{1/2}  z_t ; \quad z_t \sim  N(0,I_N) \quad \& \quad H_t = D_tR_tD_t \\ \notag
-		D_t^2 &= {\sigma_{1,t}, \dots, \sigma_{N,t}}   \\ \notag
-		\sigma_{i,t}^2 &= \gamma_i+\kappa_{i,t}  v_{i, t-1}^2 +\eta_i  \sigma_{i, t-1}^2, \quad \forall i \\ \notag
-		R_{t, i, j} &= {diag(Q_{t, i, j}}^{-1}) . Q_{t, i, j} . diag(Q_{t, i, j}^{-1})  \\ \notag
-		Q_{t, i, j} &= (1-\alpha-\beta)  \bar{Q} + \alpha  z_t  z_t'  + \beta  Q_{t, i, j} \notag
-\end{align}
-
-Note that in \ref{eq2} I have aligned the equations by the equal signs. I also want only one tag, and I create spaces using ``quads''.
-
-See if you can figure out how to do complex math using the two examples provided in \ref{eq1} and \ref{eq2}.
-
-<!-- $$ -->
-<!-- This is a commented out section in the writing part. -->
-<!-- Comments are created by highlighting text, amnd pressing CTL+C -->
-<!-- \\begin{align} -->
-<!-- \\beta = \\alpha^2 -->
-<!-- \end{align} -->
-<!-- $$ -->
-
-# Results
-
-Tables can be included as follows. Use the _xtable_ (or kable) package for tables. Table placement = H implies Latex tries to place the table Here, and not on a new page (there are, however, very many ways to skin this cat. Luckily there are many forums online!).
-
-
-```{r ShortTable, results = 'asis'}
-
-library(xtable)
-data <- mtcars[1:5,] %>% tibble::as_tibble()
-
-table <- xtable(data, caption = "Short Table Example \\label{tab1}")
-  print.xtable(table,
-             # tabular.environment = "longtable",
-             floating = TRUE,
-             table.placement = 'H',
-             # scalebox = 0.3,
-             comment = FALSE,
-             caption.placement = 'bottom'
-             )
-
-```
-
-To reference calculations __in text__, _do this:_ From table \ref{tab1} we see the average value of mpg is `r mean(mtcars[1:5,]$mpg)`.
-
-Including tables that span across pages, use the following (note that I add below the table: ``continue on the next page''). This is a neat way of splitting your table across a page.
-
-Use the following default settings to build your own possibly long tables. Note that the following will fit on one page if it can, but cleanly spreads over multiple pages:
-
-```{r LongTable, results = 'asis'}
-
-library(xtable)
-
-data = mtcars %>% tibble::as_tibble()
-  addtorow          <- list()
-  addtorow$pos      <- list()
-  addtorow$pos[[1]] <- c(0)
-  addtorow$command  <- c(paste("\\hline \n",
-                               "\\endhead \n",
-                               "\\hline \n",
-                               "{\\footnotesize Continued on next page} \n",
-                               "\\endfoot \n",
-                               "\\endlastfoot \n",sep=""))
-table <- xtable(data, caption = "Long Table Example")
-  print.xtable(table,
-             tabular.environment = "longtable",
-             floating = FALSE, # Leave this as is.
-             table.placement = 'H', # Leave this as is.
-             booktabs = T, # Aesthetics
-             include.rownames = FALSE,  # Typically you don't want this in a table.
-             add.to.row = addtorow, # For adding the Continued on next page part...
-             comment = FALSE,
-             caption.placement = 'top',  # Where do you want the caption?
-             size="\\fontsize{12pt}{13pt}\\selectfont"  # Size of text in table..
-             )
-# See https://cran.r-project.org/web/packages/xtable/vignettes/xtableGallery.pdf for table inspiration
-```
-
-\hfill
-
-<!-- hfill can be used to create a space, like here between text and table. -->
-
-
-## Huxtable
-
-Huxtable is a very nice package for making working with tables between Rmarkdown and Tex easier.
-
-This cost some adjustment to the Tex templates to make it work, but it now works nicely.
-
-See documentation for this package [here](https://hughjonesd.github.io/huxtable/huxtable.html). A particularly nice addition of this package is for making the printing of regression results a joy (see [here](https://hughjonesd.github.io/huxtable/huxtable.html#creating-a-regression-table)). Here follows an example:
-
-
-If you are eager to use huxtable, comment out the Huxtable table in the Rmd template, and uncomment the colortbl package in your Rmd's root.
-
-Note that I do not include this in the ordinary template, as some latex users have complained it breaks when they build their Rmds (especially those using tidytex - I don't have this problem as I have the full Miktex installed on mine). Up to you, but I strongly recommend installing the package manually and using huxtable. To make this work, uncomment the _Adding additional latex packages_ part in yaml at the top of the Rmd file. Then comment out the huxtable example in the template below this line. Reknit, and enjoy.
-
-```{r, results = 'asis'}
-
-if(!require(huxtable)) install.packages(huxtable)
-library(huxtable)
-data(diamonds, package = 'ggplot2')
-Title <- "Regression Output"
-Label <- "Reg01"
-lm1 <- lm(price ~ carat, diamonds)
-lm2 <- lm(price ~ depth, diamonds)
-lm3 <- lm(price ~ carat + depth, diamonds)
-htab <-
-huxreg(lm1, lm2, lm3,
-                statistics = c(N = "nobs", R2 = "r.squared"),
-                note = "%stars%.") %>%
-  set_caption(Title) %>%
-  set_label(Label)
-# More settings:
-font_size(htab) <- 12
-# Let's change regression names: this is slightly hacky, but works. Comment out this section to see what the default looks like:
-  Names <- c( "Reg1", "Reg2", "Reg3")
-  for(i in 1:length(Names)) {
-    htab[1,][[1+i]] <- Names[i]
-  }
-# Now simply call the table:
-htab
-
-```
-
-FYI - R also recently introduced the gt package, which is worthwhile exploring too.
-
-# Lists
-
-To add lists, simply using the following notation
-
-* This is really simple
-
-    + Just note the spaces here - writing in R you have to sometimes be pedantic about spaces...
-
-* Note that Rmarkdown notation removes the pain of defining \LaTeX environments!
 
 # Conclusion
 
@@ -464,12 +221,11 @@ I hope you find this template useful. Remember, stackoverflow is your friend - u
 <!-- \newpage -->
 
 \newpage
-
 # References {-}
 
 <div id="refs"></div>
 
-
+\newpage
 # Appendix {-}
 
 ## Appendix A {-}
