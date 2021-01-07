@@ -101,7 +101,7 @@ eigens <- tibble(corr_1 = eigen_1$values,
 rm(eigen_1, eigen_2, eigen_3, eigen_4, eigen_5, eigen_6, eigen_7)
 
 # Printing Eigenvalues in a table
-stargazer::stargazer(eigens, type = "html", summary = FALSE, rownames = FALSE, out.header = FALSE)
+head(eigens, n = 10)
 
 ```
 
@@ -113,22 +113,22 @@ gc()
 memory.size(max = NA)
 
 # Setting number of markets and length of progress bar.
-N <- 5
+N <- 50
 pb <- dplyr::progress_estimated(N)
 
 
 set.seed(9543712)
 market_1 <-
-  1:N %>% 
-  map_dfr(~sim_market_with_progress(corr = corr_2,
-                                    k = 252,
-                                    mv_dist = "t",
-                                    mv_df = 3,
-                                    marginal_dist = "norm",
-                                    marginal_dist_model = list(mu = 0.02, 
-                                                               sd = 0.1),
-                                    ts_model = NULL),
-          .id = "Universe")
+    1:N %>%
+    map_dfr(~sim_market_with_progress(corr = diag(20),
+                                      k = 252,
+                                      mv_dist = "t",
+                                      mv_df = 3,
+                                      marginal_dist = "norm",
+                                      marginal_dist_model = list(mu = 0.02,
+                                                                 sd = 0.1),
+                                      ts_model = NULL),
+            .id = "Universe")
 
 # Saving dataframe
 save(market_1, file = "data/market_1.rda")
