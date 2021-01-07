@@ -230,11 +230,14 @@ Finally, the portfolio metrics are compared within portfolio types across market
 
 ## Correlation Structures \label{corr_struc}
 
-### _Ad Hoc_
+This section describes the process and motivation behind the creation of the four _ad hoc_ correlation matrices (section \ref{adhoc}) and the empirical correlation matrix (section \ref{emp) used as the primary inputs in the Monte Carlo simulations. 
+
+
+### Ad Hoc \label{adhoc}
 
 Figure \ref{corr_mats} presents the four _ad hoc_ correlation matrices used in this study.
 
-```{r corr mats, fig.cap="Correlation Matricies \\label{corr_mats}"}
+```{r corr mats, fig.cap="\\label{corr_mats} Correlation Matricies"}
 pacman::p_load(MCmarket, tidyverse, patchwork, ggcorrplot)
 
 corr_1 <- diag(50) %>% ggcorrplot(hc.order = TRUE, title = "Diagonal Matrix", show.legend = FALSE)
@@ -252,7 +255,8 @@ my_title <- expression(paste(italic("ad hoc"), " Correlation Matrices"))
                              theme = theme(plot.title = element_text(hjust = 0.3, size=15))) 
   
 ```
-### Emperical
+
+### Emperical \label{emp}
 
 ## Monte Carlo
 
