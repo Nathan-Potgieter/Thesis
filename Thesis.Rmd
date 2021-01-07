@@ -126,6 +126,10 @@ path dependence; first rule of investment management
 
 Due to the aforementioned sensitivity issues surrounding errors in the expected return estimation, this work will only cover the portfolio optimisation techniques that intentionally forego this input. These include the naive equal weight, inverse variance, hierarchical risk parity, ERC and the minimum variance portfolios. _The theoretical underpinnings of each will be reviewed as well as their relative performance in historical back tests_.
 
+". Markowitz’s curse is that the more correlated investments are, the
+greater is the need for a diversified portfolio—and yet
+the greater are that portfolio’s estimation errors. [@lopez]"
+
 # Aims and Objectives
 
 This work aims to use Monte Carlo Methods to uncover the relationship between a market's covariance structure and the risk return properties of various portfolio optimisation algorithms. This will be achieved through the following objectives.
@@ -186,30 +190,76 @@ Therefore, $\partial_{x_i}\sigma(x)$ refers to the change in portfolio volatilit
 
 $x^*=\{x \ \epsilon[0,1]^n:\sum x_i=1, x_i \times (\sum x)_i=x_j \times (\sum x)_j \ \forall  \ i,j \}$
 
-@choueifaty2013 conducted an empirical back test comparing the relative performance if numerous portfolio optimisers between 1999 and 2010. They used historical data from the MSCI World world index and considered the largest 50% of assets at each semi-annual rebalance date. At each rebalance date the covariance matrices, used as inputs in the portfolio optimisers, were estimated using the passed years worth of data [@choueifaty2013]. This was done to reduce noise in estimation. All portfolio's were restricted to long only. The MV portfolio achieved an annual return of 6.7% and outperformed the ERC and EW portfolio's who returned 6.3% and 5.8% respectively. Unsurprisingly, the MV portfolio possessed the lowest daily volatility (10%) followed by the ERC and then the EW portfolio's (with 12.9% and 16.4% respectively). Accordingly the MV portfolio scored the highest sharp ratio (0.36) followed by the ERC and EW portfolio's (0.24 and 0.16 respectively). 
+
 
 ### Maximum Diversification (MD)
 
-'The MD strategy, introduced by Choueifaty and Coignard [2008], invests in the portfolio that
-maximizes a diversification ratio. The ratio
+@choueifaty2008 originally designed the MD portfolio to maximize the diversification ratio (DR), which they defined as the as the sum of each securities risk bucket divided by portfolio volatility [@leote]. If we define $w=(w_1,...w_N)^T$ as a vector of portfolio weights, V as a vector of asset volatilities and $\sum$ as the covariance matrix. Then the DR can be expresses as:
+
+$DR= \frac{w'.V}{\sqrt{w'Vw}}$
+
+Therefore, much like the IV and ERC portfolio's, the MD portfolio attempts to diversify the portfolio by allocating equal risk to each security [@choueifaty2008]. The MD portfolio accomplishes this by over-weighting low volatility securities and those that are less correlated with other stocks [@leote]. For detail regarding the theoretical results and properties of the MD portfolio see @choueifaty2008 [pp. 33-35].
+
+'The MD strategy, introduced by Choueifaty and Coignard [2008], invests in the portfolio that maximizes a diversification ratio. The ratio
 is the sum of the risk budget allocated to each
 stock in the portfolio divided by the portfolio
 volatility. This strategy should invest in stocks
 that are less correlated to other stocks.' (copy pasted)
 
+## Empirical Backtests 
+
+@choueifaty2013 conducted an empirical back test comparing the relative performance if numerous portfolio optimisers between 1999 and 2010. They used historical data from the MSCI World world index and considered the largest 50% of assets at each semi-annual rebalance date. At each rebalance date the covariance matrices, used as inputs in the portfolio optimisers, were estimated using the passed years worth of data [@choueifaty2013]. This was done to reduce noise in estimation. All portfolio's were restricted to long only. The MV portfolio achieved an annual return of 6.7% and outperformed the ERC and EW portfolio's who returned 6.3% and 5.8% respectively. Unsurprisingly, the MV portfolio possessed the lowest daily volatility (10%) followed by the ERC and then the EW portfolio's (with 12.9% and 16.4% respectively). Accordingly the MV portfolio scored the highest sharp ratio (0.36) followed by the ERC and EW portfolio's (0.24 and 0.16 respectively). 
+
 ### Hierarchical Risk Parity (HRP)
 
-Due to the multitude of robustness issues related to traditional portfolio optimisers, @lopez developed a new approach incorporating machine-learning methods and graph theory [@arevalo]. @lopez argues that the "lack of hierarchical structure in a correlation matrix allows weights to vary freely in unintended ways" and that this contributes to the instability issues. His HRP algorithm requires only a singular covariance matrix and can utilize the information within without the need for the positive definite property [@lopez]. This procedure works in three stages:
+Due to the multitude of robustness issues related to traditional portfolio optimisers, @lopez developed a new approach incorporating machine-learning methods and graph theory [@arevalo]. @lopez argues that the "lack of hierarchical structure in a correlation matrix allows weights to vary freely in unintended ways" and that this contributes to the instability issues. His HRP algorithm requires only a singular co-variance matrix and can utilize the information within without the need for the positive definite property [@lopez]. This procedure works in three stages:
 
-@lopez carried out an in sample simulation study comparing the respective allocations of the long-only minimum variance, IVP and HRP portfolios using a covariance matrix using a condition number that is "not unfavourable" to the minimum variance portfolio. The simulated data consisted of 10000 observations across 10 variables. The following findings were made: The minimum variance portfolio concentrated 92.66% of funds in the top 5 holdings and assigned a zero weight to 3 assets. _Conversly_, HRP only assigned 62.5% of its funds to the top 5 holdings [@lopez]. The minimum variance portfolio's objective function causes it to build highly concentrated portfolio's in favour of a small reduction in volatility; the HRP portfolio had only a slightly higher volatility [@lopez]. This apparent diversification advantage achieved by the minimum variance portfolio is rather deceptive as the portfolio remains highly susceptible to idiosyncratic risk incidents within its top holdings [@lopez]. This claim was further validated by the finding that HRP achieved significantly lower out of sample variance compared to the minimum variance portfolio.
-
-". Markowitz’s curse is that the more correlated investments are, the
-greater is the need for a diversified portfolio—and yet
-the greater are that portfolio’s estimation errors. [@lopez]"
-
-### Inverse Variance Portfolio (IVP)
+@lopez carried out an in sample simulation study comparing the respective allocations of the long-only minimum variance, IVP and HRP portfolios using a co-variance matrix using a condition number that is "not unfavourable" to the minimum variance portfolio. The simulated data consisted of 10000 observations across 10 variables. The following findings were made: The minimum variance portfolio concentrated 92.66% of funds in the top 5 holdings and assigned a zero weight to 3 assets. _Conversly_, HRP only assigned 62.5% of its funds to the top 5 holdings [@lopez]. The minimum variance portfolio's objective function causes it to build highly concentrated portfolio's in favor of a small reduction in volatility; the HRP portfolio had only a slightly higher volatility [@lopez]. This apparent diversification advantage achieved by the minimum variance portfolio is rather deceptive as the portfolio remains highly susceptible to idiosyncratic risk incidents within its top holdings [@lopez]. This claim was further validated by the finding that HRP achieved significantly lower out of sample variance compared to the minimum variance portfolio.
 
 # Methadology
+
+This work used Monte Carlo simulation methods to investigate the link between a markets correlation structure and the relative performance of the EW, MV, IV, ERC and MD portfolios. The following may become confusing so please note the following terminology. In this study the term market can be thought of as a single observation consisting of the daily returns for a number of assets, where market type refers to an ensemble of markets each designed to posses the same characteristics. Here the ensemble units are referred to as realizations or counterfactuals. 
+
+The R package MCmarket was used to simulate five distinctive market types, each with 300 periods of returns, 20 assets and 10 000 realizations. Each market type was was designed, _ad hoc_, to posses a unique correlation structure. These structures range from a matrices with no correlation (i.e. a diagonal matrix) to those with possessing hierarchical clustering (see \ref{corr_struc}) [@mcmarket]. 
+
+The EW, MV, IV, ERC and MD portfolios were then backtested on the simulated markets. The first 50 periods, of each realisation, was used to estimate a 20 by 20 co-variance matrix, used as the primary input in calculating the weights for the respective portfolios. These weights were then used in conjunction with the simulated returns to calculate the returns for the respective portfolios. 
+
+Portfolio analytics are then performed for each portfolio type on each realization within the market types. These portfolio analytics include the standard deviation (sd) of daily returns, downside deviation, value at risk (VaR), conditional VAR (CVaR), Sharp ratio, average drawdown and maximum drawdown. The mean and median of the portfolio metrics are then calculated for each market type.
+
+Finally, the portfolio metrics are compared within portfolio types across market types and within market types across portfolio types. 
+
+## Correlation Structures \label{corr_struc}
+
+### _Ad Hoc_
+
+Figure \ref{corr_mats} presents the four _ad hoc_ correlation matrices used in this study.
+
+```{r corr mats, fig.cap="Correlation Matricies \\label{corr_mats}"}
+pacman::p_load(MCmarket, tidyverse, patchwork, ggcorrplot)
+
+corr_1 <- diag(50) %>% ggcorrplot(hc.order = TRUE, title = "Diagonal Matrix", show.legend = FALSE)
+corr_2 <- gen_corr(D = 50, Clusters = "none") %>% ggcorrplot(title = "No Clusters", show.legend = FALSE)
+corr_3 <- gen_corr(D = 50, Clusters = "non-overlapping", Num_Clusters = 5) %>%
+  ggcorrplot(hc.order = TRUE, title = "Five Clusters", show.legend = FALSE)
+corr_4 <- gen_corr(D = 50, Clusters = "overlapping", 
+                   Num_Clusters = c(10,5,2), Num_Layers = 3) %>% 
+  ggcorrplot(hc.order = TRUE, title = "Overlapping Clusters", show.legend = FALSE)
+
+my_title <- expression(paste(italic("ad hoc"), " Correlation Matrices"))
+
+(corr_1 + corr_2) / (corr_3 + corr_4) + 
+  patchwork::plot_annotation(title = my_title,
+                             theme = theme(plot.title = element_text(hjust = 0.3, size=15))) 
+  
+```
+### Emperical
+
+## Monte Carlo
+
+## Back Tests
+
+## Portfolio Analytics
+
 
 # Results and Discussion
 
