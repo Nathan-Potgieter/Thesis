@@ -20,8 +20,7 @@ This document serves as the README for Nathan Potgieter's Stellenbosch Universit
 This section sets out to design five distinct 50 by 50 market correlation matrices, ranging from highly unrealistic, and purely theoretical, to more realistic hierarchically clustered matrices.
 ```{r making markets, results='asis'}
 # Loading required packages
-library('pacman')
-p_load(MCmarket, tidyverse, ggcorrplot)
+pacman::p_load(MCmarket, tidyverse, ggcorrplot)
 
 #----------------------------------------------
 # First look at the diagonal correlation matrix
@@ -113,15 +112,14 @@ gc()
 memory.size(max = NA)
 
 # Setting number of markets and length of progress bar.
-N <- 50
+N <- 10
 pb <- dplyr::progress_estimated(N)
-
 
 set.seed(9543712)
 market_1 <-
     1:N %>%
-    map_dfr(~sim_market_with_progress(corr = diag(20),
-                                      k = 252,
+    map_dfr(~sim_market_with_progress(corr = corr_3,
+                                      k = 300,
                                       mv_dist = "t",
                                       mv_df = 3,
                                       marginal_dist = "norm",
@@ -132,7 +130,6 @@ market_1 <-
 
 # Saving dataframe
 save(market_1, file = "data/market_1.rda")
-save(market_1, file = "data/market_1.Rdata")
 rm(market_1)
 ```
 
@@ -211,6 +208,125 @@ maxdiv_port_m1 <- market_1 %>%
 
 
 ```
+
+## Functions: Portfolios with Periodic Rebalancing 
+
+```{r}
+# --------------------------------------------------------------------
+# This function creates a set of rolling weights from a single market
+# --------------------------------------------------------------------
+port_weight_calc <- function(data, method, from_date, look_back) {
+  
+  cov <- data %>%
+    select(date, Asset, Return) %>% 
+    filter(date < from_date & date >= from_date %m-% days(look_back)) %>%  
+    spread(Asset, Return) %>% select(-date) %>% 
+  fit_mvt() %>% .$cov
+  
+  # Calculating min var weights and making xts 
+  weights <- 
+    data %>% 
+    filter(date == from_date) %>% 
+    mutate(weight = case_when(
+      method == "naive" ~ 1/n(),
+      
+      method == "minvol" ~ optimalPortfolio(Sigma = cov, 
+                                            control = list(type = "minvol", constraint = "lo")),
+      method == "invvol" ~ optimalPortfolio(Sigma = cov, 
+                                            control = list(type = "invvol", constraint = "lo")),
+      method == "erc" ~ optimalPortfolio(Sigma = cov, 
+                                         control = list(type = "erc", constraint = "lo")),
+      method == "maxdiv" ~ optimalPortfolio(Sigma = cov, 
+                                      control = list(type = "maxdiv", constraint = "lo"))
+      )) %>% 
+    select(date, Asset, weight)
+  
+  return(weights)
+}
+
+# --------------------------------------------------------------
+# This function calculates portfolio returns for a single market
+# --------------------------------------------------------------
+port_returns <- function(returns, weights, look_back) {
+  
+  returns_xts <- data %>% 
+    select(date, Asset, Return)%>% 
+    spread(Asset, Return) %>% arrange(date) %>% 
+    filter(date>first(date) %m+% days(look_back)) %>% 
+    tbl_xts()
+  
+  weights_xts <- weights %>% 
+    spread(Asset, weight) %>% 
+    tbl_xts()
+  
+   # Calculating portfolio returns
+  rmsfuns::Safe_Return.portfolio(returns_xts, weights = weights_xts) %>% 
+    xts_tbl()
+    
+}
+
+# -----------------------------------------------------------------------------
+# This function couples the first two functions in this chunk.
+# Therefore, it creates portfolio returns with periodic re-balancing.
+# ----------------------------------------------------------------------------
+rebal_port_returns <- function(data, method, rebdates, look_back) {
+  
+  weights <- rebdates %>%
+  map_dfr(~port_weight_calc(data, method = "minvol", 
+                            from_date =  .x, 
+                            look_back = 100))
+
+port_returns(returns = data, weights = weights, look_back = 100)
+}
+
+# ----------------------------------------------------------------------------
+# This function maps rebal_port_returns over the Universe columns of the dataset
+# Therefore, it creates portfolio returns with periodic re-balancing, for each universe
+# ----------------------------------------------------------------------------
+port_rets_universal <- function(data_universal, method, rebdates, look_back = 100) {
+  
+  data_universal %>% split(data_universal$Universe) %>% 
+  map_dfr(~rebal_port_returns(.x, 
+                              method = method, 
+                              rebdates = rebdates, 
+                              look_back = look_back),
+          .id = "Universe")
+  
+}
+ 
+```
+
+## Calculating Portfolio Returns
+
+### Market 1
+
+```{r}
+# Vector of rebalance dates
+# Only works for k=300 and look_back = 100
+rebdates <- c(first(market_1$date) %m+% days(100), 
+              first(market_1$date) %m+% days(150),
+              first(market_1$date) %m+% days(200),
+              first(market_1$date) %m+% days(250))
+
+methods <- c("naive", "minvol", "invvol", "erc", "maxdiv")
+
+# Calculating portfolio returns, 
+# for each portfolio type in market 1.
+rets_m1 <- methods %>% 
+  map(~port_rets_universal(market_1,
+                           method = .x,
+                           rebdates = rebdates,
+                           look_back = 100))
+names(rets_m1) <- c("naive", "minvol", "invvol", "erc", "maxdiv")
+
+# Market 2
+
+
+# Market 3
+
+```
+
+
 
 ## Portfolio Analytics
 

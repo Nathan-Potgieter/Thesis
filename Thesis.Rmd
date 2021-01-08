@@ -220,9 +220,9 @@ Due to the multitude of robustness issues related to traditional portfolio optim
 
 This work used Monte Carlo simulation methods to investigate the link between a markets correlation structure and the relative performance of the EW, MV, IV, ERC and MD portfolios. The following may become confusing so please note the following terminology. In this study the term market can be thought of as a single observation consisting of the daily returns for a number of assets, where market type refers to an ensemble of markets each designed to posses the same characteristics. Here the ensemble units are referred to as realizations or counterfactuals. 
 
-The R package MCmarket was used to simulate five distinctive market types, each with 300 periods of returns, 20 assets and 10 000 realizations. Each market type was was designed, _ad hoc_, to posses a unique correlation structure. These structures range from a matrices with no correlation (i.e. a diagonal matrix) to those with possessing hierarchical clustering (see \ref{corr_struc}) [@mcmarket]. 
+The R package MCmarket was used to simulate five distinctive market types, each corresponding to a unique correlation structure. Four of the correlation matrices were designed _ad hoc_, to posses a unique correlation structure, while the fifth was calculated using S&P 500 data. These correlation matrices range from one exhibiting no correlation (i.e. a diagonal matrix) to one with hierarchical clustering (see \ref{corr_struc}) [@mcmarket]. 
 
-The EW, MV, IV, ERC and MD portfolios were then backtested on the simulated markets. The first 50 periods, of each realisation, was used to estimate a 20 by 20 co-variance matrix, used as the primary input in calculating the weights for the respective portfolios. These weights were then used in conjunction with the simulated returns to calculate the returns for the respective portfolios. 
+The long only EW, MV, IV, ERC and MD portfolios were then backtested on the simulated markets using periodic reweighting. 
 
 Portfolio analytics are then performed for each portfolio type on each realization within the market types. These portfolio analytics include the standard deviation (sd) of daily returns, downside deviation, value at risk (VaR), conditional VAR (CVaR), Sharp ratio, average drawdown and maximum drawdown. The mean and median of the portfolio metrics are then calculated for each market type.
 
@@ -258,9 +258,25 @@ my_title <- expression(paste(italic("ad hoc"), " Correlation Matrices"))
 
 ### Emperical \label{emp}
 
+The empirical correlation matrix used in this study was calculated by randomly selecting the daily returns for 50 of the largest (market capitalization) 100  S&P 500 stocks between 1 January 2016 and 1 January 2021. Markets capitalization?? were measured on 1 January 2021. The covariance matrix was then calculated using the R package fitHeavyTail. This package uses ML estimation to fit a multivariate t-distribution according to the following methodology. 
+
+Chuanhai Liu and Donald B. Rubin, “ML estimation of the t-distribution using EM and its extensions, ECM and ECME,” Statistica Sinica (5), pp. 19-39, 1995. 
+
+
+```{r}
+fitHeavyTail::fit_mvt()
+```
+
+
 ## Monte Carlo
 
+This work uses the R package MCmarket to carry out its Monte Carlo simulations. This package uses a generalized Monte Carlo framework from @mcref. 
+
 ## Back Tests
+
+To remain in line with the literature, and the mandate for the majority of investors, the long-only constraint was applied to all portfolio's. In addition, a constraint limiting the maximum weight for a single security to 20%. This additional constraint is intended to prevent portfolio's that tend to building excessively highly concentrated holdings, while remaining flexible enough to punish those who do so. Therefore, the constraints are effectively providing a fair playing ground for the portfolio's to compete. 
+
+The first 50 periods were used to estimate the co-variance matrix, used as the primary input in portfolio weight calculations for the respective portfolios. These weights were then used in conjunction with the simulated returns to calculate the returns for the respective portfolios. d
 
 ## Portfolio Analytics
 
@@ -269,7 +285,7 @@ my_title <- expression(paste(italic("ad hoc"), " Correlation Matrices"))
 
 # Conclusion
 
-I hope you find this template useful. Remember, stackoverflow is your friend - use it to find answers to questions. Feel free to write me a mail if you have any questions regarding the use of this package. To cite this package, simply type citation("Texevier") in Rstudio to get the citation for @Texevier (Note that uncited references in your bibtex file will not be included in References).
+I hope you find this template useful. Remember, stackoverflow is your friend - use it to find answers to questions. Feel free to write me a mail if you have any questions regarding the use of this package. To cite this package, simply type citation("Texevier") in Rstudio to get the citation for @Texevier (Note that united references in your bibtex file will not be included in References).
 
 <!-- Make title of bibliography here: -->
 <!-- \newpage -->
