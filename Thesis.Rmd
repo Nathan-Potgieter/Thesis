@@ -122,9 +122,11 @@ write_rds(Example_data, path = "data/Example_data.rds")
 
 # Introduction \label{Introduction}
 
+importance of monte carlo methods
+
 path dependence; first rule of investment management
 
-Due to the aforementioned sensitivity issues surrounding errors in the expected return estimation, this work will only cover the portfolio optimisation techniques that intentionally forego this input. These include the naive equal weight, inverse variance, hierarchical risk parity, ERC and the minimum variance portfolios. _The theoretical underpinnings of each will be reviewed as well as their relative performance in historical back tests_.
+Due to the aforementioned sensitivity issues surrounding errors in the expected return estimation, this work will only cover so-called risk based portfolios, since these techniques intentionally forego this input. These include the naive equal weight, inverse variance, hierarchical risk parity, equal risk contribution and the minimum variance portfolios. _The theoretical underpinnings of each will be reviewed as well as their relative performance in historical back tests_.
 
 ". Markowitz’s curse is that the more correlated investments are, the
 greater is the need for a diversified portfolio—and yet
@@ -132,15 +134,15 @@ the greater are that portfolio’s estimation errors. [@lopez]"
 
 # Aims and Objectives
 
-This work aims to use Monte Carlo Methods to uncover the relationship between a market's covariance structure and the risk return properties of various portfolio optimisation algorithms. This will be achieved through the following objectives.
+This work aims to use Monte Carlo Methods to uncover the relationship between a market's covariance structure and the risk return properties of various risk based portfolio algorithms. This will be achieved through the following objectives.
 
-1. Design and create five distinct \emph{ad hoc} _20 by 20_ correlation matrices, each corresponding to a different risk structure or market type. These will range from a structure possessing no clusters to those possessing hierarchical clustering.
+1. Design and create four distinctive \emph{ad hoc} and build one empirical _50 by 50_ correlation matrix, each representing a market with a different risk structure. These will range from a structure possessing no clusters to those exhibiting hierarchical clustering.
 
-2. Use the R package _MCmarket_ to perform Monte Carlo Simulations for each of the five _ad hoc_ correlation matrices [REFERENCE MYSELF]. The markets will be designed to have student t multivariate distributions, with 3 degrees of freedom, the returns will each be univariate normally distributed with a periodic mean of 0.02 and standard deviation of 0.1. Each market type will be simulated 10 000 times across 300 periods. 
+2. Use the R package _MCmarket_ to perform Monte Carlo Simulations, using each of the five correlation matrices from step one as the primary input [REFERENCE MYSELF]. The markets will be built to posses student t multivariate distributions, with 3 degrees of freedom. Meanwhile the individual asset returns will each be normally distributed with a random mean and standard deviation. Each market type will be simulated 10 000 times across 300 periods. 
 
-3. Use the simulated markets to calculate the returns obtained from the portfolio optimisers. The first 50 periods will be used estimate the _ex ante_ covariance matrix and the portfolio returns will be calculated on the remaining 250 periods. (should properly incorporate rebalancing!!!!!!! every 50 periods?). The 
+3. Use the simulated market data to calculate the returns obtained from various risk based portfolio's. The first __100__ periods will be used estimate an out of sample covariance matrix, this will be used to calculate portfolio weights. These weights will remain for the next 50 periods after which portfolios will be rebalanced by looking back _100_ periods, recalculating the covariance matrix and the new portfolio weights. This process is repeated until all _300_ simulated periods have been considered. Therefore, each portfolio will end up with a series of _199_ returns.
 
-4. The performance of each portfolio optimiser will then be compared and contrasted using various portfolio risk/return analytics. Portfolio optimisers will be compared with each other within market types and with themselves across markets types.  
+4. The performance of each portfolio will then be compared and contrasted using various portfolio risk/return analytics. Portfolio optimisers will be compared with each other within market types and with themselves across markets types. 
 
 
 # Litrature Review
@@ -149,9 +151,13 @@ This work aims to use Monte Carlo Methods to uncover the relationship between a 
 
 ### Introduction
 
-Since Harry Markovitz's (1952) seminal work on the mean-variance portfolios scholars from around the globe have been aspiring to develop a robust algorithm capable of _ex ante_ situating a portfolio on the efficient frontier  [@markowitz]. There are now a wide array of available alternatives portfolio optimisers. They range from simple heuristic based approaches to advanced mathematical algorithms based on quadratic optimisation, random matrix theory and machine learning methods; many more are still in the making.
+Since Harry Markovitz's (1952) seminal work on mean-variance portfolios scholars from around the globe have been aspiring to develop a robust algorithm capable of situating a portfolio on the efficient frontier _ex ante_ [@markowitz]. There are now a wide array of available alternatives portfolio optimisers. They range from simple heuristic based approaches to advanced mathematical algorithms based on quadratic optimisation, random matrix theory and machine learning methods; with many more are still in the making.
 
-These optimisers however are not without their flaws. Mean-variance optimisers, in particular, rely heavily on the accuracy of return forecasts, where small changes in the expected return input can lead to large changes in portfolio weights [@lopez]. Due to this issue only so-called risk based portfolio's that intentionally avoid using expected return forecasts are discussed in this work as they are said to be more robust to estimation error [@maillard2010]. Furthermore, quadratic programming methods used in portfolio optimisation require the inversion of some positive-definite covariance matrix, which can be susceptible to error if the covariance matrix suffers from a high condition number. where a condition number is defined as the absolute value of the ratio between a covariance matrix's largest and smallest eigenvalues [@lopez; @lopez2012]. Diagonal matrices have the smallest condition number which increases as more correlated variables are added. When working with high conditional number matrices a small change in a single entry's estimated covariance can greatly alter its inverse of, which in turn can effect the portfolio weights [@lopez]. This is exacerbated by the fact that covariance matrices themselves are prone to estimation error. For a given sample size, larger dimension co-variance matrices are prone to more noise in estimation. This is essentially due to a reduction in degrees of freedom as a sample of at least $1/2N(N+1)$ independent and identically distributed (iid) observations are required to estimate an $N\times N$ covariance matrix. Furthermore, financial market covariance structures tend to vary over time and have been know to change rapidly during so-called regime changes [@lopez].  __[Regime changes]__
+This review 
+
+### Common Issues Portfolio Optimizers
+ 
+These optimisers are not without their flaws and this section highlights some common issues that tend to worsen their out of sample performance. Mean-variance optimisers, in particular, rely heavily on the accuracy of return forecasts, where small changes in the expected return input can lead to large changes in portfolio weights [@lopez]. Due to this issue the so-called risk based portfolio's that intentionally avoid using expected return forecasts have garnered alot of attention [@maillard2010]. Furthermore, quadratic programming methods used in many portfolio optimization require the inversion of some positive-definite covariance matrix. This step is particularly susceptible to error if the covariance matrix suffers from a high condition number. A condition number is defined as the absolute value of the ratio between a covariance matrix's largest and smallest eigenvalues [@lopez; @lopez2012]. Diagonal matrices have the smallest condition number, of 1, which increases as more correlated variables are added. When working with high conditional number matrices a small change in a single entry's estimated covariance can greatly alter its inverse, which in turn can effect the portfolio weights [@lopez]. This is exacerbated by the fact that covariance matrices themselves are prone to estimation error [@zhou2019]. For a given sample size, larger dimension covariance matrices are prone to more noise in estimation. This is essentially due to a reduction in degrees of freedom as a sample of at least $1/2N(N+1)$ independent and identically distributed (iid) observations are required to estimate an $N\times N$ covariance matrix. Furthermore, financial market covariance structures tend to vary over time and have been know to change rapidly during so-called regime changes [@lopez]. This exacerbates the issue of requiring a large number of observations when estimating the covariance matrix, as there is no guarantee that passed data will be a good refection of the future and looking further into the passed decreases the likelihood of it being so. 
 
 ### Naive Equal Weight (EW)
 
@@ -194,7 +200,7 @@ $x^*=\{x \ \epsilon[0,1]^n:\sum x_i=1, x_i \times (\sum x)_i=x_j \times (\sum x)
 
 ### Maximum Diversification (MD)
 
-@choueifaty2008 originally designed the MD portfolio to maximize the diversification ratio (DR), which they defined as the as the sum of each securities risk bucket divided by portfolio volatility [@leote]. If we define $w=(w_1,...w_N)^T$ as a vector of portfolio weights, V as a vector of asset volatilities and $\sum$ as the covariance matrix. Then the DR can be expresses as:
+@choueifaty2008 originally designed the MD portfolio to maximize a diversification ratio (DR), defined as the as the sum of each securities risk bucket divided by portfolio volatility [@leote]. If we define $w=(w_1,...w_N)^T$ as a vector of portfolio weights, V as a vector of asset volatilities and $\sum$ as the covariance matrix. Then the DR can be expresses as:
 
 $DR= \frac{w'.V}{\sqrt{w'Vw}}$
 
@@ -210,21 +216,15 @@ that are less correlated to other stocks.' (copy pasted)
 
 @choueifaty2013 conducted an empirical back test comparing the relative performance if numerous portfolio optimisers between 1999 and 2010. They used historical data from the MSCI World world index and considered the largest 50% of assets at each semi-annual rebalance date. At each rebalance date the covariance matrices, used as inputs in the portfolio optimisers, were estimated using the passed years worth of data [@choueifaty2013]. This was done to reduce noise in estimation. All portfolio's were restricted to long only. The MV portfolio achieved an annual return of 6.7% and outperformed the ERC and EW portfolio's who returned 6.3% and 5.8% respectively. Unsurprisingly, the MV portfolio possessed the lowest daily volatility (10%) followed by the ERC and then the EW portfolio's (with 12.9% and 16.4% respectively). Accordingly the MV portfolio scored the highest sharp ratio (0.36) followed by the ERC and EW portfolio's (0.24 and 0.16 respectively). 
 
-### Hierarchical Risk Parity (HRP)
-
-Due to the multitude of robustness issues related to traditional portfolio optimisers, @lopez developed a new approach incorporating machine-learning methods and graph theory [@arevalo]. @lopez argues that the "lack of hierarchical structure in a correlation matrix allows weights to vary freely in unintended ways" and that this contributes to the instability issues. His HRP algorithm requires only a singular co-variance matrix and can utilize the information within without the need for the positive definite property [@lopez]. This procedure works in three stages:
-
-@lopez carried out an in sample simulation study comparing the respective allocations of the long-only minimum variance, IVP and HRP portfolios using a co-variance matrix using a condition number that is "not unfavourable" to the minimum variance portfolio. The simulated data consisted of 10000 observations across 10 variables. The following findings were made: The minimum variance portfolio concentrated 92.66% of funds in the top 5 holdings and assigned a zero weight to 3 assets. _Conversly_, HRP only assigned 62.5% of its funds to the top 5 holdings [@lopez]. The minimum variance portfolio's objective function causes it to build highly concentrated portfolio's in favor of a small reduction in volatility; the HRP portfolio had only a slightly higher volatility [@lopez]. This apparent diversification advantage achieved by the minimum variance portfolio is rather deceptive as the portfolio remains highly susceptible to idiosyncratic risk incidents within its top holdings [@lopez]. This claim was further validated by the finding that HRP achieved significantly lower out of sample variance compared to the minimum variance portfolio.
-
 # Methadology
 
-This work used Monte Carlo simulation methods to investigate the link between a markets correlation structure and the relative performance of the EW, MV, IV, ERC and MD portfolios. The following may become confusing so please note the following terminology. In this study the term market can be thought of as a single observation consisting of the daily returns for a number of assets, where market type refers to an ensemble of markets each designed to posses the same characteristics. Here the ensemble units are referred to as realizations or counterfactuals. 
+This work used Monte Carlo simulation methods to investigate the link between a markets correlation structure and the relative performance of the EW, MV, IV, ERC and MD portfolios. The note the following terminology: the term market can be thought of as a single observation consisting of the daily returns for a number of assets, while market type refers to an set of markets each designed to posses the same risk characteristics. 
 
-The R package MCmarket was used to simulate five distinctive market types, each corresponding to a unique correlation structure. Four of the correlation matrices were designed _ad hoc_, to posses a unique correlation structure, while the fifth was calculated using S&P 500 data. These correlation matrices range from one exhibiting no correlation (i.e. a diagonal matrix) to one with hierarchical clustering (see \ref{corr_struc}) [@mcmarket]. 
+The R package MCmarket was used to simulate five distinctive market types, each corresponding to a unique correlation structure [@mcmarket]. Four of the correlation matrices were designed _ad hoc_, to posses a unique correlation structure, while the fifth was calculated using emperical S&P 500 data. These correlation matrices range from one exhibiting no correlation (i.e. a diagonal matrix) to one with hierarchical clustering (see \ref{corr_struc}) . 
 
 The long only EW, MV, IV, ERC and MD portfolios were then backtested on the simulated markets using periodic reweighting. 
 
-Portfolio analytics are then performed for each portfolio type on each realization within the market types. These portfolio analytics include the standard deviation (sd) of daily returns, downside deviation, value at risk (VaR), conditional VAR (CVaR), Sharp ratio, average drawdown and maximum drawdown. The mean and median of the portfolio metrics are then calculated for each market type.
+Portfolio analytics were then performed for each portfolio type on each realization within the market types. These portfolio analytics include the standard deviation (sd) of daily returns, downside deviation, value at risk (VaR), conditional VAR (CVaR), Sharp ratio, average drawdown and maximum drawdown. The mean and median of the portfolio metrics are then calculated for each market type.
 
 Finally, the portfolio metrics are compared within portfolio types across market types and within market types across portfolio types. 
 
@@ -241,11 +241,11 @@ Figure \ref{corr_mats} presents the four _ad hoc_ correlation matrices used in t
 pacman::p_load(MCmarket, tidyverse, patchwork, ggcorrplot)
 
 corr_1 <- diag(50) %>% ggcorrplot(hc.order = TRUE, title = "Diagonal Matrix", show.legend = FALSE)
-corr_2 <- gen_corr(D = 50, Clusters = "none") %>% ggcorrplot(title = "No Clusters", show.legend = FALSE)
-corr_3 <- gen_corr(D = 50, Clusters = "non-overlapping", Num_Clusters = 5) %>%
+corr_2 <- gen_corr(D = 50, clusters = "none") %>% ggcorrplot(title = "No Clusters", show.legend = FALSE)
+corr_3 <- gen_corr(D = 50, clusters = "non-overlapping", num_clusters = 5) %>%
   ggcorrplot(hc.order = TRUE, title = "Five Clusters", show.legend = FALSE)
-corr_4 <- gen_corr(D = 50, Clusters = "overlapping", 
-                   Num_Clusters = c(10,5,2), Num_Layers = 3) %>% 
+corr_4 <- gen_corr(D = 50, clusters = "overlapping", 
+                   num_clusters = c(10,5,2), num_layers = 3) %>% 
   ggcorrplot(hc.order = TRUE, title = "Overlapping Clusters", show.legend = FALSE)
 
 my_title <- expression(paste(italic("ad hoc"), " Correlation Matrices"))
@@ -264,7 +264,7 @@ Chuanhai Liu and Donald B. Rubin, “ML estimation of the t-distribution using E
 
 
 ```{r}
-fitHeavyTail::fit_mvt()
+
 ```
 
 
@@ -298,6 +298,11 @@ I hope you find this template useful. Remember, stackoverflow is your friend - u
 \newpage
 # Appendix {-}
 
+### Hierarchical Risk Parity (HRP)
+
+Due to the multitude of robustness issues related to traditional portfolio optimisers, @lopez developed a new approach incorporating machine-learning methods and graph theory [@arevalo]. @lopez argues that the "lack of hierarchical structure in a correlation matrix allows weights to vary freely in unintended ways" and that this contributes to the instability issues. His HRP algorithm requires only a singular co-variance matrix and can utilize the information within without the need for the positive definite property [@lopez]. This procedure works in three stages:
+
+@lopez carried out an in sample simulation study comparing the respective allocations of the long-only minimum variance, IVP and HRP portfolios using a co-variance matrix using a condition number that is "not unfavourable" to the minimum variance portfolio. The simulated data consisted of 10000 observations across 10 variables. The following findings were made: The minimum variance portfolio concentrated 92.66% of funds in the top 5 holdings and assigned a zero weight to 3 assets. _Conversly_, HRP only assigned 62.5% of its funds to the top 5 holdings [@lopez]. The minimum variance portfolio's objective function causes it to build highly concentrated portfolio's in favor of a small reduction in volatility; the HRP portfolio had only a slightly higher volatility [@lopez]. This apparent diversification advantage achieved by the minimum variance portfolio is rather deceptive as the portfolio remains highly susceptible to idiosyncratic risk incidents within its top holdings [@lopez]. This claim was further validated by the finding that HRP achieved significantly lower out of sample variance compared to the minimum variance portfolio.
 ## Appendix A {-}
 
 Some appendix information here

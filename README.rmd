@@ -17,6 +17,8 @@ This document serves as the README for Nathan Potgieter's Stellenbosch Universit
 
 ## Creating Correlation Structure Types
 
+### _ad hoc_
+
 This section sets out to design five distinct 50 by 50 market correlation matrices, ranging from highly unrealistic, and purely theoretical, to more realistic hierarchically clustered matrices.
 ```{r making markets, results='asis'}
 # Loading required packages
@@ -26,31 +28,37 @@ pacman::p_load(MCmarket, tidyverse, ggcorrplot)
 # First look at the diagonal correlation matrix
 # This seems far to simple and boring; Check with nico
 #----------------------------------------------
-corr_1 <- diag(50)
+corr_1 <- diag(20)
 eigen_1 <- eigen(corr_1) # all eigenvalues are 1 and all eigenvectors contain only zero's
 corr_1 %>% ggcorrplot(hc.order = TRUE, title = "Diagonal Matrix")
 
 #---------------------------------------------
 # Correlation matrix with no clusters
 #---------------------------------------------
-corr_2 <- gen_corr(D = 50, Clusters = "none")
+corr_2 <- gen_corr(D = 50, clusters = "none")
 eigen_2 <- eigen(corr_2)
 corr_2 %>% ggcorrplot(title = "No Clusters")
 
 #---------------------------------------------
 # Correlation matrix with 5 clusters
 #---------------------------------------------
-corr_3 <- gen_corr(D = 50, Clusters = "non-overlapping", Num_Clusters = 5)
+corr_3 <- gen_corr(D = 50, clusters = "non-overlapping", num_clusters = 5)
 eigen_3 <- eigen(corr_3)
 corr_3 %>% ggcorrplot(hc.order = TRUE, title = "Five Clusters")
 
 #---------------------------------------------
 # Correlation matrix with 10, 5 and 2 overlapping clusters
 #---------------------------------------------
-corr_4 <- gen_corr(D = 50, Clusters = "overlapping", Num_Clusters = c(10,5,2), Num_Layers = 3)
+corr_4 <- gen_corr(D = 50, clusters = "overlapping", num_clusters = c(10,5,2), num_layers = 3)
 eigen_4 <- eigen(corr_4)
 corr_4 %>% ggcorrplot(hc.order = TRUE, title = "Overlapping Clusters")
 
+```
+
+### Emperical
+https://eur03.safelinks.protection.outlook.com/?url=https%3A%2F%2Frawgit.com%2Fdppalomar%2FcovFactorModel%2Fmaster%2Fvignettes%2FcovFactorModel-vignette.html&data=04%7C01%7C%7C0caeb7ee2beb449dd0af08d8b409e474%7Ca6fa3b030a3c42588433a120dffcd348%7C0%7C0%7C637457302843416665%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C2000&sdata=1aBOrvjRM9Z3wXBR5miFvKfC5eiRpiUx8FH2bVS0FII%3D&reserved=0
+
+```{r emperical corrs}
 #-----------------------------------------------
 # Some empirical correlation matrices - from S&P500
 # See ??corr_mats for info on how dataset was compiled
@@ -86,7 +94,11 @@ corr_7 %>% ggcorrplot(hc.order = TRUE, title = "Rally Market")  +
         axis.title = element_blank(),
         axis.ticks = element_blank())
 
+```
 
+### Eigan Values
+
+```{r eigens}
 #------------------------------------------
 # Data set of eigenvalues
 #------------------------------------------
@@ -96,37 +108,59 @@ eigens <- tibble(corr_1 = eigen_1$values,
                  corr_4 = eigen_4$values,
                  corr_5 = eigen_5$values,
                  corr_6 = eigen_6$values,
-                 corr_7 = eigen_7$values)
+                 corr_7 = eigen_7$values) %>% 
+  gather(corr, eigen) %>% group_by(corr) %>% 
+  mutate(cond_num = max(abs(eigen))/min(abs(eigen))) %>% 
+  arrange(corr)
+  
 rm(eigen_1, eigen_2, eigen_3, eigen_4, eigen_5, eigen_6, eigen_7)
 
 # Printing Eigenvalues in a table
 head(eigens, n = 10)
-
 ```
+
 
 ## Simulating Markets
 
 ```{r monte carlo, eval=FALSE, include=TRUE}
-#clearing memory and Viewing current limit
-gc()
-memory.size(max = NA)
+# loading packages
+pacman::p_load(dplyr, purrr, MCmarket)
+
+# Creating vectors for portfolio mean and sd's
+set.seed(8541683)
+means <- rnorm(20, mean = 0.02, sd = 0.03)
+sds <- rnorm(20, mean = 0.1, sd = 0.03)
+max(means)
+min(means)
+max(sds)
+min(sds)
 
 # Setting number of markets and length of progress bar.
-N <- 10
+N <- 10000
 pb <- dplyr::progress_estimated(N)
 
+#clearing memory and Viewing current limit
+gc()
+memory.size()
+memory.limit()
+
 set.seed(9543712)
-market_1 <-
+
+market_1 <- 
     1:N %>%
-    map_dfr(~sim_market_with_progress(corr = corr_3,
+    map_dfr(~sim_market_with_progress(corr = corr_1,
                                       k = 300,
                                       mv_dist = "t",
                                       mv_df = 3,
                                       marginal_dist = "norm",
-                                      marginal_dist_model = list(mu = 0.02,
-                                                                 sd = 0.1),
+                                      marginal_dist_model = list(mu = means,
+                                                                 sd = sds),
                                       ts_model = NULL),
-            .id = "Universe")
+            .id = "Universe") 
+    
+write.csv(market_1, file = "data/market_1.csv", row.names = FALSE)
+    
+market_1 <- read.csv("data/market.csv") %>% as_tibble()
 
 # Saving dataframe
 save(market_1, file = "data/market_1.rda")
