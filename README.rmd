@@ -28,7 +28,7 @@ pacman::p_load(MCmarket, tidyverse, ggcorrplot)
 # First look at the diagonal correlation matrix
 # This seems far to simple and boring; Check with nico
 #----------------------------------------------
-corr_1 <- diag(20)
+corr_1 <- diag(50)
 eigen_1 <- eigen(corr_1) # all eigenvalues are 1 and all eigenvectors contain only zero's
 corr_1 %>% ggcorrplot(hc.order = TRUE, title = "Diagonal Matrix")
 
@@ -128,8 +128,8 @@ pacman::p_load(dplyr, purrr, MCmarket)
 
 # Creating vectors for portfolio mean and sd's
 set.seed(8541683)
-means <- rnorm(20, mean = 0.02, sd = 0.03)
-sds <- rnorm(20, mean = 0.1, sd = 0.03)
+means <- rnorm(50, mean = 0.02, sd = 0.03)
+sds <- rnorm(50, mean = 0.1, sd = 0.03)
 max(means)
 min(means)
 max(sds)

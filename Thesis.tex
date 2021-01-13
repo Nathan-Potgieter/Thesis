@@ -246,7 +246,7 @@ Multivariate GARCH \sep Kalman Filter \sep Copula \\ \vspace{0.3cm}
 \section{\texorpdfstring{Introduction
 \label{Introduction}}{Introduction }}\label{introduction}}
 
-importance of monte carlo methods
+importance of Monte Carlo methods
 
 path dependence; first rule of investment management
 
@@ -275,11 +275,11 @@ through the following objectives.
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \item
-  Design and create four distinctive \emph{ad hoc} and build one
-  empirical \emph{50 by 50} correlation matrix, each representing a
-  market with a different risk structure. These will range from a
-  structure possessing no clusters to those exhibiting hierarchical
-  clustering.
+  Design and create four distinctive \emph{ad hoc} correlation matrices
+  and build one empirical \emph{50 by 50} correlation matrix, each
+  representing a market with a different risk structure. These from
+  markets structure possessing no clusters to those exhibiting
+  hierarchical clustering.
 \item
   Use the R package \emph{MCmarket} to perform Monte Carlo Simulations,
   using each of the five correlation matrices from step one as the
@@ -318,134 +318,178 @@ Algorithms}\label{a-review-of-portfolio-optimisation-algorithms}}
 Since Harry Markovitz's (1952) seminal work on mean-variance portfolios
 scholars from around the globe have been aspiring to develop a robust
 algorithm capable of situating a portfolio on the efficient frontier
-\emph{ex ante} (Markowitz, \protect\hyperlink{ref-markowitz}{1952}).
-There are now a wide array of available alternatives portfolio
-optimisers. They range from simple heuristic based approaches to
-advanced mathematical algorithms based on quadratic optimisation, random
+\emph{ex ante}. There are now a wide array of available alternatives
+portfolio optimisers raging from simple heuristic based approaches to
+advanced mathematical algorithms based on quadratic optimization, random
 matrix theory and machine learning methods; with many more are still in
 the making.
 
-This review
+This literature review review will cover some common issues discussed
+within the literature surrounding portfolio optimization in general, the
+five risk-based portfolios evaluated in this work, their respective
+performance in empirical back tests and Monte Carlo Studies and finally
+the importance of using Monte Carlo methods when stress testing
+portfolio optimization algorithms will be discussed.
 
 \hypertarget{common-issues-portfolio-optimizers}{%
 \subsubsection{Common Issues Portfolio
 Optimizers}\label{common-issues-portfolio-optimizers}}
 
-These optimisers are not without their flaws and this section highlights
-some common issues that tend to worsen their out of sample performance.
-Mean-variance optimisers, in particular, rely heavily on the accuracy of
-return forecasts, where small changes in the expected return input can
-lead to large changes in portfolio weights (De Prado,
-\protect\hyperlink{ref-lopez}{2016}). Due to this issue the so-called
-risk based portfolio's that intentionally avoid using expected return
-forecasts have garnered alot of attention (Maillard,
-\protect\hyperlink{ref-maillard2010}{2010}). Furthermore, quadratic
-programming methods used in many portfolio optimization require the
-inversion of some positive-definite covariance matrix. This step is
-particularly susceptible to error if the covariance matrix suffers from
-a high condition number. A condition number is defined as the absolute
-value of the ratio between a covariance matrix's largest and smallest
-eigenvalues (Bailey \& Lopez De Prado,
-\protect\hyperlink{ref-lopez2012}{2012}; De Prado,
-\protect\hyperlink{ref-lopez}{2016}). Diagonal matrices have the
-smallest condition number, of 1, which increases as more correlated
-variables are added. When working with high conditional number matrices
-a small change in a single entry's estimated covariance can greatly
-alter its inverse, which in turn can effect the portfolio weights (De
-Prado, \protect\hyperlink{ref-lopez}{2016}). This is exacerbated by the
-fact that covariance matrices themselves are prone to estimation error
-(Zhou \emph{et al.}, \protect\hyperlink{ref-zhou2019}{2019}). For a
-given sample size, larger dimension covariance matrices are prone to
+When working with in sample data Portfolio optimization tends to be a
+perfect science, but out of sample it becomes more of an art form where
+it is often preferable to work on heuristic than hard rules. This
+section highlights some gneral issues, highlighted within the portfolio
+optimization literature, that tend to worsen their out of sample
+performance.
+
+Firstly, mean-variance optimisers, like those introduced by Markowitz
+(\protect\hyperlink{ref-markowitz}{1952}), rely heavily on the accuracy
+of their expected return forecasts. Small changes in the expected return
+input can lead to large changes in portfolio weights (De Prado,
+\protect\hyperlink{ref-lopez}{2016}). Since in practice expected returns
+are extremely difficult, if not impossible, to accurately estimate, this
+issue serves as a major hindrance to their wide spread use. Due to this
+issue the so-called risk based portfolio's that intentionally avoid
+using expected return forecasts have garnered a lot of attention
+(Maillard, \protect\hyperlink{ref-maillard2010}{2010}).
+
+Unfortunately, these risk based portfolios are not void of issues. The
+quadratic programming methods used in many portfolio optimisers,
+including the mean variance and many risk-based, require the inversion
+of some positive-definite covariance matrix. This positive definiteness
+requirement can cause issues as covariance matrices estimated on
+empirical data are sometimes not positive definite, in which case their
+inverse does not exist and these portfolio's don't have solutions
+({\textbf{???}}). A common method to get around this issue is to simply
+transform the non-posetive definate matrix into its closest positive
+definite form.
+
+The covariance estimation step is particularly susceptible to error if
+the covariance matrix suffers from a high condition number. A condition
+number is defined as the absolute value of the ratio between a
+covariance matrix's largest and smallest eigenvalues (Bailey \& Lopez De
+Prado, \protect\hyperlink{ref-lopez2012}{2012}; De Prado,
+\protect\hyperlink{ref-lopez}{2016}). The conditional number is smallest
+in diagonal matrices (they have a conditional number of 1) and it
+increases as more correlated variables are added. When working with high
+conditional number matrices a small change in a single entry's estimated
+covariance can greatly alter its inverse, which in turn can effect the
+portfolio weights (De Prado, \protect\hyperlink{ref-lopez}{2016}). This
+is exacerbated by the fact that covariance matrices themselves are prone
+to estimation error (Zhou \emph{et al.},
+\protect\hyperlink{ref-zhou2019}{2019}). For a sample with a given
+number of periods, larger dimension covariance matrices are prone to
 more noise in estimation. This is essentially due to a reduction in
 degrees of freedom as a sample of at least \(1/2N(N+1)\) independent and
 identically distributed (iid) observations are required to estimate an
-\(N\times N\) covariance matrix. Furthermore, financial market
-covariance structures tend to vary over time and have been know to
-change rapidly during so-called regime changes (De Prado,
+\(N\times N\) covariance matrix (De Prado,
+\protect\hyperlink{ref-lopez}{2016} {[}p.~60{]}). Furthermore, financial
+market covariance structures tend to vary over time and have been know
+to change rapidly during so-called regime changes (De Prado,
 \protect\hyperlink{ref-lopez}{2016}). This exacerbates the issue of
 requiring a large number of observations when estimating the covariance
 matrix, as there is no guarantee that passed data will be a good
 refection of the future and looking further into the passed decreases
 the likelihood of it being so.
 
+\hypertarget{risk-based-portfolios}{%
+\subsubsection{Risk Based Portfolio's}\label{risk-based-portfolios}}
+
+This section reviews the intuition and technical underpinnings within
+the litrature surrounding the so-called risk-based portfolios. These
+include the equal weight (EW), minimum variance (MV), inverse volatility
+(IV), equal risk contribution and the maximum diversification
+portfolios. The EW is a simple heuristic approach, the minimum variance
+is more akin to a Markovitz (1952) mean variance portfolio, while the
+inverse-variance (IV), equal risk contrition (ERC) and maximum
+diversification (MD) are quite similar in that they each assume that
+adequate diversification can be obtained by allocating equal risk to
+each investible security.
+
 \hypertarget{naive-equal-weight-ew}{%
-\subsubsection{Naive Equal Weight (EW)}\label{naive-equal-weight-ew}}
+\paragraph{Naive Equal Weight (EW)}\label{naive-equal-weight-ew}}
 
 Perhaps the oldest and most simple portfolio diversification heuristic
 constitutes holding a weight of \(1/N\) of the \(N\) total assets
 available to the investor (DeMiguel \emph{et al.},
-\protect\hyperlink{ref-demiguel2009}{2009}). This portfolio is commonly
-called the equal weight or 1/N portfolio, its failure to recognise the
-importance of covariation between assets has resulted in it also being
-referred to as the naive portfolio. It commonly used as a benchmark
-index.
+\protect\hyperlink{ref-demiguel2009}{2009}). In layman's terms this can
+be describes as putting an equal number of eggs in each available
+basket. This portfolio is commonly called the equal weight or 1/N
+portfolio, its failure to recognize the importance of bothe the relative
+asset variance and the covariance between assets has also resulted in it
+being referred to as the naive portfolio. Its simplicity has resulted in
+it commonly being used as the benchmark portfolio.
 
 Despite its simplistic nature empirical studies tend to find a
 statistically insignificant difference in Sharp ratio between the naive
 portfolio and more advanced portfolio optimisers. This finding was made
 in DeMiguel \emph{et al.} (\protect\hyperlink{ref-demiguel2009}{2009})
 who looked at the mean-variance, minimum-variance and Bayes-Stein
-portfolio's, where EW also performed surprisingly well form a total
+portfolio's, where EW also performed surprisingly well from a total
 return perspective.
 
 \hypertarget{minimum-variance-mv}{%
-\subsubsection{Minimum Variance (MV)}\label{minimum-variance-mv}}
+\paragraph{Minimum Variance (MV)}\label{minimum-variance-mv}}
 
-Portfolio optimisers designed to exhibit the minimum variance have
-garnered a lot of attention for themselves, largely to their tendency to
+Portfolio optimisers designed to exhibit the minimum variance have more
+recently garnered a lot of attention, largely due their tendency to
 achieve surprisingly high returns in historical back tests (Clarke
 \emph{et al.}, \protect\hyperlink{ref-clarke2011}{2011}). This
-performance has been attributed to the fact that low volatility stocks
-tend to earn returns in excess of the market, and high beta stocks tend
-not to be rewarded by higher returns (Clarke \emph{et al.},
-\protect\hyperlink{ref-clarke2011}{2011}; Fama \& French,
-\protect\hyperlink{ref-fama1992}{1992}). These minimum variance
-portfolios tend to achieve cumulative returns equal to or slightly
+performance has been attributed to the empirical phenomenon that low
+volatility stocks tend to earn returns in excess of the market, and high
+beta stocks tend not to be rewarded by higher returns (Clarke \emph{et
+al.}, \protect\hyperlink{ref-clarke2011}{2011}; Fama \& French,
+\protect\hyperlink{ref-fama1992}{1992}). These findings are contrary
+financial economic theory. For example, the minimum variance (MV)
+portfolio tends to achieve cumulative returns equal to or slightly
 greater than market capitalization weighted portfolio's whilst
 maintaining consistently lower variance and achieving a noticeable
-improvement in downside risk mitigation even during times of financial
+improvement in downside risk mitigation, even during times of financial
 crisis (Clarke \emph{et al.}, \protect\hyperlink{ref-clarke2011}{2011}).
-\textbf{The MV portfolio (discussed in this section) is the only
-portfolio on the efficient frontier that does not depend on expected
-return forecasts(De Prado, \protect\hyperlink{ref-lopez}{2016}).}
+Interestingly, the MV portfolio is the only portfolio of the efficient
+frontier that does not depend on expected return forecasts(De Prado,
+\protect\hyperlink{ref-lopez}{2016}).
 
 The minimum variance portfolio selects security weights such that the
-resulting portfolio weights correspond to the portfolio with the lowest
-possible in sample volatility. Therefore, it has the lowest expected
-volatility and is, in theory, safest/least risky portfolio (De Carvalho
+resulting portfolio correspond to that with the lowest possible in
+sample volatility. Therefore, it has the lowest expected volatility and
+is, in theory, safest/least risky portfolio (De Carvalho \emph{et al.},
+\protect\hyperlink{ref-rawl2012}{2012}\protect\hyperlink{ref-rawl2012}{a}).
+Its primary input is a variance covariance matrix, which it uses to
+minimize aggregate portfolio volatility. This is accomplished by
+overweighting low volatility and low correlation securities (De Carvalho
 \emph{et al.},
 \protect\hyperlink{ref-rawl2012}{2012}\protect\hyperlink{ref-rawl2012}{a}).
-Its primary input is a variance covariance matrix, which it uses in its
-optimisation to overweight low volatility and low correlation securities
-(De Carvalho \emph{et al.},
-\protect\hyperlink{ref-rawl2012}{2012}\protect\hyperlink{ref-rawl2012}{a}).
-This approach often works well out of sample, but is known to achieve
-minor reductions in \emph{ex ante} portfolio volatility by greatly
-favouring a small number of low volatility/correlation securities (De
-Prado, \protect\hyperlink{ref-lopez}{2016} {[}p.~68{]}). This tendency
-to produce highly concentrated portfolio's can cause serious out of
-sample diversification problem as the sample becomes increasingly
-susceptible to measurement error.
+This approach often works well out of sample, but if left unrestricted
+is known to build highly concentrated portfolio's (De Prado,
+\protect\hyperlink{ref-lopez}{2016}). Its sole objective to minimize
+portfolio volatility has been cited as the primary reason for this. When
+near trough of its objective function it to achieves minor reductions in
+\emph{ex ante} volatility by greatly favoring a small number of low
+volatility/correlation securities (De Prado,
+\protect\hyperlink{ref-lopez}{2016} {[}p.~68{]}). This tendency to
+produce highly concentrated portfolio's be costly out of sample as the
+portfolio has not sufficiently diversifies idiosyncratic risk, it puts
+too many eggs in a small number of baskets. In practice This issue can
+be countered by applying cleaver maximum and minimum constraints on
+portfolio weights.
 
 Let \(\sum\) indicate the markets variance covariance matrix and
 \(w=\{w_i,..., w_N \}\) be a vector of length N containing individual
-security weights, then the vector containing MV portfolio can be written
-as (De Carvalho \emph{et al.},
+security weights. The vector containing MV portfolio weights can new be
+described as (De Carvalho \emph{et al.},
 \protect\hyperlink{ref-rawl2012}{2012}\protect\hyperlink{ref-rawl2012}{a}):
 
 \(w^*=arg\min(w'\sum w)\ \ \ s.t.\ \sum^N_iw_i=1\)
 
 \hypertarget{inverse-varience-iv-weighting}{%
-\subsubsection{Inverse-Varience (IV)
+\paragraph{Inverse-Varience (IV)
 Weighting}\label{inverse-varience-iv-weighting}}
 
-\textbf{The inverse-variance (IV), equal risk contrition (ERC) and
-maximum diversification (MD) portfolio's each assume that adequate
-diversification can be obtained by allocating equal risk to each
-investable security.}
-
-The IV portfolio, also known as the equal-risk budget (ERB), portfolio
-aims to allocate an equal risk budget to each investable security (De
+The IV portfolio, refered to as the equal-risk budget (ERB) portfolio in
+De Carvalho \emph{et al.}
+(\protect\hyperlink{ref-leote}{2012}\protect\hyperlink{ref-leote}{b}),
+aims to allocate an equal risk budget to each investible security (De
 Carvalho \emph{et al.},
 \protect\hyperlink{ref-leote}{2012}\protect\hyperlink{ref-leote}{b}).
 Where the risk budget is defined as the the product of a the security's
@@ -456,7 +500,7 @@ securities by setting security weights as such:
 \(w_{iv}=(\frac{1/\sigma_1}{\sum^N_{j=1} 1/\sigma}, ...,\frac{1/\sigma_N}{\sum^N_{j=1} 1/\sigma} )\)
 
 \hypertarget{equal-risk-contribution-erc}{%
-\subsubsection{Equal Risk Contribution
+\paragraph{Equal Risk Contribution
 (ERC)}\label{equal-risk-contribution-erc}}
 
 The ERC portfolio is similar to the IV, but also takes covariance into
@@ -492,13 +536,13 @@ then the optimal ERC weight can be written as (Maillard,
 \(x^*=\{x \ \epsilon[0,1]^n:\sum x_i=1, x_i \times (\sum x)_i=x_j \times (\sum x)_j \ \forall \ i,j \}\)
 
 \hypertarget{maximum-diversification-md}{%
-\subsubsection{Maximum Diversification
+\paragraph{Maximum Diversification
 (MD)}\label{maximum-diversification-md}}
 
 Choueifaty \& Coignard (\protect\hyperlink{ref-choueifaty2008}{2008})
-originally designed the MD portfolio to maximize the diversification
-ratio (DR), which they defined as the as the sum of each securities risk
-bucket divided by portfolio volatility (De Carvalho \emph{et al.},
+originally designed the MD portfolio to maximize a diversification ratio
+(DR), defined as the as the sum of each securities risk bucket divided
+by portfolio volatility (De Carvalho \emph{et al.},
 \protect\hyperlink{ref-leote}{2012}\protect\hyperlink{ref-leote}{b}). If
 we define \(w=(w_1,...w_N)^T\) as a vector of portfolio weights, V as a
 vector of asset volatilities and \(\sum\) as the covariance matrix. Then
@@ -550,26 +594,24 @@ respectively).
 
 This work used Monte Carlo simulation methods to investigate the link
 between a markets correlation structure and the relative performance of
-the EW, MV, IV, ERC and MD portfolios. The following may become
-confusing so please note the following terminology. In this study the
-term market can be thought of as a single observation consisting of the
-daily returns for a number of assets, where market type refers to an
-ensemble of markets each designed to posses the same characteristics.
-Here the ensemble units are referred to as realizations or
-counterfactuals.
+the EW, MV, IV, ERC and MD portfolios. The note the following
+terminology: the term market can be thought of as a single observation
+consisting of the daily returns for a number of assets, while market
+type refers to an set of markets each designed to posses the same risk
+characteristics.
 
 The R package MCmarket was used to simulate five distinctive market
-types, each corresponding to a unique correlation structure. Four of the
-correlation matrices were designed \emph{ad hoc}, to posses a unique
-correlation structure, while the fifth was calculated using S\&P 500
-data. These correlation matrices range from one exhibiting no
-correlation (i.e.~a diagonal matrix) to one with hierarchical clustering
-(see \ref{corr_struc}) ({\textbf{???}}).
+types, each corresponding to a unique correlation structure
+({\textbf{???}}). Four of the correlation matrices were designed
+\emph{ad hoc}, to posses a unique correlation structure, while the fifth
+was calculated using emperical S\&P 500 data. These correlation matrices
+range from one exhibiting no correlation (i.e.~a diagonal matrix) to one
+with hierarchical clustering (see \ref{corr_struc}) .
 
 The long only EW, MV, IV, ERC and MD portfolios were then backtested on
 the simulated markets using periodic reweighting.
 
-Portfolio analytics are then performed for each portfolio type on each
+Portfolio analytics were then performed for each portfolio type on each
 realization within the market types. These portfolio analytics include
 the standard deviation (sd) of daily returns, downside deviation, value
 at risk (VaR), conditional VAR (CVaR), Sharp ratio, average drawdown and
@@ -617,6 +659,8 @@ Chuanhai Liu and Donald B. Rubin, ``ML estimation of the t-distribution
 using EM and its extensions, ECM and ECME,'' Statistica Sinica (5),
 pp.~19-39, 1995.
 
+\includegraphics{Thesis_files/figure-latex/unnamed-chunk-1-1.pdf}
+
 \hypertarget{monte-carlo}{%
 \subsection{Monte Carlo}\label{monte-carlo}}
 
@@ -627,14 +671,14 @@ simulations. This package uses a generalized Monte Carlo framework from
 \hypertarget{back-tests}{%
 \subsection{Back Tests}\label{back-tests}}
 
-To remain in line with the literature, and the mandate for the majority
-of investors, the long-only constraint was applied to all portfolio's.
-In addition, a constraint limiting the maximum weight for a single
-security to 20\%. This additional constraint is intended to prevent
-portfolio's that tend to building excessively highly concentrated
-holdings, while remaining flexible enough to punish those who do so.
-Therefore, the constraints are effectively providing a fair playing
-ground for the portfolio's to compete.
+To remain consistent with the literature, a long-only constraint was
+applied to all portfolio's. In addition, a constraint limiting the
+maximum weight for a single security to \emph{20\%}. This additional
+constraint is intended to prevent some portfolio's from building
+excessively highly concentrated holdings, while remaining flexible
+enough to punish those who do so. Therefore, the constraints are
+effectively providing a fair playing ground for the portfolio's to
+compete.
 
 The first 50 periods were used to estimate the co-variance matrix, used
 as the primary input in portfolio weight calculations for the respective
