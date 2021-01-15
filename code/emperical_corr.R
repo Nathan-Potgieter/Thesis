@@ -35,7 +35,7 @@ SNP_top100_data %>% select(date, symbol, adjusted) %>%
 # Saving data frame
 save(SNP_top100_data, file = "data/SNP_top100_data.rda")
 
-
+load("data/SNP_top100_data.rda")
 # Selecting a random index of 50
 set.seed(428653)
 indx <- sample(1:100, size = 50)
@@ -48,6 +48,13 @@ SNP_top100_data %>% select(date, symbol, return) %>%
     .[,indx] %>%   # selecting random subset
     fitHeavyTail::fit_mvt() %>% .$cov %>% cov2cor()
 save(emp_corr, file = "data/emp_corr.rda")
+
+# Calculating df
+emp_dist_df <-
+    SNP_top100_data %>% select(date, symbol, return) %>%
+    spread(symbol, return) %>% select(-date) %>%
+    .[,indx] %>%   # selecting random subset
+    fitHeavyTail::fit_mvt() %>% .$nu
 
 
 # Cleaning CORR with covfactormodel package

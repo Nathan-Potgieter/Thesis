@@ -38,7 +38,7 @@ corr_1 %>% ggcorrplot(hc.order = TRUE, title = "Diagonal Matrix")
 corr_2 <- gen_corr(D = 50, clusters = "none")
 eigen_2 <- eigen(corr_2)
 corr_2 %>% ggcorrplot(title = "No Clusters")
-
+0.9^(5-1)
 #---------------------------------------------
 # Correlation matrix with 5 clusters
 #---------------------------------------------
@@ -100,23 +100,31 @@ corr_7 %>% ggcorrplot(hc.order = TRUE, title = "Rally Market")  +
 
 ```{r eigens}
 #------------------------------------------
-# Data set of eigenvalues
+# Table of eigenvalues
 #------------------------------------------
+# First load emprical corr and calc eigen
+load("data/emp_corr.rda")
+eigen_5 <- eigen(emp_corr)
+  
+  
 eigens <- tibble(corr_1 = eigen_1$values,
                  corr_2 = eigen_2$values,
                  corr_3 = eigen_3$values,
                  corr_4 = eigen_4$values,
-                 corr_5 = eigen_5$values,
-                 corr_6 = eigen_6$values,
-                 corr_7 = eigen_7$values) %>% 
+                 corr_5 = eigen_5$values) %>% 
   gather(corr, eigen) %>% group_by(corr) %>% 
   mutate(cond_num = max(abs(eigen))/min(abs(eigen))) %>% 
   arrange(corr)
-  
-rm(eigen_1, eigen_2, eigen_3, eigen_4, eigen_5, eigen_6, eigen_7)
+
 
 # Printing Eigenvalues in a table
-head(eigens, n = 10)
+eigen_table <-
+eigens %>% select(-cond_num) %>% group_by(corr) %>% 
+  mutate(key = 1:n()) %>%  spread(corr, eigen) %>% select(-key) %>% head(n = 10) %>% 
+  set_names(c("Diagonal", "No Clusters", "Five Clusters", "Overlapping Clusters", "Emperical"))
+save(eigen_table, file = "data/eigen_table.rda")
+
+rm(eigen_1, eigen_2, eigen_3, eigen_4, eigen_5, eigen_6, eigen_7, eigen_table, corr_6, corr_7, eigens, emp_corr)
 ```
 
 
@@ -171,7 +179,6 @@ rm(market_1)
 
 ```{r opt_port function}
 pacman::p_load(lubridate, fitHeavyTail, RiskPortfolios, tbl2xts, rmsfuns)
-load("data/market_1.rda")
 
 opt_port_return <- function(data, method, cov_calc_period = 100) {
   
@@ -246,8 +253,9 @@ maxdiv_port_m1 <- market_1 %>%
 ## Functions: Portfolios with Periodic Rebalancing 
 
 ```{r}
+pacman::p_load(lubridate, fitHeavyTail, RiskPortfolios, tbl2xts, rmsfuns)
 # --------------------------------------------------------------------
-# This function creates a set of rolling weights from a single market
+# This function creates a set of weights from a single market at a date
 # --------------------------------------------------------------------
 port_weight_calc <- function(data, method, from_date, look_back) {
   
@@ -265,13 +273,25 @@ port_weight_calc <- function(data, method, from_date, look_back) {
       method == "naive" ~ 1/n(),
       
       method == "minvol" ~ optimalPortfolio(Sigma = cov, 
-                                            control = list(type = "minvol", constraint = "lo")),
+                                            control = list(type = "minvol", 
+                                                           constraint = "user", 
+                                                           LB = rep(0, nrow(cov)),
+                                                           UB = rep(0.2, nrow(cov)))),
       method == "invvol" ~ optimalPortfolio(Sigma = cov, 
-                                            control = list(type = "invvol", constraint = "lo")),
+                                            control = list(type = "invvol", 
+                                                           constraint = "user", 
+                                                           LB = rep(0, nrow(cov)),
+                                                           UB = rep(0.2, nrow(cov)))),
       method == "erc" ~ optimalPortfolio(Sigma = cov, 
-                                         control = list(type = "erc", constraint = "lo")),
+                                         control = list(type = "erc", 
+                                                        constraint = "user", 
+                                                        LB = rep(0, nrow(cov)),
+                                                        UB = rep(0.2, nrow(cov)))),
       method == "maxdiv" ~ optimalPortfolio(Sigma = cov, 
-                                      control = list(type = "maxdiv", constraint = "lo"))
+                                      control = list(type = "maxdiv",
+                                                     constraint = "user", 
+                                                           LB = rep(0, nrow(cov)),
+                                                           UB = rep(0.2, nrow(cov))))
       )) %>% 
     select(date, Asset, weight)
   
@@ -281,12 +301,12 @@ port_weight_calc <- function(data, method, from_date, look_back) {
 # --------------------------------------------------------------
 # This function calculates portfolio returns for a single market
 # --------------------------------------------------------------
-port_returns <- function(returns, weights, look_back) {
+port_returns <- function(data, weights, look_back) {
   
   returns_xts <- data %>% 
     select(date, Asset, Return)%>% 
     spread(Asset, Return) %>% arrange(date) %>% 
-    filter(date>first(date) %m+% days(look_back)) %>% 
+    filter(date>=first(date) %m+% days(look_back)) %>% 
     tbl_xts()
   
   weights_xts <- weights %>% 
@@ -306,11 +326,11 @@ port_returns <- function(returns, weights, look_back) {
 rebal_port_returns <- function(data, method, rebdates, look_back) {
   
   weights <- rebdates %>%
-  map_dfr(~port_weight_calc(data, method = "minvol", 
+  map_dfr(~port_weight_calc(data, method = method, 
                             from_date =  .x, 
-                            look_back = 100))
+                            look_back = look_back))
 
-port_returns(returns = data, weights = weights, look_back = 100)
+port_returns(data, weights = weights, look_back = look_back)
 }
 
 # ----------------------------------------------------------------------------
@@ -335,6 +355,14 @@ port_rets_universal <- function(data_universal, method, rebdates, look_back = 10
 ### Market 1
 
 ```{r}
+# Load MC data
+# load("data/market_1.rda")
+pacman::p_load(lubridate, fitHeavyTail, RiskPortfolios, tbl2xts, rmsfuns)
+
+market_1 <- market_1 %>% mutate(date = as.Date(date),
+                                Universe = as.character(Universe))
+dat <- market_1 %>% filter(Universe==1)
+
 # Vector of rebalance dates
 # Only works for k=300 and look_back = 100
 rebdates <- c(first(market_1$date) %m+% days(100), 
@@ -346,17 +374,67 @@ methods <- c("naive", "minvol", "invvol", "erc", "maxdiv")
 
 # Calculating portfolio returns, 
 # for each portfolio type in market 1.
+load("data/market_1.rda")
 rets_m1 <- methods %>% 
   map(~port_rets_universal(market_1,
                            method = .x,
                            rebdates = rebdates,
                            look_back = 100))
 names(rets_m1) <- c("naive", "minvol", "invvol", "erc", "maxdiv")
+save(rets_m1, file = "data/rets_m1.rda")
+
+rm(market_1, rets_m1)
+gc()
 
 # Market 2
+load("data/market_2.rda")
+rets_m2 <- methods %>% 
+  map(~port_rets_universal(market_2,
+                           method = .x,
+                           rebdates = rebdates,
+                           look_back = 100))
+names(rets_m2) <- c("naive", "minvol", "invvol", "erc", "maxdiv")
+save(rets_m2, file = "data/rets_m2.rda")
 
+rm(market_2, rets_m2)
+gc()
 
 # Market 3
+load("data/market_3.rda")
+rets_m3 <- methods %>% 
+  map(~port_rets_universal(market_3,
+                           method = .x,
+                           rebdates = rebdates,
+                           look_back = 100))
+names(rets_m3) <- c("naive", "minvol", "invvol", "erc", "maxdiv")
+save(rets_m3, file = "data/rets_m3.rda")
+
+rm(market_3, rets_m3)
+gc()
+
+# Market 4
+rets_m4 <- methods %>% 
+  map(~port_rets_universal(market_4,
+                           method = .x,
+                           rebdates = rebdates,
+                           look_back = 100))
+names(rets_m4) <- c("naive", "minvol", "invvol", "erc", "maxdiv")
+save(rets_m4, file = "data/rets_m4.rda")
+
+rm(market_4, rets_m4)
+gc()
+
+# Market 5
+rets_m5 <- methods %>% 
+  map(~port_rets_universal(market_5,
+                           method = .x,
+                           rebdates = rebdates,
+                           look_back = 100))
+names(rets_m5) <- c("naive", "minvol", "invvol", "erc", "maxdiv")
+save(rets_m5, file = "data/rets_m5.rda")
+
+rm(market_5, rets_m5)
+gc()
 
 ```
 
@@ -389,6 +467,11 @@ universal_portfolio_analytics <- function(portfolio_return_tbl,
   ) %>% 
   map_dfr(~as_tibble(t(.x))) 
 }
+
+# Other candidates|| What to use as index??
+PerformanceAnalytics::SortinoRatio()
+PerformanceAnalytics::InformationRatio()
+
 
 list_all_portfolio_analytics <- function(portfolio_return_tbl) {
   list(
@@ -518,9 +601,10 @@ Mu <- data %>%
 pacman::p_load(quadprog, tbl2xts, RiskPortfolios)
 
 minvar(var = cov_ht, wmin = 0.0, wmax = 1)
+Sigma <- MCmarket::corr_mats$cor_normal[[1]]
 
-optimalPortfolio(Sigma = cov_ht, 
-                 control = list(type = "minvol", constraint = "lo"))
+optimalPortfolio(Sigma, 
+                 control = list(type = "minvol", constraint = "user", LB = rep(0, nrow(Sigma)), UB = rep(0.2, nrow(Sigma))))
 
 optimalPortfolio(Sigma = cov_ht, 
                  control = list(type = "invvol", constraint = "lo"))
