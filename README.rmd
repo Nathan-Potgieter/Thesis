@@ -128,20 +128,15 @@ rm(eigen_1, eigen_2, eigen_3, eigen_4, eigen_5, eigen_6, eigen_7, eigen_table, c
 ```
 
 
-## Simulating Markets
+## Monte Carlo
 
 ```{r monte carlo, eval=FALSE, include=TRUE}
 # loading packages
 pacman::p_load(dplyr, purrr, MCmarket)
 
 # Creating vectors for portfolio mean and sd's
-set.seed(8541683)
-means <- rnorm(50, mean = 0.02, sd = 0.03)
-sds <- rnorm(50, mean = 0.1, sd = 0.03)
-max(means)
-min(means)
-max(sds)
-min(sds)
+load("data/emp_mu.rda")
+load("data/emp_sd.rda")
 
 # Setting number of markets and length of progress bar.
 N <- 10000
@@ -149,154 +144,119 @@ pb <- dplyr::progress_estimated(N)
 
 #clearing memory and Viewing current limit
 gc()
-memory.size()
-memory.limit()
 
 set.seed(9543712)
-
-market_1 <- 
+market <- 
     1:N %>%
-    map_dfr(~sim_market_with_progress(corr = corr_1,
-                                      k = 300,
-                                      mv_dist = "t",
-                                      mv_df = 3,
-                                      marginal_dist = "norm",
-                                      marginal_dist_model = list(mu = means,
-                                                                 sd = sds),
-                                      ts_model = NULL),
-            .id = "Universe") 
-    
-write.csv(market_1, file = "data/market_1.csv", row.names = FALSE)
-    
-market_1 <- read.csv("data/market.csv") %>% as_tibble()
+    map(~sim_market_with_progress(corr = corr_1,
+                                  k = 300,
+                                  mv_dist = "t",
+                                  mv_df = 3,
+                                  marginal_dist = "norm",
+                                  marginal_dist_model = list(mu = emp_mu,
+                                                                 sd = emp_sd),
+                                  ts_model = NULL)) 
+gc()
+```
 
+```{r saving mcdata, eval=FALSE, include=TRUE}
 # Saving dataframe
 save(market_1, file = "data/market_1.rda")
 rm(market_1)
+gc()
 ```
 
 ## Portfolio Optimisation
 
-```{r opt_port function}
-pacman::p_load(lubridate, fitHeavyTail, RiskPortfolios, tbl2xts, rmsfuns)
-
-opt_port_return <- function(data, method, cov_calc_period = 100) {
-  
-  data_exante <- data %>%
-    select(date, Asset, Return) %>% 
-    spread(Asset, Return) %>% 
-    arrange(date) %>% 
-    filter(date<first(date) %m+% days(cov_calc_period))
-  
-  # Calculating covar mat
-  cov <- data_exante %>% 
-  select(-date) %>% 
-  fit_mvt() %>% .$cov
-  
-  # Calculating min var weights and making xts 
-  weights <- data %>% 
-    filter(date == first(date)) %>% 
-    mutate(weight = case_when(
-      method == "naive" ~ 1/n(),
-      
-      method == "minvol" ~ optimalPortfolio(Sigma = cov, 
-                                            control = list(type = "minvol", constraint = "lo")),
-      method == "invvol" ~ optimalPortfolio(Sigma = cov, 
-                                            control = list(type = "invvol", constraint = "lo")),
-      method == "erc" ~ optimalPortfolio(Sigma = cov, 
-                                         control = list(type = "erc", constraint = "lo")),
-      method == "maxdiv" ~ optimalPortfolio(Sigma = cov, 
-                                      control = list(type = "maxdiv", constraint = "lo"))
-      )) %>% 
-    select(date, Asset, weight) %>% 
-    tbl_xts(cols_to_xts = "weight", spread_by = "Asset")
-  
-  # Creating expost portfolio dataset
-  data_expost_xts <- data %>%
-    select(date, Asset, Return) %>% 
-    spread(Asset, Return) %>% 
-    arrange(date) %>% 
-    filter(date>first(date) %m+% days(cov_calc_period)) %>% 
-    tbl_xts()
-  
-  # Calculating portfolio returns
-  rmsfuns::Safe_Return.portfolio(data_expost_xts, weights = weights) %>% 
-    xts_tbl()
-}
-
-
-# Calculating portfolio returns across universes
-
-naive_port_m1 <- market_1 %>% 
-  split(market_1$Universe) %>%
-  map_dfr(~opt_port_return(.x, method = "naive", cov_calc_period = 100), .id = "Universe")
-
-min_var_port_m1 <- market_1 %>% 
-  split(market_1$Universe) %>%
-  map_dfr(~opt_port_return(.x, method = "minvol"), .id = "Universe")
-
-invvol_port_m1 <- market_1 %>% 
-  split(market_1$Universe) %>%
-  map_dfr(~opt_port_return(.x, method = "invvol"), .id = "Universe")
-
-erc_port_m1 <- market_1 %>% 
-  split(market_1$Universe) %>%
-  map_dfr(~opt_port_return(.x, method = "erc"), .id = "Universe")
-
-maxdiv_port_m1 <- market_1 %>% 
-  split(market_1$Universe) %>%
-  map_dfr(~opt_port_return(.x, method = "maxdiv"), .id = "Universe")
-
-
-```
-
-## Functions: Portfolios with Periodic Rebalancing 
+### Functions: Portfolios with Periodic Rebalancing 
 
 ```{r}
-pacman::p_load(lubridate, fitHeavyTail, RiskPortfolios, tbl2xts, rmsfuns)
+pacman::p_load(lubridate, fitHeavyTail, RiskPortfolios, tbl2xts, rmsfuns, tictoc)
 # --------------------------------------------------------------------
 # This function creates a set of weights from a single market at a date
 # --------------------------------------------------------------------
-port_weight_calc <- function(data, method, from_date, look_back) {
+port_weight_calc <- function(data, method = "minvol", from_date, look_back = 100) {
   
-  cov <- data %>%
-    select(date, Asset, Return) %>% 
-    filter(date < from_date & date >= from_date %m-% days(look_back)) %>%  
-    spread(Asset, Return) %>% select(-date) %>% 
-  fit_mvt() %>% .$cov
   
-  # Calculating min var weights and making xts 
-  weights <- 
-    data %>% 
-    filter(date == from_date) %>% 
-    mutate(weight = case_when(
-      method == "naive" ~ 1/n(),
+  if (method != "naive") { 
+    cov <- data %>%
+            filter(date < from_date & date >= from_date %m-% days(look_back)) %>%
+            spread(Asset, Return) %>% select(-date) %>%
+            fit_mvt() %>% .$cov
+    }
+ 
+    # Calculating min var weights and making xts
+    if (method == "naive") {
+      weights <- data %>%
+        filter(date == from_date) %>%
+        mutate(weight = 1 / n()) %>%
+        select(date, Asset, weight)
       
-      method == "minvol" ~ optimalPortfolio(Sigma = cov, 
-                                            control = list(type = "minvol", 
-                                                           constraint = "user", 
-                                                           LB = rep(0, nrow(cov)),
-                                                           UB = rep(0.2, nrow(cov)))),
-      method == "invvol" ~ optimalPortfolio(Sigma = cov, 
-                                            control = list(type = "invvol", 
-                                                           constraint = "user", 
-                                                           LB = rep(0, nrow(cov)),
-                                                           UB = rep(0.2, nrow(cov)))),
-      method == "erc" ~ optimalPortfolio(Sigma = cov, 
-                                         control = list(type = "erc", 
-                                                        constraint = "user", 
-                                                        LB = rep(0, nrow(cov)),
-                                                        UB = rep(0.2, nrow(cov)))),
-      method == "maxdiv" ~ optimalPortfolio(Sigma = cov, 
-                                      control = list(type = "maxdiv",
-                                                     constraint = "user", 
-                                                           LB = rep(0, nrow(cov)),
-                                                           UB = rep(0.2, nrow(cov))))
-      )) %>% 
-    select(date, Asset, weight)
-  
-  return(weights)
+    } else
+      if (method == "minvol") {
+        weights <- data %>%
+          filter(date == from_date) %>%
+          mutate(weight = optimalPortfolio(
+            Sigma = cov,
+            control = list(
+              type = "minvol",
+              constraint = "user",
+              LB = rep(0, nrow(cov)),
+              UB = rep(0.2, nrow(cov))
+            )
+          )) %>%
+        select(-Return)
+        
+      } else
+        if (method == "invvol") {
+          weights <- data %>%
+          filter(date == from_date) %>%
+          mutate(weight = optimalPortfolio(
+            Sigma = cov,
+            control = list(
+              type = "invvol",
+              constraint = "user",
+              LB = rep(0, nrow(cov)),
+              UB = rep(0.2, nrow(cov))
+            )
+          )) %>%
+        select(-Return)
+          
+        } else
+          if (method == "erc") {
+            weights <- data %>%
+          filter(date == from_date) %>%
+          mutate(weight = optimalPortfolio(
+            Sigma = cov,
+            control = list(
+              type = "erc",
+              constraint = "user",
+              LB = rep(0, nrow(cov)),
+              UB = rep(0.2, nrow(cov))
+            )
+          )) %>%
+        select(-Return)
+            
+          } else
+            if (method == "maxdiv") {
+              weights <- data %>%
+          filter(date == from_date) %>%
+          mutate(weight = optimalPortfolio(
+            Sigma = cov,
+            control = list(
+              type = "maxdiv",
+              constraint = "user",
+              LB = rep(0, nrow(cov)),
+              UB = rep(0.2, nrow(cov))
+            )
+          )) %>%
+        select(-Return)
+            }
+
+    return(weights)
 }
+
+#eg: w <- port_weight_calc(data = dat[[1]], method = "minvol", from_date = as.Date("2021-04-26"), look_back = 100)
 
 # --------------------------------------------------------------
 # This function calculates portfolio returns for a single market
@@ -305,7 +265,7 @@ port_returns <- function(data, weights, look_back) {
   
   returns_xts <- data %>% 
     select(date, Asset, Return)%>% 
-    spread(Asset, Return) %>% arrange(date) %>% 
+    spread(Asset, Return) %>% 
     filter(date>=first(date) %m+% days(look_back)) %>% 
     tbl_xts()
   
@@ -319,11 +279,15 @@ port_returns <- function(data, weights, look_back) {
     
 }
 
+#eg: port_returns(data = dat[[1]], weights = w, look_back = 100)
+
 # -----------------------------------------------------------------------------
 # This function couples the first two functions in this chunk.
 # Therefore, it creates portfolio returns with periodic re-balancing.
 # ----------------------------------------------------------------------------
 rebal_port_returns <- function(data, method, rebdates, look_back) {
+  
+  pb$tick()$print()
   
   weights <- rebdates %>%
   map_dfr(~port_weight_calc(data, method = method, 
@@ -333,18 +297,19 @@ rebal_port_returns <- function(data, method, rebdates, look_back) {
 port_returns(data, weights = weights, look_back = look_back)
 }
 
+#eg. rebal_port_returns(dat[[1]], method = "minvol", rebdates, look_back = 100)
+
 # ----------------------------------------------------------------------------
 # This function maps rebal_port_returns over the Universe columns of the dataset
 # Therefore, it creates portfolio returns with periodic re-balancing, for each universe
 # ----------------------------------------------------------------------------
 port_rets_universal <- function(data_universal, method, rebdates, look_back = 100) {
+  # Tick to progress bar
   
-  data_universal %>% split(data_universal$Universe) %>% 
-  map_dfr(~rebal_port_returns(.x, 
-                              method = method, 
-                              rebdates = rebdates, 
-                              look_back = look_back),
-          .id = "Universe")
+  data_universal  %>% map(~rebal_port_returns(.x, 
+                                   method = method, 
+                                   rebdates = rebdates, 
+                                   look_back = look_back))
   
 }
  
@@ -354,93 +319,301 @@ port_rets_universal <- function(data_universal, method, rebdates, look_back = 10
 
 ### Market 1
 
-```{r}
+```{r, eval=FALSE, include=TRUE}
 # Load MC data
-# load("data/market_1.rda")
-pacman::p_load(lubridate, fitHeavyTail, RiskPortfolios, tbl2xts, rmsfuns)
+load("data/market_1.rda")
+pacman::p_load(tidyverse, lubridate, fitHeavyTail, RiskPortfolios, tbl2xts, rmsfuns)
 
-market_1 <- market_1 %>% mutate(date = as.Date(date),
-                                Universe = as.character(Universe))
-dat <- market_1 %>% filter(Universe==1)
+source("code/calc_port_returns.R")
+# dat <- market_1[[1]]
+# dat <- market_1[1:2]
 
 # Vector of rebalance dates
 # Only works for k=300 and look_back = 100
-rebdates <- c(first(market_1$date) %m+% days(100), 
-              first(market_1$date) %m+% days(150),
-              first(market_1$date) %m+% days(200),
-              first(market_1$date) %m+% days(250))
+rebdates <- c(first(market_1[[1]]$date) %m+% days(100), 
+              first(market_1[[1]]$date) %m+% days(150),
+              first(market_1[[1]]$date) %m+% days(200),
+              first(market_1[[1]]$date) %m+% days(250))
+
+# Testing:: port_rets_universal(dat, method = "naive", rebdates, look_back = 100)
 
 methods <- c("naive", "minvol", "invvol", "erc", "maxdiv")
 
+#=====================================
 # Calculating portfolio returns, 
 # for each portfolio type in market 1.
-load("data/market_1.rda")
-rets_m1 <- methods %>% 
-  map(~port_rets_universal(market_1,
-                           method = .x,
-                           rebdates = rebdates,
-                           look_back = 100))
-names(rets_m1) <- c("naive", "minvol", "invvol", "erc", "maxdiv")
-save(rets_m1, file = "data/rets_m1.rda")
+#====================================
+N <- 10000
 
-rm(market_1, rets_m1)
+pb <- dplyr::progress_estimated(N)
+naive_m1 <- port_rets_universal(market_1, method = "naive", rebdates, look_back = 100)
+save(naive_m1, file = "data/naive_m1.rda")
+rm(naive_m1)
+
+pb <- dplyr::progress_estimated(N)
+minvol_m1 <- port_rets_universal(market_1, method = "minvol", rebdates, look_back = 100)
+save(minvol_m1, file = "data/minvol_m1.rda")
+rm(minvol_m1)
+
+pb <- dplyr::progress_estimated(N)
+invvol_m1 <- port_rets_universal(market_1, method = "invvol", rebdates, look_back = 100)
+save(invvol_m1, file = "data/invvol_m1.rda")
+rm(invvol_m1)
+
+pb <- dplyr::progress_estimated(N)
+erc_m1 <- port_rets_universal(market_1, method = "erc", rebdates, look_back = 100)
+save(erc_m1, file = "data/erc_m1.rda")
+rm(erc_m1)
+
+pb <- dplyr::progress_estimated(N)
+maxdiv_m1 <- port_rets_universal(market_1, method = "maxdiv", rebdates, look_back = 100)
+save(maxdiv_m1, file = "data/maxdiv_m1.rda")
+rm(maxdiv_m1)
+
+# load("data/naive_m1.rda")
+# load("data/minvol_m1.rda")
+# load("data/invvol_m1.rda")
+# load("data/erc_m1.rda")
+# load("data/maxdiv_m1.rda")
+# rets_m1 <- list(naive_m1, minvol_m1, invvol_m1, erc_m1, maxdiv_m1)
+# names(rets_m1) <- methods
+# save(rets_m1, file = "data/rets_m1.rda")
+
+rm(market_1)
 gc()
 
-# Market 2
+#====================================
+# for each portfolio type in market 2.
+#====================================
 load("data/market_2.rda")
-rets_m2 <- methods %>% 
-  map(~port_rets_universal(market_2,
-                           method = .x,
-                           rebdates = rebdates,
-                           look_back = 100))
-names(rets_m2) <- c("naive", "minvol", "invvol", "erc", "maxdiv")
-save(rets_m2, file = "data/rets_m2.rda")
 
-rm(market_2, rets_m2)
+N <- 10000
+
+pb <- dplyr::progress_estimated(N)
+naive_m2 <- port_rets_universal(market_2, method = "naive", rebdates, look_back = 100)
+save(naive_m2, file = "data/naive_m2.rda")
+rm(naive_m2)
+
+pb <- dplyr::progress_estimated(N)
+minvol_m2 <- port_rets_universal(market_2, method = "minvol", rebdates, look_back = 100)
+save(minvol_m2, file = "data/minvol_m2.rda")
+rm(minvol_m2)
+
+pb <- dplyr::progress_estimated(N)
+invvol_m2 <- port_rets_universal(market_2, method = "invvol", rebdates, look_back = 100)
+save(invvol_m2, file = "data/invvol_m2.rda")
+rm(invvol_m2)
+
+pb <- dplyr::progress_estimated(N)
+erc_m2 <- port_rets_universal(market_2, method = "erc", rebdates, look_back = 100)
+save(erc_m2, file = "data/erc_m2.rda")
+rm(erc_m2)
+
+pb <- dplyr::progress_estimated(N)
+maxdiv_m2 <- port_rets_universal(market_2, method = "maxdiv", rebdates, look_back = 100)
+save(maxdiv_m2, file = "data/maxdiv_m2.rda")
+rm(maxdiv_m2)
+
+# load("data/naive_m2.rda")
+# load("data/minvol_m2.rda")
+# load("data/invvol_m2.rda")
+# load("data/erc_m2.rda")
+# load("data/maxdiv_m2.rda")
+# rets_m2 <- list(naive_m2, minvol_m2, invvol_m2, erc_m2, maxdiv_m2)
+# names(rets_m2) <- methods
+# save(rets_m2, file = "data/rets_m2.rda")
+
+rm(market_2)
 gc()
-
-# Market 3
+#====================================
+# for each portfolio type in market 3.
+#====================================
 load("data/market_3.rda")
-rets_m3 <- methods %>% 
-  map(~port_rets_universal(market_3,
-                           method = .x,
-                           rebdates = rebdates,
-                           look_back = 100))
-names(rets_m3) <- c("naive", "minvol", "invvol", "erc", "maxdiv")
-save(rets_m3, file = "data/rets_m3.rda")
 
-rm(market_3, rets_m3)
+N <- 10000
+
+pb <- dplyr::progress_estimated(N)
+naive_m3 <- port_rets_universal(market_3, method = "naive", rebdates, look_back = 100)
+save(naive_m3, file = "data/naive_m3.rda")
+rm(naive_m3)
+
+pb <- dplyr::progress_estimated(N)
+minvol_m3 <- port_rets_universal(market_3, method = "minvol", rebdates, look_back = 100)
+save(minvol_m3, file = "data/minvol_m3.rda")
+rm(minvol_m3)
+
+pb <- dplyr::progress_estimated(N)
+invvol_m3 <- port_rets_universal(market_3, method = "invvol", rebdates, look_back = 100)
+save(invvol_m3, file = "data/invvol_m3.rda")
+rm(invvol_m3)
+
+pb <- dplyr::progress_estimated(N)
+erc_m3 <- port_rets_universal(market_3, method = "erc", rebdates, look_back = 100)
+save(erc_m3, file = "data/erc_m3.rda")
+rm(erc_m3)
+
+pb <- dplyr::progress_estimated(N)
+maxdiv_m3 <- port_rets_universal(market_3, method = "maxdiv", rebdates, look_back = 100)
+save(maxdiv_m3, file = "data/maxdiv_m3.rda")
+rm(maxdiv_m3)
+
+rm(market_3)
 gc()
 
-# Market 4
-rets_m4 <- methods %>% 
-  map(~port_rets_universal(market_4,
-                           method = .x,
-                           rebdates = rebdates,
-                           look_back = 100))
-names(rets_m4) <- c("naive", "minvol", "invvol", "erc", "maxdiv")
-save(rets_m4, file = "data/rets_m4.rda")
+#====================================
+# for each portfolio type in market 4.
+#====================================
+load("data/market_4.rda")
 
-rm(market_4, rets_m4)
+N <- 10000
+
+pb <- dplyr::progress_estimated(N)
+naive_m4 <- port_rets_universal(market_4, method = "naive", rebdates, look_back = 100)
+save(naive_m4, file = "data/naive_m4.rda")
+rm(naive_m4)
+
+pb <- dplyr::progress_estimated(N)
+minvol_m4 <- port_rets_universal(market_4, method = "minvol", rebdates, look_back = 100)
+save(minvol_m4, file = "data/minvol_m4.rda")
+rm(minvol_m4)
+
+pb <- dplyr::progress_estimated(N)
+invvol_m4 <- port_rets_universal(market_4, method = "invvol", rebdates, look_back = 100)
+save(invvol_m4, file = "data/invvol_m4.rda")
+rm(invvol_m4)
+
+pb <- dplyr::progress_estimated(N)
+erc_m4 <- port_rets_universal(market_4, method = "erc", rebdates, look_back = 100)
+save(erc_m4, file = "data/erc_m4.rda")
+rm(erc_m4)
+
+pb <- dplyr::progress_estimated(N)
+maxdiv_m4 <- port_rets_universal(market_4, method = "maxdiv", rebdates, look_back = 100)
+save(maxdiv_m4, file = "data/maxdiv_m4.rda")
+rm(maxdiv_m4)
+
+rm(market_4)
 gc()
 
-# Market 5
-rets_m5 <- methods %>% 
-  map(~port_rets_universal(market_5,
-                           method = .x,
-                           rebdates = rebdates,
-                           look_back = 100))
-names(rets_m5) <- c("naive", "minvol", "invvol", "erc", "maxdiv")
-save(rets_m5, file = "data/rets_m5.rda")
+#====================================
+# for each portfolio type in market 5
+#====================================
+load("data/market_5.rda")
+
+N <- 10000
+
+pb <- dplyr::progress_estimated(N)
+naive_m5 <- port_rets_universal(market_5, method = "naive", rebdates, look_back = 100)
+save(naive_m5, file = "data/naive_m5.rda")
+rm(naive_m5)
+
+pb <- dplyr::progress_estimated(N)
+minvol_m5 <- port_rets_universal(market_5, method = "minvol", rebdates, look_back = 100)
+save(minvol_m5, file = "data/minvol_m5.rda")
+rm(minvol_m5)
+
+pb <- dplyr::progress_estimated(N)
+invvol_m5 <- port_rets_universal(market_5, method = "invvol", rebdates, look_back = 100)
+save(invvol_m5, file = "data/invvol_m5.rda")
+rm(invvol_m5)
+
+pb <- dplyr::progress_estimated(N)
+erc_m5 <- port_rets_universal(market_5, method = "erc", rebdates, look_back = 100)
+save(erc_m5, file = "data/erc_m5.rda")
+rm(erc_m5)
+
+pb <- dplyr::progress_estimated(N)
+maxdiv_m5 <- port_rets_universal(market_5, method = "maxdiv", rebdates, look_back = 100)
+save(maxdiv_m5, file = "data/maxdiv_m5.rda")
+rm(maxdiv_m5)
 
 rm(market_5, rets_m5)
+
 gc()
 
 ```
 
-
-
 ## Portfolio Analytics
+This function calculated various portfilio metrics for a list of portfolio returns
+
+```{r portfolio metrics}
+
+
+get_perf_metrics <- function(port_ret_data) {
+  
+  Sharp <- 
+  port_ret_data %>% map( ~ SharpeRatio(tbl_xts(.), FUN = "StdDev") %>%
+                           as_tibble()) %>% 
+    reduce(bind_rows) %>% set_names("sharp")
+  
+  SD <-
+    port_ret_data %>% map(~ sd(.$portfolio.returns) %>% 
+                   as_tibble()) %>% 
+    reduce(bind_rows) %>% set_names("sd")
+  
+  DD <- port_ret_data %>% map( ~ DownsideDeviation(.$portfolio.returns) %>% 
+                                 as_tibble) %>% 
+    reduce(bind_rows) %>% set_names("dd") 
+  
+  VaR <- port_ret_data %>% map( ~ VaR(tbl_xts(.)) %>% 
+                                  as_tibble()) %>% 
+    reduce(bind_rows) %>% set_names("Var") 
+  
+  list(Sharp = Sharp, SD = SD, DD = DD, Var = VaR)
+  
+}
+```
+
+
+### Market 1
+```{r}
+load("data/rets_m1.rda")
+pacman::p_load(PerformanceAnalytics)
+
+#===================
+# Naive Portfolio
+#==================
+
+naive_perf_m1 <- get_perf_metrics(rets_m1$naive)
+minvol_perf_m1 <- get_perf_metrics(rets_m1$minvol)
+invvol_perf_m1 <- get_perf_metrics(rets_m1$invvol)
+erc_perf_m1 <- get_perf_metrics(rets_m1$erc)
+maxdiv_perf_m1 <- get_perf_metrics(rets_m1$maxdiv)
+perf_m1 <- list(naive = naive_perf_m1,
+                minvol = minvol_perf_m1,
+                invvol = invvol_perf_m1,
+                erc = erc_perf_m1,
+                maxdiv = maxdiv_perf_m1)
+save(perf_m1, file = "data/perf_m1.rda")
+rm(naive_perf_m1, minvol_perf_m1, invvol_perf_m1, erc_perf_m1, maxdiv_perf_m1)
+
+# perf_m1$naive$Sharp[[1]] %>% mean()
+# perf_m1$minvol$Sharp[[1]] %>% mean()
+# perf_m1$invvol$Sharp[[1]] %>% mean()
+# perf_m1$erc$Sharp[[1]] %>% mean()
+# perf_m1$maxdiv$Sharp[[1]] %>% mean()
+
+# perf_m1$naive$SD[[1]] %>% mean()
+# perf_m1$minvol$SD[[1]] %>% mean()
+# perf_m1$invvol$SD[[1]] %>% mean()
+# perf_m1$erc$SD[[1]] %>% mean()
+# perf_m1$maxdiv$SD[[1]] %>% mean()
+
+# perf_m1$naive$DD[[1]] %>% mean()
+# perf_m1$minvol$DD[[1]] %>% mean()
+# perf_m1$invvol$DD[[1]] %>% mean()
+# perf_m1$erc$DD[[1]] %>% mean()
+# perf_m1$maxdiv$DD[[1]] %>% mean()
+
+# perf_m1$naive$Var[[1]] %>% na.omit() %>% mean()     # 3 NA's
+# perf_m1$minvol$Var[[1]] %>% mean()
+# perf_m1$invvol$Var[[1]] %>% na.omit() %>% mean()  # 1 NA
+# perf_m1$erc$Var[[1]] %>% na.omit() %>% mean()   # 1 Na
+# perf_m1$maxdiv$Var[[1]] %>% mean()
+
+```
+
+### Market 2
 
 ```{r RiskPortfolios, warning=FALSE}
 pacman::p_load(PerformanceAnalytics)

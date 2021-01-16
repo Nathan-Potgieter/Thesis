@@ -49,6 +49,24 @@ SNP_top100_data %>% select(date, symbol, return) %>%
     fitHeavyTail::fit_mvt() %>% .$cov %>% cov2cor()
 save(emp_corr, file = "data/emp_corr.rda")
 
+# Calculating vector of expected returns using fitHeavyTail
+emp_mu <-
+SNP_top100_data %>% select(date, symbol, return) %>%
+    filter(date>=as.Date("2020-01-01") & date <= as.Date("2021-01-01")) %>%
+    spread(symbol, return) %>% select(-date) %>%
+    .[,indx] %>%   # selecting random subset
+    fitHeavyTail::fit_mvt() %>% .$mu
+save(emp_mu, file = "data/emp_mu.rda")
+
+# Calculating vector of sds fitHeavyTail
+emp_sd <-
+SNP_top100_data %>% select(date, symbol, return) %>%
+    filter(date>=as.Date("2020-01-01") & date <= as.Date("2021-01-01")) %>%
+    spread(symbol, return) %>% select(-date) %>%
+    .[,indx] %>%   # selecting random subset
+    fitHeavyTail::fit_mvt() %>% .$cov %>% diag(.) %>% sqrt()
+save(emp_sd, file = "data/emp_sd.rda")
+
 # Calculating df
 emp_dist_df <-
     SNP_top100_data %>% select(date, symbol, return) %>%

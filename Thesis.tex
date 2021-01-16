@@ -170,42 +170,35 @@
 
 \begin{frontmatter}  %
 
-\title{Helping You Write Academic Papers in R using Texevier}
+\title{Investigating the Link Between Covariance structure and Risk-Based
+Portfolio Performance}
 
 % Set to FALSE if wanting to remove title (for submission)
 
 
 
 
-\author[Add1]{Nico Katzke\footnote{\textbf{Contributions:} \newline \emph{The authors
-  would like to thank no institution for money donated to this project.
-  Thank you sincerely.}}}
-\ead{nfkatzke@gmail.com}
-
-\author[Add1,Add2]{John Smith}
-\ead{John@gmail.com}
-
-\author[Add1,Add2]{John Doe}
-\ead{Joe@gmail.com}
+\author[Add1]{Nathan Potgieter\footnote{\textbf{Contributions:} \newline \emph{The
+  authors would like to thank Nico Katzke for helping me puzzle and prod
+  my to to the eventual completion of this research project.}}}
+\ead{19959672@sun.ac.za}
 
 
 
-\address[Add1]{Prescient Securities, Cape Town, South Africa}
-\address[Add2]{Some other Institution, Cape Town, South Africa}
 
-\cortext[cor]{Corresponding author: Nico Katzke\footnote{\textbf{Contributions:} \newline \emph{The authors
-  would like to thank no institution for money donated to this project.
-  Thank you sincerely.}}}
+
+\address[Add1]{Stellenbosch University, Stellenbosch, South Africa}
+
 
 \begin{abstract}
 \small{
-Abstract to be written here. The abstract should not be too long and
-should provide the reader with a good understanding what you are writing
-about. Academic papers are not like novels where you keep the reader in
-suspense. To be effective in getting others to read your paper, be as
-open and concise about your findings here as possible. Ideally, upon
-reading your abstract, the reader should feel he / she must read your
-paper in entirety.
+This work uses Monte Carlo methods to design and simulate financial
+market returns for five distinctive markets types, each relating to a
+unique covariance structure. The equal weight, minimum variance, inverse
+variance, equal risk contribution and maximum diversification portfolios
+are each back tested in the simulated markets and the relationship
+between the portfolio return characteristics and the market covariance
+structure is evaluated. \textbf{FINDINGS}
 }
 \end{abstract}
 
@@ -213,7 +206,8 @@ paper in entirety.
 
 \begin{keyword}
 \footnotesize{
-Multivariate GARCH \sep Kalman Filter \sep Copula \\ \vspace{0.3cm}
+Monte Carlo \sep Risk-based Portfolios \sep Portfolio Selection
+\sep Copula \\ \vspace{0.3cm}
 \textit{JEL classification} L250 \sep L100
 }
 \end{keyword}
@@ -257,36 +251,55 @@ matrix theory and machine learning methods; with many more are still in
 the making.
 
 Unfortunately, portfolio optimisers of the mean-variance type suffer
-from sensitivity to changes in their expected return forecast, which are
-naturally extremely difficult to forecast (De Prado,
-\protect\hyperlink{ref-lopez}{2016}). Due to this concern, this work
-only evaluates the risk-based portfolio strategies, defined by De
-Carvalho \emph{et al.}
+from sensitivity issues from even slight changes in their expected
+return forecast, which are naturally extremely difficult, if not
+impossible, to forecast (De Prado, \protect\hyperlink{ref-lopez}{2016}).
+Due to these issues, this work only evaluates the risk-based portfolio
+strategies, defined by De Carvalho \emph{et al.}
 (\protect\hyperlink{ref-leote}{2012}\protect\hyperlink{ref-leote}{a}) as
 ``systemic quantitative approaches to portfolio allocation'' that solely
 rely on views of risk when allocating capital. These strategies
-therefore, do not require expected return forecasts.
+therefore, do not require expected return forecasts and are said to be
+more robust to estimation error. Despite their sole focus on risk
+mitigation risk-based portfolio's often perform surprising well, form a
+total return standpoint, in empirical back tests (Choueifaty \emph{et
+al.}, \protect\hyperlink{ref-choueifaty2013}{2013}).
 
-importance of Monte Carlo methods
+Furthermore, instead of opting for the standard emperical approach of
+evaluating said strategies through the use of historical back tests,
+this work opts to use Monte Carlo simulation methods to investigate the
+link between the markets covairiance structure and portfolio
+performance. Monte Carlo methods prove to be invaluable in answering
+this question as they allow for the creation of \emph{ad hoc} markets
+with predetermined risk return characteristics, and hence the researcher
+is left with no uncertainty regarding the composition of the market.
+This creates an environment ideal for experimentation as the researcher
+has control over the market and can therefore adjust the independent
+variable, in this case the markets covariance matrix, and observe the
+response in the dependent variable, which in this work are the portfolio
+return characteristics.
 
-path dependence; first rule of investment management
-
-Due to the aforementioned sensitivity issues surrounding errors in the
-expected return estimation, this work will only cover so-called risk
-based portfolios, since these techniques intentionally forego this
-input. These include the naive equal weight, inverse variance,
-hierarchical risk parity, equal risk contribution and the minimum
-variance portfolios. \emph{The theoretical underpinnings of each will be
-reviewed as well as their relative performance in historical back
-tests}.
+The risk-based portfolios evaluated in this work include the naive equal
+weight (EW), minimum variance (MV), inverse variance (IV), equal risk
+contribution (ERC) and the maximum diversification (MD) portfolios.
+Section \ref{aims} lays out this works aims and objects, Section
+\ref{lit} provides a review of the relevant literature. This includes
+some general issues plaguing the field of portfolio optimization, the
+rational and theoretical underpinnings behind the five risk-based
+portfolios, their relative performance in empirical back tests and
+finally the importance of using Monte Carlo methods in finance. Section
+\ref{methadology} discusses the methodology used to uncover the
+relationship of interest, Section \ref{reasults} provides and discusses
+the results and finally Section \ref{conclusion} concludes.
 
 \hypertarget{aims-and-objectives}{%
-\section{Aims and Objectives}\label{aims-and-objectives}}
+\section{\texorpdfstring{Aims and Objectives
+\label{aims}}{Aims and Objectives }}\label{aims-and-objectives}}
 
 This work aims to use Monte Carlo Methods to uncover the relationship
 between a market's covariance structure and the risk return properties
-of various risk based portfolio algorithms. This will be achieved
-through the following objectives.
+of various risk-based portfolio algorithms. This will be achieved
+through the following objectives:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -299,11 +312,12 @@ through the following objectives.
 \item
   Use the R package \emph{MCmarket} to perform Monte Carlo Simulations,
   using each of the five correlation matrices from step one as the
-  primary input {[}REFERENCE MYSELF{]}. The markets will be built to
-  posses student t multivariate distributions, with 3 degrees of
-  freedom. Meanwhile the individual asset returns will each be normally
-  distributed with a random mean and standard deviation. Each market
-  type will be simulated 10 000 times across 300 periods.
+  primary input (Potgieter, \protect\hyperlink{ref-MCmarket}{2020}). The
+  markets will be built to posses student t multivariate distributions,
+  with 3 degrees of freedom. Meanwhile the individual asset returns will
+  each be normally distributed with a random mean and standard
+  deviation. Each market type will be simulated 10 000 times across 300
+  periods.
 \item
   Use the simulated market data to calculate the returns obtained from
   various risk based portfolio's. The first \textbf{100} periods will be
@@ -322,7 +336,8 @@ through the following objectives.
 \end{enumerate}
 
 \hypertarget{litrature-review}{%
-\section{Litrature Review}\label{litrature-review}}
+\section{\texorpdfstring{Litrature Review
+\label{lit}}{Litrature Review }}\label{litrature-review}}
 
 \hypertarget{a-review-of-portfolio-optimisation-algorithms}{%
 \subsection{A Review of Portfolio Optimisation
@@ -338,30 +353,30 @@ algorithm capable of situating a portfolio on the efficient frontier
 portfolio optimisers raging from simple heuristic based approaches to
 advanced mathematical algorithms based on quadratic optimization, random
 matrix theory and machine learning methods; with many more are still in
-the making.
+the making (De Prado, \protect\hyperlink{ref-lopez}{2016}).
 
-This literature review review will cover some common issues discussed
-within the literature surrounding portfolio optimization in general, the
-five risk-based portfolios evaluated in this work, their respective
-performance in empirical back tests and Monte Carlo Studies and finally
-the importance of using Monte Carlo methods when stress testing
-portfolio optimization algorithms will be discussed.
+This literature review will cover some common issues discussed within
+the literature surrounding portfolio optimization in general, the five
+risk-based portfolios evaluated in this work, their respective
+performance in both empirical back tests and Monte Carlo studies and
+finally the importance of using Monte Carlo methods within finance will
+be discussed.
 
 \hypertarget{common-issues-portfolio-optimizers}{%
 \subsubsection{Common Issues Portfolio
 Optimizers}\label{common-issues-portfolio-optimizers}}
 
-When working with in sample data Portfolio optimization tends to be a
+When working with in sample data, Portfolio optimization tends to be a
 perfect science, but out of sample it becomes more of an art form where
-it is often preferable to work on heuristic than hard rules. This
-section highlights some gneral issues, highlighted within the portfolio
-optimization literature, that tend to worsen their out of sample
-performance.
+it is often preferable to use heuristic over hard rules. This section
+highlights some general issues, highlighted within the portfolio
+optimization literature, that tend to worsen their performance out of
+sample.
 
 Firstly, mean-variance optimisers, like those introduced by Markowitz
 (\protect\hyperlink{ref-markowitz}{1952}), rely heavily on the accuracy
-of their expected return forecasts. Small changes in the expected return
-input can lead to large changes in portfolio weights (De Prado,
+of their expected return forecasts. Small changes in their expected
+return input can lead to large changes in portfolio weights (De Prado,
 \protect\hyperlink{ref-lopez}{2016}). Since in practice expected returns
 are extremely difficult, if not impossible, to accurately estimate, this
 issue serves as a major hindrance to their wide spread use. Due to this
@@ -375,10 +390,12 @@ including the mean variance and many risk-based, require the inversion
 of some positive-definite covariance matrix. This positive definiteness
 requirement can cause issues as covariance matrices estimated on
 empirical data are sometimes not positive definite, in which case their
-inverse does not exist and these portfolio's don't have solutions
-({\textbf{???}}). A common method to get around this issue is to simply
-transform the non-posetive definate matrix into its closest positive
-definite form.
+inverse does not exist and these portfolio's don't have solutions (De
+Prado, \protect\hyperlink{ref-lopez}{2016}). A common method to get
+around this issue is to simply compute the nearest positive definite
+matrix and use that instead (Bates \& Maechler,
+\protect\hyperlink{ref-Matrix}{2019}; Higham,
+\protect\hyperlink{ref-higham2002}{2002}).
 
 The covariance estimation step is particularly susceptible to error if
 the covariance matrix suffers from a high condition number. A condition
@@ -433,25 +450,19 @@ each investible security.
 Perhaps the oldest and most simple portfolio diversification heuristic
 constitutes holding a weight of \(1/N\) of the \(N\) total assets
 available to the investor (DeMiguel \emph{et al.},
-\protect\hyperlink{ref-demiguel2009}{2009}). Therefore, this stratagy
-doesn't require and data and doesn't involdve any kind of optimization
-{[}demiguel2009{]}. In layman's terms this can be describes as putting
-an equal number of eggs in each available basket. This portfolio is
-commonly called the equal weight or 1/N portfolio, its failure to
-recognize the importance of both the relative asset variance and the
-covariance between assets has also resulted in it being referred to as
-the naive portfolio. Its simplicity has resulted in it commonly being
-used as the benchmark portfolio. From a mean variance perspective this
-allocation is optimal when is no correlation between securities and each
-possesses the same variance ({\textbf{???}}).
-
-Despite its simplistic nature empirical studies tend to find a
-statistically insignificant difference in Sharp ratio between the naive
-portfolio and more advanced portfolio optimisers. This finding was made
-in DeMiguel \emph{et al.} (\protect\hyperlink{ref-demiguel2009}{2009})
-who looked at the mean-variance, minimum-variance and Bayes-Stein
-portfolio's, where EW also performed surprisingly well from a total
-return perspective.
+\protect\hyperlink{ref-demiguel2009}{2009}). Therefore, this strategy
+doesn't consider the data when calculating weights and doesn't involve
+any form of optimization (DeMiguel \emph{et al.},
+\protect\hyperlink{ref-demiguel2009}{2009}). In layman's terms this
+strategy can be described as putting an equal number of eggs in each
+available basket. This portfolio is commonly called the equal weight or
+1/N portfolio, but its failure to recognize the importance of both the
+asset variance and the covariance between assets has resulted in it also
+being referred to as the naive portfolio. Meanwhile its simplicity means
+that it has been widely used as a benchmark portfolio. From a mean
+variance perspective equal weighting is optimal when there is no
+correlation between securities and each possesses the same variance. In
+this scenario, the EW is equivalent to the MV portfolio.
 
 \hypertarget{minimum-variance-mv}{%
 \paragraph{Minimum Variance (MV)}\label{minimum-variance-mv}}
@@ -464,7 +475,7 @@ performance has been attributed to the empirical phenomenon that low
 volatility stocks tend to earn returns in excess of the market, and high
 beta stocks tend not to be rewarded by higher returns (Clarke \emph{et
 al.}, \protect\hyperlink{ref-clarke2011}{2011}; Fama \& French,
-\protect\hyperlink{ref-fama1992}{1992}). These findings are contrary
+\protect\hyperlink{ref-fama1992}{1992}). These findings are contrary to
 financial economic theory. For example, the minimum variance (MV)
 portfolio tends to achieve cumulative returns equal to or slightly
 greater than market capitalization weighted portfolio's whilst
@@ -656,64 +667,77 @@ performance of the EW portfolio in Choueifaty \emph{et al.}
 relatively poor returns achieved by the smaller stocks in the MSCI world
 index.
 
+Despite the simplistic nature of the EW portfolio empirical studies,
+like those by DeMiguel \emph{et al.}
+(\protect\hyperlink{ref-demiguel2009}{2009}), tend to find a
+statistically insignificant difference in Sharp ratio between the naive
+portfolio and more advanced portfolio optimisers. DeMiguel \emph{et al.}
+(\protect\hyperlink{ref-demiguel2009}{2009}) the EW ro the the
+mean-variance, MV and Bayes-Stein portfolios, where the EW also
+performed surprisingly well from a total return perspective.
+
 Due to the aforementioned issues surrounding estimation error in a
 market's covariance matrix Ardia \emph{et al.}
 (\protect\hyperlink{ref-ardia2017}{2017}) set out to evaluate the impact
 of covariance matrix misspecification on the properties of risk based
 portfolio's. They used Monte Carlo methods to build six distinctive
 investment universes, each with a unique, variance/correlation structure
-and number of assets. Various covariance matrix estimation techniques
-were then estimated on the simulated data, with one serving as the
-benchmark. They then used the simulated data and the various covariance
-matrices to access the impact of alternative covariance specifications
-on the performance of the MV, IV, ERC and MD portfolio's. The ERC and IV
-portfolios were found to be ``relatively robust to covariance
-misspecification'', the MV to be sensitive to mispecification in both
-the variance and covarienve and the MD portfolio to be robust to
-misspecification in the variances but sensitive to misspecification in
-the covariances (Ardia \emph{et al.},
-\protect\hyperlink{ref-ardia2017}{2017}: 1).
+and a varying number of assets. Numerous covariance matrix estimation
+techniques were then estimated on the simulated data, one of which
+serving as the benchmark. They then used the simulated data and the
+various covariance matrices to access the impact of alternative
+covariance specifications on the performance of the MV, IV, ERC and MD
+portfolio's. The ERC and IV portfolios were found to be ``relatively
+robust to covariance misspecification'', the MV was found to be
+sensitive to misspecification in both the variance and covarienve and
+the MD portfolio was found to be robust to misspecification in the
+variances but sensitive to misspecification in the covariances (Ardia
+\emph{et al.}, \protect\hyperlink{ref-ardia2017}{2017}: 1).
 
 \hypertarget{monte-carlo-methods-in-portfolio-optimisation}{%
 \subsection{Monte Carlo Methods in Portfolio
 Optimisation}\label{monte-carlo-methods-in-portfolio-optimisation}}
 
-From the onset of electronic computing people have shown a keen interest
-in using said computing power to conduct randomized experiments (Kroese
-\emph{et al.}, \protect\hyperlink{ref-kroese2014}{2014}: 1). The core of
-Monte Carlo simulations is the creation of random objects or processes
-using a computer. There are a number of reasons for doing this, but the
-primary one used in this work and thereby discussed in this review is of
-the sampling kind (Kroese \emph{et al.},
+Ever since the pioneering age of computers people have shown a keen
+interest in using their ability to perform rapid calculations to conduct
+randomized experiments (Kroese \emph{et al.},
+\protect\hyperlink{ref-kroese2014}{2014}: 1). The core of Monte Carlo
+simulation is in the creation of random objects or processes using a
+computer. There are a number of reasons for doing this, but the primary
+one used in this work and thereby discussed in this review is of the
+sampling kind (Kroese \emph{et al.},
 \protect\hyperlink{ref-kroese2014}{2014}). This typically involves the
 modeling of some stochastic object or process, followed by sampling from
-some probability distribution and manipulating said sample through some
-deterministic process such that the underlying process mimics the true
-underlying process. The primary idea behind Monte Carlo simuation is to
-repeat the simulation process many times so that interesting properties
-can be uncovered through the law of large numbers.\\
+some probability distribution and the manipulating said sample through
+some deterministic process such that the result mimics the true
+underlying process. The primary idea behind Monte Carlo simulation is to
+repeat this simulation process many times so that interesting properties
+can be uncovered by invoking the law of large numbers and central limit
+theorem.
 
-An example of this can be found in Wang \emph{et al.}
+A fiancial application of this can be found in Wang \emph{et al.}
 (\protect\hyperlink{ref-wang2012}{2012}) who designed a Monte Calro
 procedure that (1) models both the time-series and cross-section
-properties of financial market returns, this also involves the
-estimation of a random term's probability distribution function (pdf).
-And (2) sampling from the modeled process to produce an ensemble of
-market, with each exerting the same risk properties. The simulated data
-can then be used for risk management and/or the pricing of securities
-(Kroese \emph{et al.}, \protect\hyperlink{ref-kroese2014}{2014}; Wang
-\emph{et al.}, \protect\hyperlink{ref-wang2012}{2012}). This unique
-ability to generate a large number of counterfactuals for an asset
-market with a known risk structure has made it a uniquely powerful tool
-in accessing the properties of portfolio optimization algorithms (Bailey
-\& Lopez De Prado, \protect\hyperlink{ref-lopez2012}{2012}).
+properties of financial market returns, this involves the estimation of
+a random term's probability distribution function (pdf) using extreme
+value theory. And (2) sampling from the modeled process to produce an
+ensemble of market returns, with each exerting the same risk properties.
+The simulated data can then be used in risk management and/or the
+pricing of financial securities (Kroese \emph{et al.},
+\protect\hyperlink{ref-kroese2014}{2014}; Wang \emph{et al.},
+\protect\hyperlink{ref-wang2012}{2012}). This unique ability to generate
+a large number of counterfactuals for an asset market with a known risk
+structure has made it a uniquely powerful tool in accessing the
+properties of portfolio optimization algorithms (Bailey \& Lopez De
+Prado, \protect\hyperlink{ref-lopez2012}{2012}).
 
 Glasserman (\protect\hyperlink{ref-glasserman2013}{2013}) is a useful
 source for understanding the methods and applications of Monte Carlo
 methods in finance.
 
 \hypertarget{methadology}{%
-\section{Methadology}\label{methadology}}
+\section{\texorpdfstring{Methadology
+\label{methadology}}{Methadology }}\label{methadology}}
 
 This work used Monte Carlo simulation methods to investigate the link
 between a markets correlation structure and the relative performance of
@@ -725,13 +749,13 @@ to an set or ensemble of markets each with the same specified same risk
 characteristics.
 
 The R package MCmarket was used to simulate five distinctive market
-types, each corresponding to a unique correlation structure
-({\textbf{???}}). Four of the correlation matrices were designed
-\emph{ad hoc}, to posses a unique correlation structure, while the fifth
-was estimated using empirical data from the constitutes of the S\&P 500.
-These correlation matrices range from one exhibiting no correlation
-(i.e.~a diagonal matrix) to one with hierarchical clustering (see
-\ref{corr_struc}).
+types, each corresponding to a unique correlation structure (Potgieter,
+\protect\hyperlink{ref-MCmarket}{2020}). Four of the correlation
+matrices were designed \emph{ad hoc}, to posses a unique correlation
+structure, while the fifth was estimated using empirical data from the
+constitutes of the S\&P 500. These correlation matrices range from one
+exhibiting no correlation (i.e.~a diagonal matrix) to one with
+hierarchical clustering (see \ref{corr_struc}).
 
 The long only EW, MV, IV, ERC and MD portfolios were then backtested on
 the simulated markets and portfolio analytics were performed for each
@@ -760,16 +784,19 @@ Table \ref{eigens}.
 \subsubsection{\texorpdfstring{Ad Hoc
 \label{adhoc}}{Ad Hoc }}\label{ad-hoc}}
 
-This section sets out the four \emph{ad hoc} 50 by 50 correlation
+This section describes the four \emph{ad hoc} 50 by 50 correlation
 matrices used as the key inputs in their respective Monte Carlo
-simulations. Figure \ref{corr_mats} presents the said correlation
-matrices.
+simulations. See Figure \ref{corr_mats}for a graphical representation of
+each correlation matrix. Note that the \emph{gen\_corr} function from
+the R package \emph{MCmarket} was used in the construction of the four
+\emph{ad hoc} matrices (Potgieter,
+\protect\hyperlink{ref-MCmarket}{2020}).
 
-The first and most simplistic of the four matrices (labeled Diagonal
-Matrix in Figure \ref{corr_mats}) describes a market with a zero
-correlation coefficient between each asset. Each of its 50 eigenvalues
-are 1. It has no risk clusters and is therefore plenty scope for
-diversification.
+The first and most simplistic of the four matrices is a diagonal matrix
+(see Diagonal Matrix in Figure \ref{corr_mats}). It describes a market
+with a zero correlation coefficient between each asset. Each of its 50
+eigenvalues are 1, it has no risk clusters and is therefore plenty scope
+for diversification.
 
 The second matrix (labeled No Clusters in Figure \ref{corr_mats}) has no
 risk clusters but describes a market with significant correlation
@@ -779,24 +806,24 @@ pairwise correlation coefficient of 0.9). Correlations then diminish
 exponentially by the absolute distance between the two assets (i.e.~the
 correlation between Asset 1 and 5 is \(0.9^{|1-5|}=0.6561\)). Its has a
 large first eigenvalue of 15.93, but they quickly diminish such that its
-9th eigenvalue is less than 1 at 0.79. \textbf{COMMENTS}
+9th largest eigenvalue is less than 1 at 0.79. \textbf{COMMENTS}
 
 The third matrix (labeled Five Clusters in Figure \ref{corr_mats})
 contains five distinctive non-overlapping risk clusters. Assets within
 the same cluster have a pairwise correlation coefficient of 0.6 while
-those in separate clusters are not correlated. Its first five
-eigenvalues are around 6.5, with the remaining 45 at 0.4.
-\textbf{COMMENTS}
+those that are not in the same cluster are uncorrelated. Its first five
+eigenvalues are 6.5, with the remaining 45 equal to 0.4.
 
 The final \emph{ad hoc} correlation matrix has three layers of
-overlapping risk clusters. The first layer has 10 distinctive clusters
+overlapping risk clusters. The first layer has 10 distinctive clusters,
 within which assets have a correlation coefficient of 0.7. The second
 layer has four clusters where assets that are not in same first layer
 cluster have a correlation coefficient of 0.5. Assets that are in the
 same third layer cluster but not clustered in layers one and two have a
 correlation coefficient of 0.3. Finally, those who do not share any
 cluster have a correlation coefficient of 0.05. Its largest eigenvalue
-is 14.36, but they quickly diminish as its third largest is only 3.3.
+is 14.36, but they diminish fairly quickly as its third largest is only
+3.3.
 
 See Table \ref{eigens} for a list of each correlation matrices largest
 ten eigenvalues.
@@ -834,12 +861,8 @@ largest eigenvalue.
 \caption{\label{corr_emp} Emperical Correlation Matrix}
 \end{figure}
 
-\hypertarget{correlation-matrix-eigen-values}{%
-\subsubsection{Correlation Matrix Eigen
-Values}\label{correlation-matrix-eigen-values}}
-
 \begin{table}[!htbp] \centering 
-  \caption{} 
+  \caption{Eigenvalues} 
   \label{eigens} 
 \begin{tabular}{@{\extracolsep{5pt}} ccccc} 
 \\[-1.8ex]\hline 
@@ -863,15 +886,16 @@ Diagonal & No Clusters & Five Clusters & Overlapping Clusters & Emperical \\
 \hypertarget{monte-carlo}{%
 \subsection{Monte Carlo}\label{monte-carlo}}
 
-This section outline the methodology behind the Monte Carlo simulation
+This section outlines the methodology behind the Monte Carlo simulation
 performed as part of this study.
 
 This work uses a generalized version of the Monte Carlo procedure
 developed in Wang \emph{et al.}
 (\protect\hyperlink{ref-wang2012}{2012}). This framework was build into
 the R package \emph{MCmarket} which was used to carry out the
-simulations in this project ({\textbf{???}}). The following briefly
-outlines the construction of the simulated markets:
+simulations in this project (Potgieter,
+\protect\hyperlink{ref-MCmarket}{2020}). The following briefly outlines
+the construction of the simulated markets:
 
 An Elliptical t copula with 4.5 degrees of freedom is used, in
 conjunction with one of each of the five previously discussed
@@ -954,7 +978,8 @@ cumulative return (Peterson \& Carl,
 \protect\hyperlink{ref-PerformanceAnalytics}{2020}).
 
 \hypertarget{results-and-discussion}{%
-\section{Results and Discussion}\label{results-and-discussion}}
+\section{\texorpdfstring{Results and Discussion
+\label{reasults}}{Results and Discussion }}\label{results-and-discussion}}
 
 \hypertarget{diag}{%
 \subsection{Diag}\label{diag}}
@@ -964,7 +989,8 @@ if the asset variance allocation is fairly evenly distribution then the
 EW, MV, IV, ERC and MD will produce fairly similar.
 
 \hypertarget{conclusion}{%
-\section{Conclusion}\label{conclusion}}
+\section{\texorpdfstring{Conclusion
+\label{conclusion}}{Conclusion }}\label{conclusion}}
 
 I hope you find this template useful. Remember, stackoverflow is your
 friend - use it to find answers to questions. Feel free to write me a
@@ -990,6 +1016,11 @@ impact of covariance misspecification in risk-based portfolios.
 Bailey, D.H. \& Lopez De Prado, M. 2012. Balanced baskets: A new
 approach to trading and hedging risks. \emph{Journal of Investment
 Strategies (Risk Journals)}. 1(4).
+
+\leavevmode\hypertarget{ref-Matrix}{}%
+Bates, D. \& Maechler, M. 2019. \emph{Matrix: Sparse and dense matrix
+classes and methods}. ed. {[}Online{]}, Available:
+\url{https://CRAN.R-project.org/package=Matrix}.
 
 \leavevmode\hypertarget{ref-choueifaty2008}{}%
 Choueifaty, Y. \& Coignard, Y. 2008. Toward maximum diversification.
@@ -1031,6 +1062,10 @@ returns. \emph{the Journal of Finance}. 47(2):427--465.
 Glasserman, P. 2013. \emph{Monte carlo methods in financial
 engineering}. ed. Vol. 53. Springer Science \& Business Media.
 
+\leavevmode\hypertarget{ref-higham2002}{}%
+Higham, N.J. 2002. Computing the nearest correlation matrix---a problem
+from finance. \emph{IMA journal of Numerical Analysis}. 22(3):329--343.
+
 \leavevmode\hypertarget{ref-Texevier}{}%
 Katzke, N.F. 2017. \emph{Texevier: Package to create elsevier templates
 for rmarkdown}. ed. Stellenbosch, South Africa: Bureau for Economic
@@ -1058,6 +1093,11 @@ Markowitz, H. 1952. Portfolio selection. \emph{The Journal of Finance}.
 Peterson, B.G. \& Carl, P. 2020. \emph{PerformanceAnalytics: Econometric
 tools for performance and risk analysis}. ed. {[}Online{]}, Available:
 \url{https://CRAN.R-project.org/package=PerformanceAnalytics}.
+
+\leavevmode\hypertarget{ref-MCmarket}{}%
+Potgieter, N. 2020. \emph{MCmarket: Package to simplify the monte carlo
+simulation of financial markets}. ed. Stellenbosch, South Africa:
+Stellenbosch University.
 
 \leavevmode\hypertarget{ref-wang2012}{}%
 Wang, P., Sullivan, R.N. \& Ge, Y. 2012. Risk-based dynamic asset
