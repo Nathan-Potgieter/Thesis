@@ -317,8 +317,6 @@ port_rets_universal <- function(data_universal, method, rebdates, look_back = 10
 
 ## Calculating Portfolio Returns
 
-### Market 1
-
 ```{r, eval=FALSE, include=TRUE}
 # Load MC data
 load("data/market_1.rda")
@@ -457,6 +455,15 @@ maxdiv_m3 <- port_rets_universal(market_3, method = "maxdiv", rebdates, look_bac
 save(maxdiv_m3, file = "data/maxdiv_m3.rda")
 rm(maxdiv_m3)
 
+# load("data/naive_m3.rda")
+# load("data/minvol_m3.rda")
+# load("data/invvol_m3.rda")
+# load("data/erc_m3.rda")
+# load("data/maxdiv_m3.rda")
+# rets_m3 <- list(naive_m3, minvol_m3, invvol_m3, erc_m3, maxdiv_m3)
+# names(rets_m3) <- methods
+# save(rets_m3, file = "data/rets_m3.rda")
+
 rm(market_3)
 gc()
 
@@ -491,6 +498,15 @@ pb <- dplyr::progress_estimated(N)
 maxdiv_m4 <- port_rets_universal(market_4, method = "maxdiv", rebdates, look_back = 100)
 save(maxdiv_m4, file = "data/maxdiv_m4.rda")
 rm(maxdiv_m4)
+
+# load("data/naive_m4.rda")
+# load("data/minvol_m4.rda")
+# load("data/invvol_m4.rda")
+# load("data/erc_m4.rda")
+# load("data/maxdiv_m4.rda")
+# rets_m4 <- list(naive_m4, minvol_m4, invvol_m4, erc_m4, maxdiv_m4)
+# names(rets_m4) <- methods
+# save(rets_m4, file = "data/rets_m4.rda")
 
 rm(market_4)
 gc()
@@ -527,8 +543,16 @@ maxdiv_m5 <- port_rets_universal(market_5, method = "maxdiv", rebdates, look_bac
 save(maxdiv_m5, file = "data/maxdiv_m5.rda")
 rm(maxdiv_m5)
 
-rm(market_5, rets_m5)
+# load("data/naive_m5.rda")
+# load("data/minvol_m5.rda")
+# load("data/invvol_m5.rda")
+# load("data/erc_m5.rda")
+# load("data/maxdiv_m5.rda")
+# rets_m5 <- list(naive_m5, minvol_m5, invvol_m5, erc_m5, maxdiv_m5)
+# names(rets_m5) <- methods
+# save(rets_m5, file = "data/rets_m5.rda")
 
+rm(market_5, rets_m5)
 gc()
 
 ```
