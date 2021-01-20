@@ -529,8 +529,7 @@ source("code/calc_port_returns.R")
 
 # Vector of rebalance dates
 # Only works for k=300 and look_back = 100
-rebdates <- c(first(market_1[[1]]$date) %m+% days(200), 
-              first(market_1[[1]]$date) %m+% days(250),
+rebdates <- c(first(market_1[[1]]$date) %m+% days(250), 
               first(market_1[[1]]$date) %m+% days(300),
               first(market_1[[1]]$date) %m+% days(350),
               first(market_1[[1]]$date) %m+% days(400),
@@ -549,27 +548,27 @@ methods <- c("naive", "minvol", "invvol", "erc", "maxdiv")
 N <- 10000
 
 pb <- dplyr::progress_estimated(N)
-naive_m1 <- port_rets_universal(market_1, method = "naive", rebdates, look_back = 200)
+naive_m1 <- port_rets_universal(market_1, method = "naive", rebdates, look_back = 250)
 save(naive_m1, file = "data/naive_m1.rda")
 rm(naive_m1)
 
 pb <- dplyr::progress_estimated(N)
-minvol_m1 <- port_rets_universal(market_1, method = "minvol", rebdates, look_back = 200)
+minvol_m1 <- port_rets_universal(market_1, method = "minvol", rebdates, look_back = 250)
 save(minvol_m1, file = "data/minvol_m1.rda")
 rm(minvol_m1)
 
 pb <- dplyr::progress_estimated(N)
-invvol_m1 <- port_rets_universal(market_1, method = "invvol", rebdates, look_back = 200)
+invvol_m1 <- port_rets_universal(market_1, method = "invvol", rebdates, look_back = 250)
 save(invvol_m1, file = "data/invvol_m1.rda")
 rm(invvol_m1)
 
 pb <- dplyr::progress_estimated(N)
-erc_m1 <- port_rets_universal(market_1, method = "erc", rebdates, look_back = 200)
+erc_m1 <- port_rets_universal(market_1, method = "erc", rebdates, look_back = 250)
 save(erc_m1, file = "data/erc_m1.rda")
 rm(erc_m1)
 
 pb <- dplyr::progress_estimated(N)
-maxdiv_m1 <- port_rets_universal(market_1, method = "maxdiv", rebdates, look_back = 200)
+maxdiv_m1 <- port_rets_universal(market_1, method = "maxdiv", rebdates, look_back = 250)
 save(maxdiv_m1, file = "data/maxdiv_m1.rda")
 rm(maxdiv_m1)
 
@@ -593,27 +592,27 @@ load("data/rebdates.rda")
 N <- 10000
 
 pb <- dplyr::progress_estimated(N)
-naive_m2 <- port_rets_universal(market_2, method = "naive", rebdates, look_back = 200)
+naive_m2 <- port_rets_universal(market_2, method = "naive", rebdates, look_back = 250)
 save(naive_m2, file = "data/naive_m2.rda")
 rm(naive_m2)
 
 pb <- dplyr::progress_estimated(N)
-minvol_m2 <- port_rets_universal(market_2, method = "minvol", rebdates, look_back = 200)
+minvol_m2 <- port_rets_universal(market_2, method = "minvol", rebdates, look_back = 250)
 save(minvol_m2, file = "data/minvol_m2.rda")
 rm(minvol_m2)
 
 pb <- dplyr::progress_estimated(N)
-invvol_m2 <- port_rets_universal(market_2, method = "invvol", rebdates, look_back = 200)
+invvol_m2 <- port_rets_universal(market_2, method = "invvol", rebdates, look_back = 250)
 save(invvol_m2, file = "data/invvol_m2.rda")
 rm(invvol_m2)
 
 pb <- dplyr::progress_estimated(N)
-erc_m2 <- port_rets_universal(market_2, method = "erc", rebdates, look_back = 200)
+erc_m2 <- port_rets_universal(market_2, method = "erc", rebdates, look_back = 250)
 save(erc_m2, file = "data/erc_m2.rda")
 rm(erc_m2)
 
 pb <- dplyr::progress_estimated(N)
-maxdiv_m2 <- port_rets_universal(market_2, method = "maxdiv", rebdates, look_back = 200)
+maxdiv_m2 <- port_rets_universal(market_2, method = "maxdiv", rebdates, look_back = 250)
 save(maxdiv_m2, file = "data/maxdiv_m2.rda")
 rm(maxdiv_m2)
 
@@ -632,31 +631,31 @@ gc()
 # for each portfolio type in market 3.
 #====================================
 load("data/market_3.rda")
-
+load("data/rebdates.rda")
 N <- 10000
 
 pb <- dplyr::progress_estimated(N)
-naive_m3 <- port_rets_universal(market_3, method = "naive", rebdates, look_back = 200)
+naive_m3 <- port_rets_universal(market_3, method = "naive", rebdates, look_back = 250)
 save(naive_m3, file = "data/naive_m3.rda")
 rm(naive_m3)
 
 pb <- dplyr::progress_estimated(N)
-minvol_m3 <- port_rets_universal(market_3, method = "minvol", rebdates, look_back = 200)
+minvol_m3 <- port_rets_universal(market_3, method = "minvol", rebdates, look_back = 250)
 save(minvol_m3, file = "data/minvol_m3.rda")
 rm(minvol_m3)
 
 pb <- dplyr::progress_estimated(N)
-invvol_m3 <- port_rets_universal(market_3, method = "invvol", rebdates, look_back = 200)
+invvol_m3 <- port_rets_universal(market_3, method = "invvol", rebdates, look_back = 250)
 save(invvol_m3, file = "data/invvol_m3.rda")
 rm(invvol_m3)
 
 pb <- dplyr::progress_estimated(N)
-erc_m3 <- port_rets_universal(market_3, method = "erc", rebdates, look_back = 200)
+erc_m3 <- port_rets_universal(market_3, method = "erc", rebdates, look_back = 250)
 save(erc_m3, file = "data/erc_m3.rda")
 rm(erc_m3)
 
 pb <- dplyr::progress_estimated(N)
-maxdiv_m3 <- port_rets_universal(market_3, method = "maxdiv", rebdates, look_back = 200)
+maxdiv_m3 <- port_rets_universal(market_3, method = "maxdiv", rebdates, look_back = 250)
 save(maxdiv_m3, file = "data/maxdiv_m3.rda")
 rm(maxdiv_m3)
 
@@ -680,27 +679,27 @@ load("data/market_4.rda")
 N <- 10000
 
 pb <- dplyr::progress_estimated(N)
-naive_m4 <- port_rets_universal(market_4, method = "naive", rebdates, look_back = 200)
+naive_m4 <- port_rets_universal(market_4, method = "naive", rebdates, look_back = 250)
 save(naive_m4, file = "data/naive_m4.rda")
 rm(naive_m4)
 
 pb <- dplyr::progress_estimated(N)
-minvol_m4 <- port_rets_universal(market_4, method = "minvol", rebdates, look_back = 200)
+minvol_m4 <- port_rets_universal(market_4, method = "minvol", rebdates, look_back = 250)
 save(minvol_m4, file = "data/minvol_m4.rda")
 rm(minvol_m4)
 
 pb <- dplyr::progress_estimated(N)
-invvol_m4 <- port_rets_universal(market_4, method = "invvol", rebdates, look_back = 200)
+invvol_m4 <- port_rets_universal(market_4, method = "invvol", rebdates, look_back = 250)
 save(invvol_m4, file = "data/invvol_m4.rda")
 rm(invvol_m4)
 
 pb <- dplyr::progress_estimated(N)
-erc_m4 <- port_rets_universal(market_4, method = "erc", rebdates, look_back = 200)
+erc_m4 <- port_rets_universal(market_4, method = "erc", rebdates, look_back = 250)
 save(erc_m4, file = "data/erc_m4.rda")
 rm(erc_m4)
 
 pb <- dplyr::progress_estimated(N)
-maxdiv_m4 <- port_rets_universal(market_4, method = "maxdiv", rebdates, look_back = 200)
+maxdiv_m4 <- port_rets_universal(market_4, method = "maxdiv", rebdates, look_back = 250)
 save(maxdiv_m4, file = "data/maxdiv_m4.rda")
 rm(maxdiv_m4)
 
@@ -724,27 +723,27 @@ load("data/market_5.rda")
 N <- 10000
 
 pb <- dplyr::progress_estimated(N)
-naive_m5 <- port_rets_universal(market_5, method = "naive", rebdates, look_back = 200)
+naive_m5 <- port_rets_universal(market_5, method = "naive", rebdates, look_back = 250)
 save(naive_m5, file = "data/naive_m5.rda")
 rm(naive_m5)
 
 pb <- dplyr::progress_estimated(N)
-minvol_m5 <- port_rets_universal(market_5, method = "minvol", rebdates, look_back = 200)
+minvol_m5 <- port_rets_universal(market_5, method = "minvol", rebdates, look_back = 250)
 save(minvol_m5, file = "data/minvol_m5.rda")
 rm(minvol_m5)
 
 pb <- dplyr::progress_estimated(N)
-invvol_m5 <- port_rets_universal(market_5, method = "invvol", rebdates, look_back = 200)
+invvol_m5 <- port_rets_universal(market_5, method = "invvol", rebdates, look_back = 250)
 save(invvol_m5, file = "data/invvol_m5.rda")
 rm(invvol_m5)
 
 pb <- dplyr::progress_estimated(N)
-erc_m5 <- port_rets_universal(market_5, method = "erc", rebdates, look_back = 200)
+erc_m5 <- port_rets_universal(market_5, method = "erc", rebdates, look_back = 250)
 save(erc_m5, file = "data/erc_m5.rda")
 rm(erc_m5)
 
 pb <- dplyr::progress_estimated(N)
-maxdiv_m5 <- port_rets_universal(market_5, method = "maxdiv", rebdates, look_back = 200)
+maxdiv_m5 <- port_rets_universal(market_5, method = "maxdiv", rebdates, look_back = 250)
 save(maxdiv_m5, file = "data/maxdiv_m5.rda")
 rm(maxdiv_m5)
 
@@ -852,12 +851,11 @@ load("data/rebdates.rda")
 source("code/calc_port_returns.R")
 source("code/Effective_Number_of_constituits.R")
 
-naive_enc_m1 <- market_1 %>% map( ~ ENC(.x, method = "naive"))
 minvol_enc_m1 <- market_1 %>% map( ~ ENC(.x, method = "minvol"))
 invvol_enc_m1 <- market_1 %>% map( ~ ENC(.x, method = "invvol"))
 erc_enc_m1 <- market_1 %>% map( ~ ENC(.x, method = "erc"))
 maxdiv_enc_m1 <- market_1 %>% map( ~ ENC(.x, method = "maxdiv"))
-enc_m1 <- list(naive = naive_enc_m1,
+enc_m1 <- list(naive = 50, # saving calculation time
                minvol = minvol_enc_m1,
                invvol = invvol_enc_m1,
                erc = erc_enc_m1,
@@ -867,6 +865,7 @@ save(enc_m1, file = "data/enc_m1.rda")
 # Entropy - ENB
 load("data/market_1.rda")
 load("data/rets_m1.rda")
+source("code/Effective_Number_of_bets.R")
 
 
 naive_enb_m1 <-

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2021.1.13)  20 JAN 2021 14:05
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2021.1.13)  21 JAN 2021 00:13
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -800,17 +800,17 @@ LaTeX Font Info:    Trying to load font information for OT1+lmtt on input line
 File: ot1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <9> on input line 215.
+(Font)              <9> on input line 217.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 215.
+(Font)              <5> on input line 217.
 LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 2
-15.
+17.
 (c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\@ifnextchar' on input line 269.
+(hyperref)                removing `\@ifnextchar' on input line 271.
 
 [1
 
@@ -818,35 +818,38 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 {c:/Users/natha/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdfte
 x.map}] [2] [3] [4] [5] [6] [7] [8]
 LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 7
-43.
+50.
 (c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 ) [9] [10]
-<Thesis_files/figure-latex/corr mats-1.pdf, id=351, 433.62pt x 361.35pt>
+<Thesis_files/figure-latex/corr mats-1.pdf, id=356, 433.62pt x 361.35pt>
 File: Thesis_files/figure-latex/corr mats-1.pdf Graphic file (type pdf)
 <use Thesis_files/figure-latex/corr mats-1.pdf>
 Package pdftex.def Info: Thesis_files/figure-latex/corr mats-1.pdf  used on inp
 ut line 844.
 (pdftex.def)             Requested size: 433.61894pt x 361.34912pt.
 [11 <./Thesis_files/figure-latex/corr mats-1.pdf>]
-<Thesis_files/figure-latex/unnamed-chunk-1-1.pdf, id=367, 325.215pt x 325.215pt
+<Thesis_files/figure-latex/unnamed-chunk-1-1.pdf, id=376, 325.215pt x 325.215pt
 >
 File: Thesis_files/figure-latex/unnamed-chunk-1-1.pdf Graphic file (type pdf)
 <use Thesis_files/figure-latex/unnamed-chunk-1-1.pdf>
 Package pdftex.def Info: Thesis_files/figure-latex/unnamed-chunk-1-1.pdf  used 
-on input line 872.
+on input line 878.
 (pdftex.def)             Requested size: 325.2142pt x 325.2142pt.
 [12 <./Thesis_files/figure-latex/unnamed-chunk-1-1.pdf>]
 
-LaTeX Warning: Reference `corrs' on page 13 undefined on input line 912.
+LaTeX Warning: Reference `corrs' on page 13 undefined on input line 920.
 
 
-LaTeX Warning: Reference `emp_corr' on page 13 undefined on input line 924.
+LaTeX Warning: Reference `emp_corr' on page 13 undefined on input line 936.
+
+
+LaTeX Warning: Reference `(' on page 13 undefined on input line 942.
 
 [13] [14] [15] [16] [17] [18] [19] [20] [21]
 
 Package hyperref Warning: Difference (2) between bookmark levels is greater 
-(hyperref)                than one, level fixed on input line 1410.
+(hyperref)                than one, level fixed on input line 1425.
 
 [22]
 No file Thesis.bbl.
@@ -858,16 +861,16 @@ LaTeX Warning: There were undefined references.
 LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `Thesis.out' has not changed.
-(rerunfilecheck)             Checksum: 67C702D25E2E32FEAD14D033A7F5BA9D;2501.
+(rerunfilecheck)             Checksum: A55EBD80C18A60C2EEBA729D1C5A2D3F;2504.
  ) 
 Here is how much of TeX's memory you used:
- 12531 strings out of 481252
- 227026 string characters out of 5914123
- 526940 words of memory out of 5000000
- 29053 multiletter control sequences out of 15000+600000
+ 12538 strings out of 481252
+ 227088 string characters out of 5914123
+ 527247 words of memory out of 5000000
+ 29057 multiletter control sequences out of 15000+600000
  479587 words of font info for 78 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 83i,12n,88p,273b,821s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 83i,12n,88p,273b,817s stack positions out of 5000i,500n,10000p,200000b,80000s
 {c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.
 enc}{c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ma
 thsy.enc}{c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/
@@ -894,10 +897,10 @@ pfb><c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lm
 sy6.pfb><c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/l
 m/lmsy8.pfb><c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/publ
 ic/lm/lmtt9.pfb>
-Output written on Thesis.pdf (23 pages, 409752 bytes).
+Output written on Thesis.pdf (23 pages, 409352 bytes).
 PDF statistics:
- 593 PDF objects out of 1000 (max. 8388607)
- 540 compressed objects within 6 object streams
- 146 named destinations out of 1000 (max. 500000)
+ 602 PDF objects out of 1000 (max. 8388607)
+ 549 compressed objects within 6 object streams
+ 149 named destinations out of 1000 (max. 500000)
  299 words of extra memory for PDF output out of 10000 (max. 10000000)
 
