@@ -49,46 +49,22 @@ corr_3 %>% ggcorrplot(hc.order = TRUE, title = "Five Clusters")
 #---------------------------------------------
 # Correlation matrix with 10, 5 and 2 overlapping clusters
 #---------------------------------------------
-corr_4 <- gen_corr(D = 50, clusters = "overlapping", num_clusters = c(10,5,2), num_layers = 3)
+corr_4 <- gen_corr(D = 50, clusters = "overlapping", num_clusters = c(10,5,2))
 eigen_4 <- eigen(corr_4)
 corr_4 %>% ggcorrplot(hc.order = TRUE, title = "Overlapping Clusters")
 
 ```
 
 ### Emperical
-https://eur03.safelinks.protection.outlook.com/?url=https%3A%2F%2Frawgit.com%2Fdppalomar%2FcovFactorModel%2Fmaster%2Fvignettes%2FcovFactorModel-vignette.html&data=04%7C01%7C%7C0caeb7ee2beb449dd0af08d8b409e474%7Ca6fa3b030a3c42588433a120dffcd348%7C0%7C0%7C637457302843416665%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C2000&sdata=1aBOrvjRM9Z3wXBR5miFvKfC5eiRpiUx8FH2bVS0FII%3D&reserved=0
 
 ```{r emperical corrs}
-#-----------------------------------------------
-# Some empirical correlation matrices - from S&P500
-# See ??corr_mats for info on how dataset was compiled
-# First looking at "normal market"
-#-----------------------------------------------
-corr_5 <- corr_mats$cor_normal[[2]]
-eigen_5 <- eigen(corr_5)
-corr_5 %>% ggcorrplot(hc.order = TRUE, title = "Normal Market") +
-    theme_bw() +
-  theme(axis.text.x=element_text(angle=90),
-        axis.title = element_blank(),
-        axis.ticks = element_blank())
 
-#----------------------------------------------
-# "stressed market"
-#----------------------------------------------
-corr_6 <- corr_mats$cor_stressed[[1]]
-eigen_6 <- eigen(corr_6)
-corr_6 %>% ggcorrplot(hc.order = TRUE, title = "Stressed Market")  +
-    theme_bw() +
-  theme(axis.text.x=element_text(angle=90),
-        axis.title = element_blank(),
-        axis.ticks = element_blank())
+# Loading emperical correlation matrix
+# see code/emperical_corr.R
+load("data/emp_corr.rda")
+corr_5 <- emp_corr
 
-#----------------------------------------------
-# "rally market"
-#----------------------------------------------
-corr_7 <- corr_mats$cor_rally[[1]]
-eigen_7 <- eigen(corr_7)
-corr_7 %>% ggcorrplot(hc.order = TRUE, title = "Rally Market")  +
+corr_5 %>% ggcorrplot(hc.order = TRUE, title = "Emperical Correlation Mtrixw")  +
     theme_bw() +
   theme(axis.text.x=element_text(angle=90),
         axis.title = element_blank(),
@@ -127,12 +103,14 @@ save(eigen_table, file = "data/eigen_table.rda")
 rm(eigen_1, eigen_2, eigen_3, eigen_4, eigen_5, eigen_6, eigen_7, eigen_table, corr_6, corr_7, eigens, emp_corr)
 ```
 
-
 ## Monte Carlo
 
-```{r monte carlo, eval=FALSE, include=TRUE}
+### Market 1
+
+```{r monte carlo 1, eval=FALSE, include=TRUE}
 # loading packages
 pacman::p_load(dplyr, purrr, MCmarket)
+
 
 # Creating vectors for portfolio mean and sd's
 load("data/emp_mu.rda")
@@ -146,25 +124,248 @@ pb <- dplyr::progress_estimated(N)
 gc()
 
 set.seed(9543712)
-market <- 
-    1:N %>%
-    map(~sim_market_with_progress(corr = corr_1,
-                                  k = 300,
-                                  mv_dist = "t",
-                                  mv_df = 3,
-                                  marginal_dist = "norm",
-                                  marginal_dist_model = list(mu = emp_mu,
-                                                                 sd = emp_sd),
-                                  ts_model = NULL)) 
+market_1 <-
+  1:N %>%
+  map(
+    ~ sim_market(
+      corr = corr_1,
+      k = 500,
+      mv_dist = "t",
+      mv_df = 3,
+      marginal_dist = "norm",
+      marginal_dist_model = list(mu = emp_mu,
+                                 sd = emp_sd),
+      ts_model = NULL,
+      progress = TRUE
+    )
+  )
 gc()
-```
 
-```{r saving mcdata, eval=FALSE, include=TRUE}
+
 # Saving dataframe
 save(market_1, file = "data/market_1.rda")
 rm(market_1)
 gc()
 ```
+
+### Market 2
+
+```{r monte carlo 2, eval=FALSE, include=TRUE}
+# loading packages
+pacman::p_load(dplyr, purrr, MCmarket)
+
+
+# Creating vectors for portfolio mean and sd's
+load("data/emp_mu.rda")
+load("data/emp_sd.rda")
+
+# Setting number of markets and length of progress bar.
+N <- 10000
+pb <- dplyr::progress_estimated(N)
+
+#clearing memory and Viewing current limit
+gc()
+
+set.seed(9543712)
+market_2 <-
+  1:N %>%
+  map(
+    ~ sim_market(
+      corr = corr_2,
+      k = 500,
+      mv_dist = "t",
+      mv_df = 3,
+      marginal_dist = "norm",
+      marginal_dist_model = list(mu = emp_mu,
+                                 sd = emp_sd),
+      ts_model = NULL,
+      progress = TRUE
+    )
+  )
+gc()
+
+
+# Saving dataframe
+save(market_2, file = "data/market_2.rda")
+rm(market_2)
+gc()
+
+```
+
+### Market 3
+
+```{r monte carlo 3, eval=FALSE, include=TRUE}
+# loading packages
+pacman::p_load(dplyr, purrr, MCmarket)
+
+
+# Creating vectors for portfolio mean and sd's
+load("data/emp_mu.rda")
+load("data/emp_sd.rda")
+
+# Setting number of markets and length of progress bar.
+N <- 10000
+pb <- dplyr::progress_estimated(N)
+
+set.seed(9543712)
+market_3 <-
+  1:N %>%
+  map(
+    ~ sim_market(
+      corr = corr_3,
+      k = 500,
+      mv_dist = "t",
+      mv_df = 3,
+      marginal_dist = "norm",
+      marginal_dist_model = list(mu = emp_mu,
+                                 sd = emp_sd),
+      ts_model = NULL,
+      progress = TRUE
+    )
+  )
+
+# Saving dataframe
+save(market_3, file = "data/market_3.rda")
+rm(market_3)
+gc()
+
+```
+
+
+### Market 4
+
+```{r monte carlo 4, eval=FALSE, include=TRUE}
+# loading packages
+pacman::p_load(dplyr, purrr, MCmarket)
+
+
+# Creating vectors for portfolio mean and sd's
+load("data/emp_mu.rda")
+load("data/emp_sd.rda")
+
+# Setting number of markets and length of progress bar.
+N <- 10000
+pb <- dplyr::progress_estimated(N)
+
+#clearing memory and Viewing current limit
+gc()
+
+set.seed(9543712)
+market_4 <-
+  1:N %>%
+  map(
+    ~ sim_market(
+      corr = corr_4,
+      k = 500,
+      mv_dist = "t",
+      mv_df = 3,
+      marginal_dist = "norm",
+      marginal_dist_model = list(mu = emp_mu,
+                                 sd = emp_sd),
+      ts_model = NULL,
+      progress = TRUE
+    )
+  )
+gc()
+
+
+# Saving dataframe
+save(market_4, file = "data/market_4.rda")
+rm(market_4)
+gc()
+
+```
+
+### Market 5
+
+```{r monte carlo 5, eval=FALSE, include=TRUE}
+# loading packages
+pacman::p_load(dplyr, purrr, MCmarket)
+
+
+# Creating vectors for portfolio mean and sd's
+load("data/emp_mu.rda")
+load("data/emp_sd.rda")
+
+# Setting number of markets and length of progress bar.
+N <- 10000
+pb <- dplyr::progress_estimated(N)
+
+#clearing memory and Viewing current limit
+gc()
+
+set.seed(9543712)
+market_5 <-
+  1:N %>%
+  map(
+    ~ sim_market(
+      corr = corr_5,
+      k = 500,
+      mv_dist = "t",
+      mv_df = 3,
+      marginal_dist = "norm",
+      marginal_dist_model = list(mu = emp_mu,
+                                 sd = emp_sd),
+      ts_model = NULL,
+      progress = TRUE
+    )
+  )
+gc()
+
+
+# Saving dataframe
+save(market_5, file = "data/market_5.rda")
+rm(market_5)
+gc()
+```
+
+
+### Caclulating market conditional numbers
+```{r conditional number}
+# Claculating condition number
+
+conditional_number <- function(market) {
+    eigen_values <-
+        market %>%
+        spread(Asset, Return) %>%
+        select(-date) %>%
+        fitHeavyTail::fit_mvt() %>%
+        .$cov %>% eigen() %>%  .$value
+
+    cond_num <- max(eigen_values) / min(eigen_values)
+    return(cond_num)
+}
+
+load("data/market_1.rda")
+cond_num_m1 <- market_1 %>% map(conditional_number)
+rm(market_1)
+
+load("data/market_2.rda")
+cond_num_m2 <- market_2 %>% map(conditional_number)
+rm(market_2)
+
+load("data/market_3.rda")
+cond_num_m3 <- market_3 %>% map(conditional_number)
+rm(market_3)
+
+load("data/market_4.rda")
+cond_num_m4 <- market_4 %>% map(conditional_number)
+rm(market_4)
+
+load("data/market_5.rda")
+cond_num_m5 <- market_5 %>% map(conditional_number)
+rm(market_5)
+
+cond_num <- list(
+    market_1 = cond_num_m1,
+    market_2 = cond_num_m2,
+    market_3 = cond_num_m3,
+    market_4 = cond_num_m4,
+    market_5 = cond_num_m5
+)
+
+```
+
 
 ## Portfolio Optimisation
 
@@ -175,7 +376,7 @@ pacman::p_load(lubridate, fitHeavyTail, RiskPortfolios, tbl2xts, rmsfuns, tictoc
 # --------------------------------------------------------------------
 # This function creates a set of weights from a single market at a date
 # --------------------------------------------------------------------
-port_weight_calc <- function(data, method = "minvol", from_date, look_back = 100) {
+port_weight_calc <- function(data, method = "minvol", from_date, look_back = 200) {
   
   
   if (method != "naive") { 
@@ -261,7 +462,7 @@ port_weight_calc <- function(data, method = "minvol", from_date, look_back = 100
 # --------------------------------------------------------------
 # This function calculates portfolio returns for a single market
 # --------------------------------------------------------------
-port_returns <- function(data, weights, look_back) {
+port_returns <- function(data, weights, look_back = 200) {
   
   returns_xts <- data %>% 
     select(date, Asset, Return)%>% 
@@ -285,7 +486,7 @@ port_returns <- function(data, weights, look_back) {
 # This function couples the first two functions in this chunk.
 # Therefore, it creates portfolio returns with periodic re-balancing.
 # ----------------------------------------------------------------------------
-rebal_port_returns <- function(data, method, rebdates, look_back) {
+rebal_port_returns <- function(data, method, rebdates, look_back = 200) {
   
   pb$tick()$print()
   
@@ -303,7 +504,7 @@ port_returns(data, weights = weights, look_back = look_back)
 # This function maps rebal_port_returns over the Universe columns of the dataset
 # Therefore, it creates portfolio returns with periodic re-balancing, for each universe
 # ----------------------------------------------------------------------------
-port_rets_universal <- function(data_universal, method, rebdates, look_back = 100) {
+port_rets_universal <- function(data_universal, method, rebdates, look_back = 200) {
   # Tick to progress bar
   
   data_universal  %>% map(~rebal_port_returns(.x, 
@@ -328,10 +529,14 @@ source("code/calc_port_returns.R")
 
 # Vector of rebalance dates
 # Only works for k=300 and look_back = 100
-rebdates <- c(first(market_1[[1]]$date) %m+% days(100), 
-              first(market_1[[1]]$date) %m+% days(150),
-              first(market_1[[1]]$date) %m+% days(200),
-              first(market_1[[1]]$date) %m+% days(250))
+rebdates <- c(first(market_1[[1]]$date) %m+% days(200), 
+              first(market_1[[1]]$date) %m+% days(250),
+              first(market_1[[1]]$date) %m+% days(300),
+              first(market_1[[1]]$date) %m+% days(350),
+              first(market_1[[1]]$date) %m+% days(400),
+              first(market_1[[1]]$date) %m+% days(450)
+              )
+save(rebdates, file = "data/rebdates.rda")
 
 # Testing:: port_rets_universal(dat, method = "naive", rebdates, look_back = 100)
 
@@ -344,27 +549,27 @@ methods <- c("naive", "minvol", "invvol", "erc", "maxdiv")
 N <- 10000
 
 pb <- dplyr::progress_estimated(N)
-naive_m1 <- port_rets_universal(market_1, method = "naive", rebdates, look_back = 100)
+naive_m1 <- port_rets_universal(market_1, method = "naive", rebdates, look_back = 200)
 save(naive_m1, file = "data/naive_m1.rda")
 rm(naive_m1)
 
 pb <- dplyr::progress_estimated(N)
-minvol_m1 <- port_rets_universal(market_1, method = "minvol", rebdates, look_back = 100)
+minvol_m1 <- port_rets_universal(market_1, method = "minvol", rebdates, look_back = 200)
 save(minvol_m1, file = "data/minvol_m1.rda")
 rm(minvol_m1)
 
 pb <- dplyr::progress_estimated(N)
-invvol_m1 <- port_rets_universal(market_1, method = "invvol", rebdates, look_back = 100)
+invvol_m1 <- port_rets_universal(market_1, method = "invvol", rebdates, look_back = 200)
 save(invvol_m1, file = "data/invvol_m1.rda")
 rm(invvol_m1)
 
 pb <- dplyr::progress_estimated(N)
-erc_m1 <- port_rets_universal(market_1, method = "erc", rebdates, look_back = 100)
+erc_m1 <- port_rets_universal(market_1, method = "erc", rebdates, look_back = 200)
 save(erc_m1, file = "data/erc_m1.rda")
 rm(erc_m1)
 
 pb <- dplyr::progress_estimated(N)
-maxdiv_m1 <- port_rets_universal(market_1, method = "maxdiv", rebdates, look_back = 100)
+maxdiv_m1 <- port_rets_universal(market_1, method = "maxdiv", rebdates, look_back = 200)
 save(maxdiv_m1, file = "data/maxdiv_m1.rda")
 rm(maxdiv_m1)
 
@@ -384,31 +589,31 @@ gc()
 # for each portfolio type in market 2.
 #====================================
 load("data/market_2.rda")
-
+load("data/rebdates.rda")
 N <- 10000
 
 pb <- dplyr::progress_estimated(N)
-naive_m2 <- port_rets_universal(market_2, method = "naive", rebdates, look_back = 100)
+naive_m2 <- port_rets_universal(market_2, method = "naive", rebdates, look_back = 200)
 save(naive_m2, file = "data/naive_m2.rda")
 rm(naive_m2)
 
 pb <- dplyr::progress_estimated(N)
-minvol_m2 <- port_rets_universal(market_2, method = "minvol", rebdates, look_back = 100)
+minvol_m2 <- port_rets_universal(market_2, method = "minvol", rebdates, look_back = 200)
 save(minvol_m2, file = "data/minvol_m2.rda")
 rm(minvol_m2)
 
 pb <- dplyr::progress_estimated(N)
-invvol_m2 <- port_rets_universal(market_2, method = "invvol", rebdates, look_back = 100)
+invvol_m2 <- port_rets_universal(market_2, method = "invvol", rebdates, look_back = 200)
 save(invvol_m2, file = "data/invvol_m2.rda")
 rm(invvol_m2)
 
 pb <- dplyr::progress_estimated(N)
-erc_m2 <- port_rets_universal(market_2, method = "erc", rebdates, look_back = 100)
+erc_m2 <- port_rets_universal(market_2, method = "erc", rebdates, look_back = 200)
 save(erc_m2, file = "data/erc_m2.rda")
 rm(erc_m2)
 
 pb <- dplyr::progress_estimated(N)
-maxdiv_m2 <- port_rets_universal(market_2, method = "maxdiv", rebdates, look_back = 100)
+maxdiv_m2 <- port_rets_universal(market_2, method = "maxdiv", rebdates, look_back = 200)
 save(maxdiv_m2, file = "data/maxdiv_m2.rda")
 rm(maxdiv_m2)
 
@@ -431,27 +636,27 @@ load("data/market_3.rda")
 N <- 10000
 
 pb <- dplyr::progress_estimated(N)
-naive_m3 <- port_rets_universal(market_3, method = "naive", rebdates, look_back = 100)
+naive_m3 <- port_rets_universal(market_3, method = "naive", rebdates, look_back = 200)
 save(naive_m3, file = "data/naive_m3.rda")
 rm(naive_m3)
 
 pb <- dplyr::progress_estimated(N)
-minvol_m3 <- port_rets_universal(market_3, method = "minvol", rebdates, look_back = 100)
+minvol_m3 <- port_rets_universal(market_3, method = "minvol", rebdates, look_back = 200)
 save(minvol_m3, file = "data/minvol_m3.rda")
 rm(minvol_m3)
 
 pb <- dplyr::progress_estimated(N)
-invvol_m3 <- port_rets_universal(market_3, method = "invvol", rebdates, look_back = 100)
+invvol_m3 <- port_rets_universal(market_3, method = "invvol", rebdates, look_back = 200)
 save(invvol_m3, file = "data/invvol_m3.rda")
 rm(invvol_m3)
 
 pb <- dplyr::progress_estimated(N)
-erc_m3 <- port_rets_universal(market_3, method = "erc", rebdates, look_back = 100)
+erc_m3 <- port_rets_universal(market_3, method = "erc", rebdates, look_back = 200)
 save(erc_m3, file = "data/erc_m3.rda")
 rm(erc_m3)
 
 pb <- dplyr::progress_estimated(N)
-maxdiv_m3 <- port_rets_universal(market_3, method = "maxdiv", rebdates, look_back = 100)
+maxdiv_m3 <- port_rets_universal(market_3, method = "maxdiv", rebdates, look_back = 200)
 save(maxdiv_m3, file = "data/maxdiv_m3.rda")
 rm(maxdiv_m3)
 
@@ -475,27 +680,27 @@ load("data/market_4.rda")
 N <- 10000
 
 pb <- dplyr::progress_estimated(N)
-naive_m4 <- port_rets_universal(market_4, method = "naive", rebdates, look_back = 100)
+naive_m4 <- port_rets_universal(market_4, method = "naive", rebdates, look_back = 200)
 save(naive_m4, file = "data/naive_m4.rda")
 rm(naive_m4)
 
 pb <- dplyr::progress_estimated(N)
-minvol_m4 <- port_rets_universal(market_4, method = "minvol", rebdates, look_back = 100)
+minvol_m4 <- port_rets_universal(market_4, method = "minvol", rebdates, look_back = 200)
 save(minvol_m4, file = "data/minvol_m4.rda")
 rm(minvol_m4)
 
 pb <- dplyr::progress_estimated(N)
-invvol_m4 <- port_rets_universal(market_4, method = "invvol", rebdates, look_back = 100)
+invvol_m4 <- port_rets_universal(market_4, method = "invvol", rebdates, look_back = 200)
 save(invvol_m4, file = "data/invvol_m4.rda")
 rm(invvol_m4)
 
 pb <- dplyr::progress_estimated(N)
-erc_m4 <- port_rets_universal(market_4, method = "erc", rebdates, look_back = 100)
+erc_m4 <- port_rets_universal(market_4, method = "erc", rebdates, look_back = 200)
 save(erc_m4, file = "data/erc_m4.rda")
 rm(erc_m4)
 
 pb <- dplyr::progress_estimated(N)
-maxdiv_m4 <- port_rets_universal(market_4, method = "maxdiv", rebdates, look_back = 100)
+maxdiv_m4 <- port_rets_universal(market_4, method = "maxdiv", rebdates, look_back = 200)
 save(maxdiv_m4, file = "data/maxdiv_m4.rda")
 rm(maxdiv_m4)
 
@@ -519,27 +724,27 @@ load("data/market_5.rda")
 N <- 10000
 
 pb <- dplyr::progress_estimated(N)
-naive_m5 <- port_rets_universal(market_5, method = "naive", rebdates, look_back = 100)
+naive_m5 <- port_rets_universal(market_5, method = "naive", rebdates, look_back = 200)
 save(naive_m5, file = "data/naive_m5.rda")
 rm(naive_m5)
 
 pb <- dplyr::progress_estimated(N)
-minvol_m5 <- port_rets_universal(market_5, method = "minvol", rebdates, look_back = 100)
+minvol_m5 <- port_rets_universal(market_5, method = "minvol", rebdates, look_back = 200)
 save(minvol_m5, file = "data/minvol_m5.rda")
 rm(minvol_m5)
 
 pb <- dplyr::progress_estimated(N)
-invvol_m5 <- port_rets_universal(market_5, method = "invvol", rebdates, look_back = 100)
+invvol_m5 <- port_rets_universal(market_5, method = "invvol", rebdates, look_back = 200)
 save(invvol_m5, file = "data/invvol_m5.rda")
 rm(invvol_m5)
 
 pb <- dplyr::progress_estimated(N)
-erc_m5 <- port_rets_universal(market_5, method = "erc", rebdates, look_back = 100)
+erc_m5 <- port_rets_universal(market_5, method = "erc", rebdates, look_back = 200)
 save(erc_m5, file = "data/erc_m5.rda")
 rm(erc_m5)
 
 pb <- dplyr::progress_estimated(N)
-maxdiv_m5 <- port_rets_universal(market_5, method = "maxdiv", rebdates, look_back = 100)
+maxdiv_m5 <- port_rets_universal(market_5, method = "maxdiv", rebdates, look_back = 200)
 save(maxdiv_m5, file = "data/maxdiv_m5.rda")
 rm(maxdiv_m5)
 
@@ -558,7 +763,7 @@ gc()
 ```
 
 ## Portfolio Analytics
-This function calculated various portfilio metrics for a list of portfolio returns
+This function calculated various portfolio metrics for a list of portfolio returns
 
 ```{r portfolio metrics}
 
@@ -586,11 +791,15 @@ get_perf_metrics <- function(port_ret_data) {
   list(Sharp = Sharp, SD = SD, DD = DD, Var = VaR)
   
 }
+
+PerformanceAnalytics::AverageDrawdown()
+
+
 ```
 
 
 ### Market 1
-```{r}
+```{r market 1, eval=FALSE, include=TRUE}
 load("data/rets_m1.rda")
 pacman::p_load(PerformanceAnalytics)
 
@@ -603,11 +812,13 @@ minvol_perf_m1 <- get_perf_metrics(rets_m1$minvol)
 invvol_perf_m1 <- get_perf_metrics(rets_m1$invvol)
 erc_perf_m1 <- get_perf_metrics(rets_m1$erc)
 maxdiv_perf_m1 <- get_perf_metrics(rets_m1$maxdiv)
+enb_m1 <- 
 perf_m1 <- list(naive = naive_perf_m1,
                 minvol = minvol_perf_m1,
                 invvol = invvol_perf_m1,
                 erc = erc_perf_m1,
-                maxdiv = maxdiv_perf_m1)
+                maxdiv = maxdiv_perf_m1,
+                enb = )
 save(perf_m1, file = "data/perf_m1.rda")
 rm(naive_perf_m1, minvol_perf_m1, invvol_perf_m1, erc_perf_m1, maxdiv_perf_m1)
 
@@ -635,9 +846,551 @@ rm(naive_perf_m1, minvol_perf_m1, invvol_perf_m1, erc_perf_m1, maxdiv_perf_m1)
 # perf_m1$erc$Var[[1]] %>% na.omit() %>% mean()   # 1 Na
 # perf_m1$maxdiv$Var[[1]] %>% mean()
 
+# HHI - ENC
+load("data/market_1.rda")
+load("data/rebdates.rda")
+source("code/calc_port_returns.R")
+source("code/Effective_Number_of_constituits.R")
+
+naive_enc_m1 <- market_1 %>% map( ~ ENC(.x, method = "naive"))
+minvol_enc_m1 <- market_1 %>% map( ~ ENC(.x, method = "minvol"))
+invvol_enc_m1 <- market_1 %>% map( ~ ENC(.x, method = "invvol"))
+erc_enc_m1 <- market_1 %>% map( ~ ENC(.x, method = "erc"))
+maxdiv_enc_m1 <- market_1 %>% map( ~ ENC(.x, method = "maxdiv"))
+enc_m1 <- list(naive = naive_enc_m1,
+               minvol = minvol_enc_m1,
+               invvol = invvol_enc_m1,
+               erc = erc_enc_m1,
+               maxdiv = maxdiv_enc_m1)
+save(enc_m1, file = "data/enc_m1.rda")
+
+# Entropy - ENB
+load("data/market_1.rda")
+load("data/rets_m1.rda")
+
+
+naive_enb_m1 <-
+  purrr::map2(market_1,
+              rets_m1$naive,
+              ~ Effective_Number_of_bets(R = .x,
+                                         Rp = .y))
+minvol_enb_m1 <-
+  purrr::map2(market_1,
+              rets_m1$minvol,
+              ~ Effective_Number_of_bets(R = .x,
+                                         Rp = .y))
+invvol_enb_m1 <-
+  purrr::map2(market_1,
+              rets_m1$invvol,
+              ~ Effective_Number_of_bets(R = .x,
+                                         Rp = .y))
+erc_enb_m1 <-
+  purrr::map2(market_1,
+              rets_m1$erc,
+              ~ Effective_Number_of_bets(R = .x,
+                                         Rp = .y))
+maxdiv_enb_m1 <-
+  purrr::map2(market_1,
+              rets_m1$maxdiv,
+              ~ Effective_Number_of_bets(R = .x,
+                                         Rp = .y))
+enb_m1 <- list(naive = naive_enb_m1,
+               minvol  = minvol_enb_m1,
+               invvol = invvol_enb_m1,
+               erc = erc_enb_m1,
+               maxdiv = maxdiv_enb_m1)
+
+save(enb_m1, file = "data/enb_m1.rda")
+
+enb_m1 %>% unlist() %>% as.vector()
+
+# enb_m1$naive %>% reduce(min)
+# enb_m1$naive %>% reduce(max)
+# enb_m1$naive %>% reduce(mean)
+# 
+# enb_m1$minvol %>% reduce(min)
+# enb_m1$minvol %>% reduce(max)
+# enb_m1$minvol %>% reduce(mean)
+# 
+# enb_m1$invvol %>% reduce(min)
+# enb_m1$invvol %>% reduce(max)
+# enb_m1$invvol %>% reduce(mean)
+# 
+# enb_m1$erc %>% reduce(min)
+# enb_m1$erc %>% reduce(max)
+# enb_m1$erc %>% reduce(mean)
+# 
+# enb_m1$maxdiv %>% reduce(min)
+# enb_m1$maxdiv %>% reduce(max)
+# enb_m1$maxdiv %>% reduce(mean)
+
+
+
+
 ```
 
 ### Market 2
+
+```{r market 2 , eval=FALSE, include=TRUE}
+load("data/rets_m2.rda")
+pacman::p_load(PerformanceAnalytics, tidyverse, tbl2xts)
+
+#===================
+# Naive Portfolio
+#==================
+
+naive_perf_m2 <- get_perf_metrics(rets_m2$naive)
+minvol_perf_m2 <- get_perf_metrics(rets_m2$minvol)
+invvol_perf_m2 <- get_perf_metrics(rets_m2$invvol)
+erc_perf_m2 <- get_perf_metrics(rets_m2$erc)
+maxdiv_perf_m2 <- get_perf_metrics(rets_m2$maxdiv)
+perf_m2 <- list(naive = naive_perf_m2,
+                minvol = minvol_perf_m2,
+                invvol = invvol_perf_m2,
+                erc = erc_perf_m2,
+                maxdiv = maxdiv_perf_m2)
+save(perf_m2, file = "data/perf_m2.rda")
+rm(naive_perf_m2, minvol_perf_m2, invvol_perf_m2, erc_perf_m2, maxdiv_perf_m2)
+
+# perf_m2$naive$Sharp[[1]] %>% mean()
+# perf_m2$minvol$Sharp[[1]] %>% mean()
+# perf_m2$invvol$Sharp[[1]] %>% mean()
+# perf_m2$erc$Sharp[[1]] %>% mean()
+# perf_m2$maxdiv$Sharp[[1]] %>% mean()
+
+# perf_m2$naive$SD[[1]] %>% mean()
+# perf_m2$minvol$SD[[1]] %>% mean()
+# perf_m2$invvol$SD[[1]] %>% mean()
+# perf_m2$erc$SD[[1]] %>% mean()
+# perf_m2$maxdiv$SD[[1]] %>% mean()
+
+# perf_m2$naive$DD[[1]] %>% mean()
+# perf_m2$minvol$DD[[1]] %>% mean()
+# perf_m2$invvol$DD[[1]] %>% mean()
+# perf_m2$erc$DD[[1]] %>% mean()
+# perf_m2$maxdiv$DD[[1]] %>% mean()
+
+# perf_m2$naive$Var[[1]] %>% na.omit() %>% mean()     # ? NA's
+# perf_m2$minvol$Var[[1]] %>% mean()
+# perf_m2$invvol$Var[[1]] %>% na.omit() %>% mean()  # ? NA
+# perf_m2$erc$Var[[1]] %>% na.omit() %>% mean()   # ? Na
+# perf_m2$maxdiv$Var[[1]] %>% mean()
+
+# HHI
+load("data/market_2.rda")
+load("data/rebdates.rda")
+source("code/calc_port_returns.R")
+source("code/Effective_Number_of_constituits.R")
+
+naive_enc_m2 <- market_2 %>% map( ~ ENC(.x, method = "naive"))
+minvol_enc_m2 <- market_2 %>% map( ~ ENC(.x, method = "minvol"))
+invvol_enc_m2 <- market_2 %>% map( ~ ENC(.x, method = "invvol"))
+erc_enc_m2 <- market_2 %>% map( ~ ENC(.x, method = "erc"))
+maxdiv_enc_m2 <- market_2 %>% map( ~ ENC(.x, method = "maxdiv"))
+enc_m2 <- list(naive_enc_m2,
+               minvol_enc_m2,
+               invvol_enc_m2,
+               erc_enc_m2,
+               maxdiv_enc_m2)
+save(enc_m2)
+
+# Entropy - ENB
+load("data/market_2.rda")
+load("data/rets_m2.rda")
+
+# Entropy
+load("data/market_2.rda")
+load("data/rets_m2.rda")
+source("code/Effective_Number_of_bets.R")
+
+naive_enb_m2 <-
+  purrr::map2(market_2,
+              rets_m2$naive,
+              ~ Effective_Number_of_bets(R = .x,
+                                         Rp = .y))
+minvol_enb_m2 <-
+  purrr::map2(market_2,
+              rets_m2$minvol,
+              ~ Effective_Number_of_bets(R = .x,
+                                         Rp = .y))
+invvol_enb_m2 <-
+  purrr::map2(market_2,
+              rets_m2$invvol,
+              ~ Effective_Number_of_bets(R = .x,
+                                         Rp = .y))
+erc_enb_m2 <-
+  purrr::map2(market_2,
+              rets_m2$erc,
+              ~ Effective_Number_of_bets(R = .x,
+                                         Rp = .y))
+maxdiv_enb_m2 <-
+  purrr::map2(market_2,
+              rets_m2$maxdiv,
+              ~ Effective_Number_of_bets(R = .x,
+                                         Rp = .y))
+enb_m2 <- list(naive = naive_enb_m2,
+               minvol  = minvol_enb_m2,
+               invvol = invvol_enb_m2,
+               erc = erc_enb_m2,
+               maxdiv = maxdiv_enb_m2)
+
+save(enb_m2, file = "data/enb_m2.rda")
+
+```
+
+### Market 3
+
+```{r market 3,eval=FALSE, include=TRUE}
+load("data/rets_m3.rda")
+pacman::p_load(PerformanceAnalytics, tidyverse, tbl2xts)
+
+#===================
+# Naive Portfolio
+#==================
+
+naive_perf_m3 <- get_perf_metrics(rets_m3$naive)
+minvol_perf_m3 <- get_perf_metrics(rets_m3$minvol)
+invvol_perf_m3 <- get_perf_metrics(rets_m3$invvol)
+erc_perf_m3 <- get_perf_metrics(rets_m3$erc)
+maxdiv_perf_m3 <- get_perf_metrics(rets_m3$maxdiv)
+perf_m3 <- list(naive = naive_perf_m3,
+                minvol = minvol_perf_m3,
+                invvol = invvol_perf_m3,
+                erc = erc_perf_m3,
+                maxdiv = maxdiv_perf_m3)
+save(perf_m3, file = "data/perf_m3.rda")
+rm(naive_perf_m3, minvol_perf_m3, invvol_perf_m3, erc_perf_m3, maxdiv_perf_m3)
+
+# perf_m3$naive$Sharp[[1]] %>% mean()
+# perf_m3$minvol$Sharp[[1]] %>% mean()
+# perf_m3$invvol$Sharp[[1]] %>% mean()
+# perf_m3$erc$Sharp[[1]] %>% mean()
+# perf_m3$maxdiv$Sharp[[1]] %>% mean()
+
+# perf_m3$naive$SD[[1]] %>% mean()
+# perf_m3$minvol$SD[[1]] %>% mean()
+# perf_m3$invvol$SD[[1]] %>% mean()
+# perf_m3$erc$SD[[1]] %>% mean()
+# perf_m3$maxdiv$SD[[1]] %>% mean()
+
+# perf_m3$naive$DD[[1]] %>% mean()
+# perf_m3$minvol$DD[[1]] %>% mean()
+# perf_m3$invvol$DD[[1]] %>% mean()
+# perf_m3$erc$DD[[1]] %>% mean()
+# perf_m3$maxdiv$DD[[1]] %>% mean()
+
+# perf_m3$naive$Var[[1]] %>% na.omit() %>% mean()     # ? NA's
+# perf_m3$minvol$Var[[1]] %>% mean()
+# perf_m3$invvol$Var[[1]] %>% na.omit() %>% mean()  # ? NA
+# perf_m3$erc$Var[[1]] %>% na.omit() %>% mean()   # ? Na
+# perf_m3$maxdiv$Var[[1]] %>% mean()
+
+# HHI
+load("data/market_3.rda")
+load("data/rebdates.rda")
+source("code/calc_port_returns.R")
+source("code/Effective_Number_of_constituits.R")
+
+naive_enc_m3 <- market_3 %>% map( ~ ENC(.x, method = "naive"))
+minvol_enc_m3 <- market_3 %>% map( ~ ENC(.x, method = "minvol"))
+invvol_enc_m3 <- market_3 %>% map( ~ ENC(.x, method = "invvol"))
+erc_enc_m3 <- market_3 %>% map( ~ ENC(.x, method = "erc"))
+maxdiv_enc_m3 <- market_3 %>% map( ~ ENC(.x, method = "maxdiv"))
+enc_m3 <- list(naive_enc_m3,
+               minvol_enc_m3,
+               invvol_enc_m3,
+               erc_enc_m3,
+               maxdiv_enc_m3)
+save(enc_m3)
+
+# Entropy - ENB
+load("data/market_3.rda")
+load("data/rets_m3.rda")
+
+# Entropy
+load("data/market_3.rda")
+load("data/rets_m3.rda")
+
+
+naive_enb_m3 <-
+  purrr::map2(market_3,
+              rets_m3$naive,
+              ~ Effective_Number_of_bets(R = .x,
+                                         Rp = .y))
+minvol_enb_m3 <-
+  purrr::map2(market_3,
+              rets_m3$minvol,
+              ~ Effective_Number_of_bets(R = .x,
+                                         Rp = .y))
+invvol_enb_m3 <-
+  purrr::map2(market_3,
+              rets_m3$invvol,
+              ~ Effective_Number_of_bets(R = .x,
+                                         Rp = .y))
+erc_enb_m3 <-
+  purrr::map2(market_3,
+              rets_m3$erc,
+              ~ Effective_Number_of_bets(R = .x,
+                                         Rp = .y))
+maxdiv_enb_m3 <-
+  purrr::map2(market_3,
+              rets_m3$maxdiv,
+              ~ Effective_Number_of_bets(R = .x,
+                                         Rp = .y))
+enb_m3 <- list(naive = naive_enb_m3,
+               minvol  = minvol_enb_m3,
+               invvol = invvol_enb_m3,
+               erc = erc_enb_m3,
+               maxdiv = maxdiv_enb_m3)
+
+save(enb_m3, file = "data/enb_m3.rda")
+
+```
+
+### Market 4
+
+```{r market 4, eval=FALSE, include=TRUE}
+load("data/rets_m4.rda")
+pacman::p_load(PerformanceAnalytics, tidyverse, tbl2xts)
+
+#===================
+# Naive Portfolio
+#==================
+
+naive_perf_m4 <- get_perf_metrics(rets_m4$naive)
+minvol_perf_m4 <- get_perf_metrics(rets_m4$minvol)
+invvol_perf_m4 <- get_perf_metrics(rets_m4$invvol)
+erc_perf_m4 <- get_perf_metrics(rets_m4$erc)
+maxdiv_perf_m4 <- get_perf_metrics(rets_m4$maxdiv)
+perf_m4 <- list(naive = naive_perf_m4,
+                minvol = minvol_perf_m4,
+                invvol = invvol_perf_m4,
+                erc = erc_perf_m4,
+                maxdiv = maxdiv_perf_m4)
+save(perf_m4, file = "data/perf_m4.rda")
+rm(naive_perf_m4, minvol_perf_m4, invvol_perf_m4, erc_perf_m4, maxdiv_perf_m4)
+
+# perf_m4$naive$Sharp[[1]] %>% mean()
+# perf_m4$minvol$Sharp[[1]] %>% mean()
+# perf_m4$invvol$Sharp[[1]] %>% mean()
+# perf_m4$erc$Sharp[[1]] %>% mean()
+# perf_m4$maxdiv$Sharp[[1]] %>% mean()
+
+# perf_m4$naive$SD[[1]] %>% mean()
+# perf_m4$minvol$SD[[1]] %>% mean()
+# perf_m4$invvol$SD[[1]] %>% mean()
+# perf_m4$erc$SD[[1]] %>% mean()
+# perf_m4$maxdiv$SD[[1]] %>% mean()
+
+# perf_m4$naive$DD[[1]] %>% mean()
+# perf_m4$minvol$DD[[1]] %>% mean()
+# perf_m4$invvol$DD[[1]] %>% mean()
+# perf_m4$erc$DD[[1]] %>% mean()
+# perf_m4$maxdiv$DD[[1]] %>% mean()
+
+# perf_m4$naive$Var[[1]] %>% na.omit() %>% mean()     # ? NA's
+# perf_m4$minvol$Var[[1]] %>% mean()
+# perf_m4$invvol$Var[[1]] %>% na.omit() %>% mean()  # ? NA
+# perf_m4$erc$Var[[1]] %>% na.omit() %>% mean()   # ? Na
+# perf_m4$maxdiv$Var[[1]] %>% mean()
+
+# HHI
+load("data/market_4.rda")
+load("data/rebdates.rda")
+source("code/calc_port_returns.R")
+source("code/Effective_Number_of_constituits.R")
+
+naive_enc_m4 <- market_4 %>% map( ~ ENC(.x, method = "naive"))
+minvol_enc_m4 <- market_4 %>% map( ~ ENC(.x, method = "minvol"))
+invvol_enc_m4 <- market_4 %>% map( ~ ENC(.x, method = "invvol"))
+erc_enc_m4 <- market_4 %>% map( ~ ENC(.x, method = "erc"))
+maxdiv_enc_m4 <- market_4 %>% map( ~ ENC(.x, method = "maxdiv"))
+enc_m4 <- list(naive_enc_m4,
+               minvol_enc_m4,
+               invvol_enc_m4,
+               erc_enc_m4,
+               maxdiv_enc_m4)
+save(enc_m4)
+
+# Entropy - ENB
+load("data/market_4.rda")
+load("data/rets_m4.rda")
+
+# Entropy
+load("data/market_4.rda")
+load("data/rets_m4.rda")
+
+
+naive_enb_m4 <-
+  purrr::map2(market_4,
+              rets_m4$naive,
+              ~ Effective_Number_of_bets(R = .x,
+                                         Rp = .y))
+minvol_enb_m4 <-
+  purrr::map2(market_4,
+              rets_m4$minvol,
+              ~ Effective_Number_of_bets(R = .x,
+                                         Rp = .y))
+invvol_enb_m4 <-
+  purrr::map2(market_4,
+              rets_m4$invvol,
+              ~ Effective_Number_of_bets(R = .x,
+                                         Rp = .y))
+erc_enb_m4 <-
+  purrr::map2(market_4,
+              rets_m4$erc,
+              ~ Effective_Number_of_bets(R = .x,
+                                         Rp = .y))
+maxdiv_enb_m4 <-
+  purrr::map2(market_4,
+              rets_m4$maxdiv,
+              ~ Effective_Number_of_bets(R = .x,
+                                         Rp = .y))
+enb_m4 <- list(naive = naive_enb_m4,
+               minvol  = minvol_enb_m4,
+               invvol = invvol_enb_m4,
+               erc = erc_enb_m4,
+               maxdiv = maxdiv_enb_m4)
+
+save(enb_m4, file = "data/enb_m4.rda")
+
+```
+
+### Market 5
+
+```{r market 5, eval=FALSE, include=TRUE}
+load("data/rets_m5.rda")
+pacman::p_load(PerformanceAnalytics, tidyverse, tbl2xts)
+
+#===================
+# Naive Portfolio
+#==================
+
+naive_perf_m5 <- get_perf_metrics(rets_m5$naive)
+minvol_perf_m5 <- get_perf_metrics(rets_m5$minvol)
+invvol_perf_m5 <- get_perf_metrics(rets_m5$invvol)
+erc_perf_m5 <- get_perf_metrics(rets_m5$erc)
+maxdiv_perf_m5 <- get_perf_metrics(rets_m5$maxdiv)
+perf_m5 <- list(naive = naive_perf_m5,
+                minvol = minvol_perf_m5,
+                invvol = invvol_perf_m5,
+                erc = erc_perf_m5,
+                maxdiv = maxdiv_perf_m5)
+save(perf_m5, file = "data/perf_m5.rda")
+rm(naive_perf_m5, minvol_perf_m5, invvol_perf_m5, erc_perf_m5, maxdiv_perf_m5)
+
+# perf_m5$naive$Sharp[[1]] %>% mean()
+# perf_m5$minvol$Sharp[[1]] %>% mean()
+# perf_m5$invvol$Sharp[[1]] %>% mean()
+# perf_m5$erc$Sharp[[1]] %>% mean()
+# perf_m5$maxdiv$Sharp[[1]] %>% mean()
+
+# perf_m5$naive$SD[[1]] %>% mean()
+# perf_m5$minvol$SD[[1]] %>% mean()
+# perf_m5$invvol$SD[[1]] %>% mean()
+# perf_m5$erc$SD[[1]] %>% mean()
+# perf_m5$maxdiv$SD[[1]] %>% mean()
+
+# perf_m5$naive$DD[[1]] %>% mean()
+# perf_m5$minvol$DD[[1]] %>% mean()
+# perf_m5$invvol$DD[[1]] %>% mean()
+# perf_m5$erc$DD[[1]] %>% mean()
+# perf_m5$maxdiv$DD[[1]] %>% mean()
+
+# perf_m5$naive$Var[[1]] %>% na.omit() %>% mean()     # ? NA's
+# perf_m5$minvol$Var[[1]] %>% mean()
+# perf_m5$invvol$Var[[1]] %>% na.omit() %>% mean()  # ? NA
+# perf_m5$erc$Var[[1]] %>% na.omit() %>% mean()   # ? Na
+# perf_m5$maxdiv$Var[[1]] %>% mean()
+
+# HHI
+load("data/market_5.rda")
+load("data/rebdates.rda")
+source("code/calc_port_returns.R")
+source("code/Effective_Number_of_constituits.R")
+
+naive_enc_m5 <- market_5 %>% map(~ ENC(.x, method = "naive"))
+minvol_enc_m5 <- market_5 %>% map(~ ENC(.x, method = "minvol"))
+invvol_enc_m5 <- market_5 %>% map(~ ENC(.x, method = "invvol"))
+erc_enc_m5 <- market_5 %>% map(~ ENC(.x, method = "erc"))
+maxdiv_enc_m5 <- market_5 %>% map(~ ENC(.x, method = "maxdiv"))
+enc_m5 <- list(naive_enc_m5,
+               minvol_enc_m5,
+               invvol_enc_m5,
+               erc_enc_m5,
+               maxdiv_enc_m5)
+save(enc_m5)
+
+# Entropy - ENB
+load("data/market_5.rda")
+load("data/rets_m5.rda")
+
+# Entropy
+load("data/market_5.rda")
+load("data/rets_m5.rda")
+
+
+naive_enb_m5 <-
+  purrr::map2(market_5,
+              rets_m5$naive,
+              ~ Effective_Number_of_bets(R = .x,
+                                         Rp = .y))
+minvol_enb_m5 <-
+  purrr::map2(market_5,
+              rets_m5$minvol,
+              ~ Effective_Number_of_bets(R = .x,
+                                         Rp = .y))
+invvol_enb_m5 <-
+  purrr::map2(market_5,
+              rets_m5$invvol,
+              ~ Effective_Number_of_bets(R = .x,
+                                         Rp = .y))
+erc_enb_m5 <-
+  purrr::map2(market_5,
+              rets_m5$erc,
+              ~ Effective_Number_of_bets(R = .x,
+                                         Rp = .y))
+maxdiv_enb_m5 <-
+  purrr::map2(market_5,
+              rets_m5$maxdiv,
+              ~ Effective_Number_of_bets(R = .x,
+                                         Rp = .y))
+enb_m5 <- list(naive = naive_enb_m5,
+               minvol  = minvol_enb_m5,
+               invvol = invvol_enb_m5,
+               erc = erc_enb_m5,
+               maxdiv = maxdiv_enb_m5)
+
+save(enb_m5, file = "data/enb_m5.rda")
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Apendix
+
+
+
+
+
+
+
 
 ```{r RiskPortfolios, warning=FALSE}
 pacman::p_load(PerformanceAnalytics)
@@ -746,10 +1499,6 @@ port_analytics <- list(
 
 
 
-
-# Apendix
-
-
 ### Calculating Expected returns and Covarience matricies.
 
 ```{r portfoio optimisers, eval=FALSE, include=TRUE}
@@ -791,7 +1540,6 @@ Mu <- data %>%
 ```
 
 ### Setting Constraints 
-
 
 ### Calculating Some Portfolio Optimiser Weights 
 ```{r Min Var, eval=FALSE, include=TRUE}

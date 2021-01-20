@@ -170,8 +170,8 @@
 
 \begin{frontmatter}  %
 
-\title{Investigating the Link Between Covariance structure and Risk-Based
-Portfolio Performance}
+\title{The Link Between Market Covariance Structure and the Performance of
+Risk-Based Portfolios}
 
 % Set to FALSE if wanting to remove title (for submission)
 
@@ -179,7 +179,7 @@ Portfolio Performance}
 
 
 \author[Add1]{Nathan Potgieter\footnote{\textbf{Contributions:} \newline \emph{The
-  authors would like to thank Nico Katzke for helping me puzzle and prod
+  author would like to thank Nico Katzke for helping me puzzle and prod
   my to to the eventual completion of this research project.}}}
 \ead{19959672@sun.ac.za}
 
@@ -193,12 +193,12 @@ Portfolio Performance}
 \begin{abstract}
 \small{
 This work uses Monte Carlo methods to design and simulate financial
-market returns for five distinctive markets types, each relating to a
-unique covariance structure. The equal weight, minimum variance, inverse
-variance, equal risk contribution and maximum diversification portfolios
-are each back tested in the simulated markets and the relationship
-between the portfolio return characteristics and the market covariance
-structure is evaluated. \textbf{FINDINGS}
+market returns for five distinctive markets types, with each market type
+relating to a unique covariance structure. The equal weight, minimum
+variance, inverse variance, equal risk contribution and maximum
+diversification portfolios are each back tested in the simulated markets
+and the relationship between the portfolio return characteristics and
+the market covariance structure is evaluated. \textbf{FINDINGS}
 }
 \end{abstract}
 
@@ -245,17 +245,18 @@ Since Harry Markovitz's (1952) seminal work on mean-variance portfolios
 scholars from around the globe have been aspiring to develop a robust
 algorithm capable of situating a portfolio on the efficient frontier
 \emph{ex ante}. There are now a wide array of available alternatives
-portfolio optimisers raging from simple heuristic based approaches to
-advanced mathematical algorithms based on quadratic optimization, random
-matrix theory and machine learning methods; with many more are still in
-the making.
+raging from simple heuristic based approaches to advanced mathematical
+algorithms based on quadratic optimization, random matrix theory and
+machine learning methods; with many more are still in the making.
 
 Unfortunately, portfolio optimisers of the mean-variance type suffer
-from sensitivity issues from even slight changes in their expected
-return forecast, which are naturally extremely difficult, if not
-impossible, to forecast (De Prado, \protect\hyperlink{ref-lopez}{2016}).
-Due to these issues, this work only evaluates the risk-based portfolio
-strategies, defined by De Carvalho \emph{et al.}
+from sensitivity issues, where even slight changes in their expected
+return input cause large changes in optimal portfolio weights. This is
+exacerbated by the fact that expected returns are notoriously difficult,
+if not impossible, to accurately forecast (De Prado,
+\protect\hyperlink{ref-lopez}{2016}). Due to this issue, this work
+focuses solely on the so-called risk-based portfolio, defined by De
+Carvalho \emph{et al.}
 (\protect\hyperlink{ref-leote}{2012}\protect\hyperlink{ref-leote}{a}) as
 ``systemic quantitative approaches to portfolio allocation'' that solely
 rely on views of risk when allocating capital. These strategies
@@ -265,7 +266,7 @@ mitigation risk-based portfolio's often perform surprising well, form a
 total return standpoint, in empirical back tests (Choueifaty \emph{et
 al.}, \protect\hyperlink{ref-choueifaty2013}{2013}).
 
-Furthermore, instead of opting for the standard emperical approach of
+Furthermore, instead of opting for the standard empirical approach of
 evaluating said strategies through the use of historical back tests,
 this work opts to use Monte Carlo simulation methods to investigate the
 link between the markets covairiance structure and portfolio
@@ -275,9 +276,9 @@ with predetermined risk return characteristics, and hence the researcher
 is left with no uncertainty regarding the composition of the market.
 This creates an environment ideal for experimentation as the researcher
 has control over the market and can therefore adjust the independent
-variable, in this case the markets covariance matrix, and observe the
-response in the dependent variable, which in this work are the portfolio
-return characteristics.
+variable, in this case the markets correlation structure, and observe
+the response in the dependent variable, which in this work are the
+portfolio return characteristics.
 
 The risk-based portfolios evaluated in this work include the naive equal
 weight (EW), minimum variance (MV), inverse variance (IV), equal risk
@@ -289,35 +290,37 @@ rational and theoretical underpinnings behind the five risk-based
 portfolios, their relative performance in empirical back tests and
 finally the importance of using Monte Carlo methods in finance. Section
 \ref{methadology} discusses the methodology used to uncover the
-relationship of interest, Section \ref{reasults} provides and discusses
-the results and finally Section \ref{conclusion} concludes.
+relationship of interest, Section \ref{reasults} provides the discussion
+and results, and finally Section \ref{conclusion} concludes.
 
 \hypertarget{aims-and-objectives}{%
 \section{\texorpdfstring{Aims and Objectives
 \label{aims}}{Aims and Objectives }}\label{aims-and-objectives}}
 
 This work aims to use Monte Carlo Methods to uncover the relationship
-between a market's covariance structure and the risk return properties
-of various risk-based portfolio algorithms. This will be achieved
-through the following objectives:
+between a market's correlation structure and the risk return properties
+of various risk-based portfolio algorithms. This is achieved through the
+following objectives:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \item
   Design and create four distinctive \emph{ad hoc} correlation matrices
-  and build one empirical \emph{50 by 50} correlation matrix, each
-  representing a market with a different risk structure. These from
-  markets structure possessing no clusters to those exhibiting
-  hierarchical clustering.
+  and estimate one empirical \emph{50 by 50} correlation matrix, each
+  representing a unique market type. These will range from markets
+  structures possessing no clusters to those exhibiting hierarchical
+  clustering. All other risk characteristic will remain equal between
+  market types.
 \item
   Use the R package \emph{MCmarket} to perform Monte Carlo Simulations,
-  using each of the five correlation matrices from step one as the
-  primary input (Potgieter, \protect\hyperlink{ref-MCmarket}{2020}). The
-  markets will be built to posses student t multivariate distributions,
-  with 3 degrees of freedom. Meanwhile the individual asset returns will
-  each be normally distributed with a random mean and standard
-  deviation. Each market type will be simulated 10 000 times across 300
-  periods.
+  with each of the five correlation matrices from step one acting as the
+  primary input for their own Monte Carlo (Potgieter,
+  \protect\hyperlink{ref-MCmarket}{2020}). The markets will be built to
+  posses student t multivariate distributions, with 4.5 degrees of
+  freedom. Meanwhile the individual asset returns will each be normally
+  distributed wit their mean's and standard deviation's calibrated using
+  S\&P500 data. Each of the five market types will be simulated 10 000
+  times across 300 periods.
 \item
   Use the simulated market data to calculate the returns obtained from
   various risk based portfolio's. The first \textbf{100} periods will be
@@ -327,7 +330,7 @@ through the following objectives:
   \emph{100} periods, recalculating the covariance matrix and the new
   portfolio weights. This process is repeated until all \emph{300}
   simulated periods have been considered. Therefore, each portfolio will
-  end up with a series of \emph{199} returns.
+  end up with a series of \emph{200} returns.
 \item
   The performance of each portfolio will then be compared and contrasted
   using various portfolio risk/return analytics. Portfolio optimisers
@@ -346,29 +349,20 @@ Algorithms}\label{a-review-of-portfolio-optimisation-algorithms}}
 \hypertarget{introduction-1}{%
 \subsubsection{Introduction}\label{introduction-1}}
 
-Since Harry Markovitz's (1952) seminal work on mean-variance portfolios
-scholars from around the globe have been aspiring to develop a robust
-algorithm capable of situating a portfolio on the efficient frontier
-\emph{ex ante}. There are now a wide array of available alternatives
-portfolio optimisers raging from simple heuristic based approaches to
-advanced mathematical algorithms based on quadratic optimization, random
-matrix theory and machine learning methods; with many more are still in
-the making (De Prado, \protect\hyperlink{ref-lopez}{2016}).
-
 This literature review will cover some common issues discussed within
 the literature surrounding portfolio optimization in general, the five
 risk-based portfolios evaluated in this work, their respective
 performance in both empirical back tests and Monte Carlo studies and
-finally the importance of using Monte Carlo methods within finance will
-be discussed.
+finally the importance of using Monte Carlo methods within the field of
+finance.
 
 \hypertarget{common-issues-portfolio-optimizers}{%
 \subsubsection{Common Issues Portfolio
 Optimizers}\label{common-issues-portfolio-optimizers}}
 
-When working with in sample data, Portfolio optimization tends to be a
-perfect science, but out of sample it becomes more of an art form where
-it is often preferable to use heuristic over hard rules. This section
+When operating in sample, Portfolio optimization tends to be a perfect
+science, but out of sample it becomes more of an art form where it is
+often preferable to use heuristic over hard rules. This section
 highlights some general issues, highlighted within the portfolio
 optimization literature, that tend to worsen their performance out of
 sample.
@@ -378,11 +372,11 @@ Firstly, mean-variance optimisers, like those introduced by Markowitz
 of their expected return forecasts. Small changes in their expected
 return input can lead to large changes in portfolio weights (De Prado,
 \protect\hyperlink{ref-lopez}{2016}). Since in practice expected returns
-are extremely difficult, if not impossible, to accurately estimate, this
-issue serves as a major hindrance to their wide spread use. Due to this
-issue the so-called risk based portfolio's that intentionally avoid
-using expected return forecasts have garnered a lot of attention
-(Maillard, \protect\hyperlink{ref-maillard2010}{2010}).
+are extremely difficult to estimate accurately, this issue serves as a
+major hindrance to their wide spread use. Due to this issue the
+so-called risk based portfolio's that intentionally avoid using expected
+return forecasts have garnered a lot of attention (Maillard,
+\protect\hyperlink{ref-maillard2010}{2010}).
 
 Unfortunately, these risk based portfolios are not void of issues. The
 quadratic programming methods used in many portfolio optimisers,
@@ -390,7 +384,7 @@ including the mean variance and many risk-based, require the inversion
 of some positive-definite covariance matrix. This positive definiteness
 requirement can cause issues as covariance matrices estimated on
 empirical data are sometimes not positive definite, in which case their
-inverse does not exist and these portfolio's don't have solutions (De
+inverse does not exist and these portfolios don't have solutions (De
 Prado, \protect\hyperlink{ref-lopez}{2016}). A common method to get
 around this issue is to simply compute the nearest positive definite
 matrix and use that instead (Bates \& Maechler,
@@ -403,19 +397,22 @@ number is defined as the absolute value of the ratio between a
 covariance matrix's largest and smallest eigenvalues (Bailey \& Lopez De
 Prado, \protect\hyperlink{ref-lopez2012}{2012}; De Prado,
 \protect\hyperlink{ref-lopez}{2016}). The condition number is smallest
-in diagonal matrices (they have a condition number of 1) and it
-increases as more correlated variables are added. When working with high
-condition number matrices a small change in a single entry's estimated
-covariance can greatly alter its inverse, which in turn can effect the
-portfolio weights (De Prado, \protect\hyperlink{ref-lopez}{2016}). This
-is exacerbated by the fact that covariance matrices themselves are prone
-to estimation error (Zhou \emph{et al.},
-\protect\hyperlink{ref-zhou2019}{2019}). For a sample with a given
-number of periods, larger dimension covariance matrices are prone to
-more noise in estimation. This is essentially due to a reduction in
-degrees of freedom as a sample of at least \(1/2N(N+1)\) independent and
-identically distributed (iid) observations are required to estimate an
-\(N\times N\) covariance matrix (De Prado,
+in diagonal matrices (they have a condition number of 1) and increases
+as more correlated variables are added. When working with high condition
+number matrices a small change in a single entry's estimated covariance
+can greatly alter its inverse, which in turn can effect the portfolio
+weights (De Prado, \protect\hyperlink{ref-lopez}{2016}). This is related
+to Markowitz's curse which De Prado
+(\protect\hyperlink{ref-lopez}{2016}) summerised as ``the more
+correlated investments are, the greater is the need for a diversified
+portfolio---and yet the greater are that portfolio's estimation
+errors''. Therefore, variance matrices are are prone to estimation error
+(Zhou \emph{et al.}, \protect\hyperlink{ref-zhou2019}{2019}). For a
+sample with a given number of periods, larger dimension covariance
+matrices are prone to more noise in estimation. This is essentially due
+to a reduction in degrees of freedom as a sample of at least
+\(1/2N(N+1)\) independent and identically distributed (iid) observations
+are required to estimate an \(N\times N\) covariance matrix (De Prado,
 \protect\hyperlink{ref-lopez}{2016}: 60){]}. Furthermore, financial
 market covariance structures tend to vary over time and have been know
 to change rapidly during so-called regime changes (De Prado,
@@ -425,22 +422,17 @@ matrix, as there is no guarantee that passed data will be a good
 refection of the future and looking further into the passed decreases
 the likelihood of it being so.
 
-``. Markowitz's curse is that the more correlated investments are, the
-greater is the need for a diversified portfolio---and yet the greater
-are that portfolio's estimation errors. (De Prado,
-\protect\hyperlink{ref-lopez}{2016})''
-
 \hypertarget{risk-based-portfolios}{%
 \subsubsection{Risk Based Portfolio's}\label{risk-based-portfolios}}
 
 This section reviews the intuition and technical underpinnings within
 the litrature surrounding the so-called risk-based portfolios. These
 include the equal weight (EW), minimum variance (MV), inverse volatility
-(IV), equal risk contribution and the maximum diversification
+(IV), equal risk contribution (ERC) and the maximum diversification (MD)
 portfolios. The EW is a simple heuristic approach, the minimum variance
 is more akin to a Markovitz (1952) mean variance portfolio, while the
 inverse-variance (IV), equal risk contrition (ERC) and maximum
-diversification (MD) are quite similar in that they each assume that
+diversification (MD) are quite similar in that they all assume that
 adequate diversification can be obtained by allocating equal risk to
 each investible security.
 
@@ -450,46 +442,47 @@ each investible security.
 Perhaps the oldest and most simple portfolio diversification heuristic
 constitutes holding a weight of \(1/N\) of the \(N\) total assets
 available to the investor (DeMiguel \emph{et al.},
-\protect\hyperlink{ref-demiguel2009}{2009}). Therefore, this strategy
-doesn't consider the data when calculating weights and doesn't involve
-any form of optimization (DeMiguel \emph{et al.},
+\protect\hyperlink{ref-demiguel2009}{2009}). This strategy doesn't
+require any data when allocating capital and doesn't involve any form of
+optimization (DeMiguel \emph{et al.},
 \protect\hyperlink{ref-demiguel2009}{2009}). In layman's terms this
 strategy can be described as putting an equal number of eggs in each
 available basket. This portfolio is commonly called the equal weight or
 1/N portfolio, but its failure to recognize the importance of both the
 asset variance and the covariance between assets has resulted in it also
 being referred to as the naive portfolio. Meanwhile its simplicity means
-that it has been widely used as a benchmark portfolio. From a mean
-variance perspective equal weighting is optimal when there is no
-correlation between securities and each possesses the same variance. In
-this scenario, the EW is equivalent to the MV portfolio.
+that it has been widely used as a benchmark. From a mean variance
+perspective equal weighting is optimal when there is no correlation
+between securities and each possesses the same variance. In this
+scenario, the EW is equivalent to the MV portfolio.
 
 \hypertarget{minimum-variance-mv}{%
 \paragraph{Minimum Variance (MV)}\label{minimum-variance-mv}}
 
-Portfolio optimisers designed to exhibit the minimum variance have more
-recently garnered a lot of attention, largely due their tendency to
+Portfolio optimisers designed to exhibit the minimum variance have in
+recent years garnered a lot of attention, largely due their tendency to
 achieve surprisingly high returns in historical back tests (Clarke
 \emph{et al.}, \protect\hyperlink{ref-clarke2011}{2011}). This
-performance has been attributed to the empirical phenomenon that low
+performance has been attributed to the empirical phenomena that low
 volatility stocks tend to earn returns in excess of the market, and high
 beta stocks tend not to be rewarded by higher returns (Clarke \emph{et
 al.}, \protect\hyperlink{ref-clarke2011}{2011}; Fama \& French,
 \protect\hyperlink{ref-fama1992}{1992}). These findings are contrary to
-financial economic theory. For example, the minimum variance (MV)
-portfolio tends to achieve cumulative returns equal to or slightly
-greater than market capitalization weighted portfolio's whilst
-maintaining consistently lower variance and achieving a noticeable
-improvement in downside risk mitigation, even during times of financial
-crisis (Clarke \emph{et al.}, \protect\hyperlink{ref-clarke2011}{2011}).
-Interestingly, the MV portfolio is the only portfolio of the efficient
-frontier that does not depend on expected return forecasts(De Prado,
+financial economic theory. The most widely cited of these portfolios,
+the minimum variance (MV) tends to achieve cumulative returns equal to
+or slightly greater than market capitalization weighted portfolio's
+whilst maintaining consistently lower variance and achieving a
+noticeable improvement in downside risk mitigation (Clarke \emph{et
+al.}, \protect\hyperlink{ref-clarke2011}{2011}). Interestingly, the MV
+portfolio is the only portfolio of the efficient frontier that does not
+depend on expected return forecasts(De Prado,
 \protect\hyperlink{ref-lopez}{2016}).
 
 The minimum variance portfolio selects security weights such that the
 resulting portfolio corresponds to that with the lowest possible in
 sample volatility. Therefore, it has the lowest expected volatility and
-is, in theory, safest/least risky portfolio (De Carvalho \emph{et al.},
+is, in theory, the safest/least risky portfolio (De Carvalho \emph{et
+al.},
 \protect\hyperlink{ref-rawl2012}{2012}\protect\hyperlink{ref-rawl2012}{b}).
 Its primary input is a variance covariance matrix, which it uses to
 minimize aggregate portfolio volatility. This is accomplished by
@@ -499,8 +492,8 @@ Carvalho \emph{et al.},
 
 Let \(\sum\) indicate the markets variance covariance matrix and
 \(w=\{w_i,..., w_N \}\) be a vector of length N containing individual
-security weights. The vector containing MV portfolio weights can new be
-described as (De Carvalho \emph{et al.},
+security weights. The vector containing the MV portfolio's weights can
+now be described as (De Carvalho \emph{et al.},
 \protect\hyperlink{ref-rawl2012}{2012}\protect\hyperlink{ref-rawl2012}{b}):
 
 \begin{center}
@@ -510,16 +503,16 @@ $w^*=arg\min(w'\sum w)\ \ \ s.t.\ \sum^N_iw_i=1$
 This approach often works well out of sample, but if left unrestricted
 is known to build highly concentrated portfolio's (De Prado,
 \protect\hyperlink{ref-lopez}{2016}). Its sole objective to minimize
-portfolio volatility has been cited as the primary reason for this. When
-near trough of its objective function it to achieves minor reductions in
-\emph{ex ante} volatility by greatly favoring a small number of low
-volatility/correlation securities (De Prado,
+portfolio volatility is likely the the primary reason for this. When
+near the trough of its objective function it to achieves minor
+reductions in \emph{ex ante} volatility by greatly favoring a small
+number of low volatility/correlation securities (De Prado,
 \protect\hyperlink{ref-lopez}{2016}: 68){]}. This tendency to produce
-highly concentrated portfolio's be costly out of sample as the portfolio
-has not sufficiently diversifies idiosyncratic risk, it puts too many
-eggs in a small number of baskets. In practice This issue can be
-countered by applying cleaver maximum and minimum constraints on
-portfolio weights.
+highly concentrated portfolio's can be costly out of sample as the
+portfolio does not sufficiently diversify its idiosyncratic risk. It
+puts too many eggs in too few baskets. In practice This issue can be
+countered by applying cleaver maximum and minimum portfolio weight
+constraints.
 
 \hypertarget{inverse-varience-iv-weighting}{%
 \paragraph{Inverse-Varience (IV)
@@ -531,21 +524,21 @@ in De Carvalho \emph{et al.}
 aims to allocate an equal risk budget to each investible security (De
 Carvalho \emph{et al.},
 \protect\hyperlink{ref-leote}{2012}\protect\hyperlink{ref-leote}{a}).
-Where the risk budget is defined as the the product of a the security's
+Where the risk budget is defined as the the product of a security's
 weight and volatility. Therefore, if we define \(\sigma_i\) as security
-i's volatility, then marginal volatility is equally distributed across N
+i's volatility, then risk buckets are equally distributed across N
 securities by setting security weights as such:
 
 \begin{center} 
 $w_{iv}=(\frac{1/\sigma_1}{\sum^N_{j=1} 1/\sigma}, ...,\frac{1/\sigma_N}{\sum^N_{j=1} 1/\sigma} )$ 
 \end{center}
 
-By this definition each portfolio's weight is proportional to its the
+By this definition each portfolio's weight is proportional to the
 inverse of its variance (hence its name). The IV portfolio's weighting
-strange implies that adequate diversification is attained when
+strategy assumes that adequate diversification is attained when
 allocating capital according to individual security variances and
-thereby implying that it ignores the role that co-variations between
-securities on portfolio volatility.
+thereby ignores the role of co-variations between securities on
+portfolio volatility.
 
 De Carvalho \emph{et al.}
 (\protect\hyperlink{ref-leote}{2012}\protect\hyperlink{ref-leote}{a})
@@ -567,7 +560,7 @@ security contributes equally to overall portfolio risk, which in turn
 maximises risk diversification (Maillard,
 \protect\hyperlink{ref-maillard2010}{2010}). Generally speaking the ERC
 acts similar to a weight constrained MV portfolio, with constraints
-ensuring that an adequate level idiosyncratic risk is diversification.
+ensuring that an adequate level of idiosyncratic risk is diversified.
 Following Maillard (\protect\hyperlink{ref-maillard2010}{2010}), the
 weights of an ERC portfolio \(x=(x_1,x_2,...,x_n)\) consisting of n
 assets can be calculated as follows:
@@ -576,8 +569,8 @@ let \(\sigma_i^2\) resemble asset i's variance, \(\sigma_{ij}\) the
 covariance between asset i and j and \(\sum\) be the markets variance
 covariance matrix. Portfolio risk can now be written as
 \(sigma(x)=\sqrt{x^T\sum x}=\sum_i\sum_{j\neq i}x_ix_j\sigma_{ij}\) and
-the marginal risk contribution \(\partial_{x_i}\sigma(x)\) can then be
-defined as as such:
+the marginal risk contribution, \(\partial_{x_i}\sigma(x)\), can then be
+defined as:
 
 \begin{center}
 $\partial_{x_i}\sigma(x)=\frac{\partial\sigma(x)}{\partial x_i}=\frac{x_i\sigma_i^2+\sum_{j\neq i}x_j\sigma_{ij}}{\sigma(x)}$ 
@@ -600,14 +593,14 @@ $x^*=\{x \ \epsilon[0,1]^n:\sum x_i=1, x_i \times (\sum x)_i=x_j \times (\sum x)
 
 Maillard (\protect\hyperlink{ref-maillard2010}{2010}) proved
 mathematically that the ERC portfolio's \emph{ex ante} volatility is
-always some where between those of the EW and MV portfolio's.
-Thereafter, De Carvalho \emph{et al.}
+always some where between those of the EW and MV portfolio's. De
+Carvalho \emph{et al.}
 (\protect\hyperlink{ref-leote}{2012}\protect\hyperlink{ref-leote}{a})
 found that, if all securities posses the same sharp ratio , then the ERC
 and ERB have identical portfolio weights. If in addition the correlation
 coefficients between all securities are equal, then the ERC and ERB
 merge into the EW portfolio and each are mean variance efficient with
-the maximum sharp ratio (De Carvalho \emph{et al.},
+the maximum attainable sharp ratio (De Carvalho \emph{et al.},
 \protect\hyperlink{ref-leote}{2012}\protect\hyperlink{ref-leote}{a}).
 
 \hypertarget{maximum-diversification-md}{%
@@ -616,7 +609,7 @@ the maximum sharp ratio (De Carvalho \emph{et al.},
 
 Choueifaty \& Coignard (\protect\hyperlink{ref-choueifaty2008}{2008})
 originally designed the MD portfolio to maximize some diversification
-ratio (DR), hwich he defigned as the sum of each securities risk bucket
+ratio (DR), which he defined as the sum of each securities risk bucket
 divided by portfolio volatility (De Carvalho \emph{et al.},
 \protect\hyperlink{ref-leote}{2012}\protect\hyperlink{ref-leote}{a}). If
 we define \(w=(w_1,...w_N)^T\) as a vector of portfolio weights, V as a
@@ -627,12 +620,12 @@ the DR can be expresses as:
 $DR= \frac{w'.V}{\sqrt{w'Vw}}$ 
 \end{center}
 
-Therefore, much like the IV and ERC portfolio's, the MD portfolio
-attempts to diversify the portfolio by allocating equal risk to each
-security (Choueifaty \& Coignard,
-\protect\hyperlink{ref-choueifaty2008}{2008}). The MD portfolio
-accomplishes this by over-weighting low volatility securities and those
-that are less correlated with other stocks (De Carvalho \emph{et al.},
+Much like the IV and ERC portfolios, the MD portfolio attempts to
+diversify its portfolio by allocating equal risk to each security
+(Choueifaty \& Coignard, \protect\hyperlink{ref-choueifaty2008}{2008}).
+The MD portfolio accomplishes this by over-weighting low volatility
+securities and those that are less correlated (De Carvalho \emph{et
+al.},
 \protect\hyperlink{ref-leote}{2012}\protect\hyperlink{ref-leote}{a}).
 For further detail regarding the theoretical results and properties of
 the MD portfolio see Choueifaty \& Coignard
@@ -643,22 +636,22 @@ the MD portfolio see Choueifaty \& Coignard
 Findings}\label{empirical-backtests-and-monte-carlo-findings}}
 
 Choueifaty \emph{et al.} (\protect\hyperlink{ref-choueifaty2013}{2013})
-conducted an empirical back test comparing the relative performance if
+conducted an empirical back test comparing the relative performance of
 numerous portfolio optimisers between 1999 and 2010. They used
-historical data from the MSCI World world index and considered the
-largest 50\% of assets at each semi-annual rebalance date. To reduce the
-noise in estimation, at each rebalance date covariance matrices were
-estimated using the previous years worth of data (Choueifaty \emph{et
-al.}, \protect\hyperlink{ref-choueifaty2013}{2013}). These were then
-used as the primary inputs in estimating the respective portfolio
-weights, which were restricted to long only. The MV portfolio achieved
-an annual return of 6.7\% and outperformed the ERC and EW portfolio's
-who returned 6.3\% and 5.8\% respectively. Unsurprisingly, the MV
-portfolio possessed the lowest daily volatility (10\%) followed by the
-ERC and then the EW portfolio's (with 12.9\% and 16.4\% respectively).
-Accordingly the MV portfolio scored the highest sharp ratio (0.36)
-followed by the ERC and EW portfolio's (0.24 and 0.16 respectively).
-According to De Carvalho \emph{et al.}
+historical data from the MSCI world index and considered the largest
+50\% of assets at each semi-annual rebalance date. To reduce the noise
+in estimation, at each rebalance date covariance matrices were estimated
+using the previous years worth of data (Choueifaty \emph{et al.},
+\protect\hyperlink{ref-choueifaty2013}{2013}). These were then used as
+the primary inputs in estimating the respective long-only portfolio
+weights. The MV portfolio achieved an annual return of 6.7\% and
+outperformed the ERC and EW portfolio's who returned 6.3\% and 5.8\%
+respectively. Unsurprisingly, the MV portfolio possessed the lowest
+daily volatility (10\%) followed by the ERC and then the EW portfolio's
+(with 12.9\% and 16.4\% respectively). Accordingly the MV portfolio
+scored the highest sharp ratio (0.36) followed by the ERC and EW
+portfolio's (0.24 and 0.16 respectively). According to De Carvalho
+\emph{et al.}
 (\protect\hyperlink{ref-leote}{2012}\protect\hyperlink{ref-leote}{a})
 the performance of the EW portfolio primarily depends on the premium on
 small-capitalization stocks, thereby suggesting that the relatively poor
@@ -669,12 +662,12 @@ index.
 
 Despite the simplistic nature of the EW portfolio empirical studies,
 like those by DeMiguel \emph{et al.}
-(\protect\hyperlink{ref-demiguel2009}{2009}), tend to find a
+(\protect\hyperlink{ref-demiguel2009}{2009}), who compared the EW to the
+mean-variance, MV and Bayes-Stein portfolios, tend to find a
 statistically insignificant difference in Sharp ratio between the naive
-portfolio and more advanced portfolio optimisers. DeMiguel \emph{et al.}
-(\protect\hyperlink{ref-demiguel2009}{2009}) the EW ro the the
-mean-variance, MV and Bayes-Stein portfolios, where the EW also
-performed surprisingly well from a total return perspective.
+portfolio and those of the more advanced portfolio optimisers. In this
+study the EW also performed surprisingly well from a total return
+perspective.
 
 Due to the aforementioned issues surrounding estimation error in a
 market's covariance matrix Ardia \emph{et al.}
@@ -689,7 +682,7 @@ various covariance matrices to access the impact of alternative
 covariance specifications on the performance of the MV, IV, ERC and MD
 portfolio's. The ERC and IV portfolios were found to be ``relatively
 robust to covariance misspecification'', the MV was found to be
-sensitive to misspecification in both the variance and covarienve and
+sensitive to misspecification in both the variance and covariance and
 the MD portfolio was found to be robust to misspecification in the
 variances but sensitive to misspecification in the covariances (Ardia
 \emph{et al.}, \protect\hyperlink{ref-ardia2017}{2017}: 1).
@@ -699,10 +692,10 @@ variances but sensitive to misspecification in the covariances (Ardia
 Optimisation}\label{monte-carlo-methods-in-portfolio-optimisation}}
 
 Ever since the pioneering age of computers people have shown a keen
-interest in using their ability to perform rapid calculations to conduct
-randomized experiments (Kroese \emph{et al.},
+interest in leveraging their ability to perform rapid calculations to
+conduct randomized experiments (Kroese \emph{et al.},
 \protect\hyperlink{ref-kroese2014}{2014}: 1). The core of Monte Carlo
-simulation is in the creation of random objects or processes using a
+simulation is in the creation of random objects and/or processes using a
 computer. There are a number of reasons for doing this, but the primary
 one used in this work and thereby discussed in this review is of the
 sampling kind (Kroese \emph{et al.},
@@ -712,10 +705,10 @@ some probability distribution and the manipulating said sample through
 some deterministic process such that the result mimics the true
 underlying process. The primary idea behind Monte Carlo simulation is to
 repeat this simulation process many times so that interesting properties
-can be uncovered by invoking the law of large numbers and central limit
+can be uncovered through the law of large numbers and central limit
 theorem.
 
-A fiancial application of this can be found in Wang \emph{et al.}
+A financial application of this can be found in Wang \emph{et al.}
 (\protect\hyperlink{ref-wang2012}{2012}) who designed a Monte Calro
 procedure that (1) models both the time-series and cross-section
 properties of financial market returns, this involves the estimation of
@@ -742,43 +735,55 @@ methods in finance.
 This work used Monte Carlo simulation methods to investigate the link
 between a markets correlation structure and the relative performance of
 the EW, MV, IV, ERC and MD portfolios. To avoid possible confusion note
-the following terminology: the term market refers to the daily returns
-for a number of assets, but since this is a Monte Carlo study, a market
-can be thought of as a single observation. The term market type refers
-to an set or ensemble of markets each with the same specified same risk
-characteristics.
+the following terminology:
+
+\begin{itemize}
+\tightlist
+\item
+  The term market refers to a set daily returns for a number of assets.
+  e.g.~the daily returns for each of the JSE ALSI constitutes between 1
+  January 2019 and 1 January 2020. Since this is a Monte Carlo study,
+  thousands of markets are simulated, they can therefore be thought of
+  as a single observation or realization.
+\item
+  The term market type refers to a set or ensemble of simulated markets
+  each with the same specified risk characteristics. In this study only
+  the correlation structure differs between market types.
+\end{itemize}
 
 The R package MCmarket was used to simulate five distinctive market
 types, each corresponding to a unique correlation structure (Potgieter,
 \protect\hyperlink{ref-MCmarket}{2020}). Four of the correlation
-matrices were designed \emph{ad hoc}, to posses a unique correlation
-structure, while the fifth was estimated using empirical data from the
-constitutes of the S\&P 500. These correlation matrices range from one
-exhibiting no correlation (i.e.~a diagonal matrix) to one with
-hierarchical clustering (see \ref{corr_struc}).
+matrices were designed \emph{ad hoc}, with each possessing a unique
+correlation structure, while the fifth was estimated using S\&P 500
+data. These correlation matrices range from one exhibiting no
+correlation (i.e.~a diagonal matrix) to one with hierarchical clustering
+(see \ref{corr_struc}).
 
-The long only EW, MV, IV, ERC and MD portfolios were then backtested on
-the simulated markets and portfolio analytics were performed for each
-portfolio type in each market within the five market types. These
-portfolio analytics include the standard deviation (sd) of daily
-returns, downside deviation, value at risk (VaR), conditional VAR
-(CVaR), Sharp ratio, average drawdown and maximum drawdown. The mean and
-median of the portfolio metrics are then calculated for each market
-type.
+The long only EW, MV, IV, ERC and MD portfolios were then back tested on
+the simulated markets and portfolio analytics were performed on the
+portfolio returns. \textbf{These portfolio analytics include the
+standard deviation (sd) of daily returns, downside deviation, value at
+risk (VaR), conditional VAR (CVaR), Sharp ratio, average drawdown and
+maximum drawdown}.
 
-Finally, the portfolio metrics are compared within portfolio types
-across market types and within market types across portfolio types.
+Finally, the portfolio metrics are compared within market types across
+portfolios and within portfolios, across market types.
 
 \hypertarget{correlation-structures}{%
 \subsection{\texorpdfstring{Correlation Structures
 \label{corr_struc}}{Correlation Structures }}\label{correlation-structures}}
 
-This section first describes the composition and attributes behind the
-four \emph{ad hoc} correlation matrices used in this study (section
-\ref{adhoc}). Secondly, the methodology behind the estimation of the
+This section describes the composition and attributes behind the four
+\emph{ad hoc} correlation matrices used in this study (section
+\ref{adhoc}) and then the methodology behind the estimation of the
 empirical correlation matrix (section \textbackslash ref\{emp) is
-discussed and finally each of their top 10 eigenvalues are listed in
+discussed. Finally each of the matrices top 10 eigenvalues are listed in
 Table \ref{eigens}.
+
+Note that each of the five correlation matrices described in this
+section are used in separate Monte Carlo simulations, where all other
+risk attributes remain constant across market types.
 
 \hypertarget{ad-hoc}{%
 \subsubsection{\texorpdfstring{Ad Hoc
@@ -786,8 +791,8 @@ Table \ref{eigens}.
 
 This section describes the four \emph{ad hoc} 50 by 50 correlation
 matrices used as the key inputs in their respective Monte Carlo
-simulations. See Figure \ref{corr_mats}for a graphical representation of
-each correlation matrix. Note that the \emph{gen\_corr} function from
+simulations. See Figure \ref{corr_mats} for a graphical representation
+of each correlation matrix. Note that the \emph{gen\_corr} function from
 the R package \emph{MCmarket} was used in the construction of the four
 \emph{ad hoc} matrices (Potgieter,
 \protect\hyperlink{ref-MCmarket}{2020}).
@@ -795,8 +800,9 @@ the R package \emph{MCmarket} was used in the construction of the four
 The first and most simplistic of the four matrices is a diagonal matrix
 (see Diagonal Matrix in Figure \ref{corr_mats}). It describes a market
 with a zero correlation coefficient between each asset. Each of its 50
-eigenvalues are 1, it has no risk clusters and is therefore plenty scope
-for diversification.
+eigenvalues are equal to 1 (Table \ref{eigens}), it has no risk clusters
+and is therefore plenty scope for diversification. The Monte Carlo data
+set constructed using this matrix will be referred to as Market 1.
 
 The second matrix (labeled No Clusters in Figure \ref{corr_mats}) has no
 risk clusters but describes a market with significant correlation
@@ -806,13 +812,17 @@ pairwise correlation coefficient of 0.9). Correlations then diminish
 exponentially by the absolute distance between the two assets (i.e.~the
 correlation between Asset 1 and 5 is \(0.9^{|1-5|}=0.6561\)). Its has a
 large first eigenvalue of 15.93, but they quickly diminish such that its
-9th largest eigenvalue is less than 1 at 0.79. \textbf{COMMENTS}
+9th largest eigenvalue is less than 1 at 0.79 (Table \ref{eigens}). The
+Monte Carlo data set constructed using this matrix will be referred to
+as Market 2.
 
 The third matrix (labeled Five Clusters in Figure \ref{corr_mats})
 contains five distinctive non-overlapping risk clusters. Assets within
 the same cluster have a pairwise correlation coefficient of 0.6 while
 those that are not in the same cluster are uncorrelated. Its first five
-eigenvalues are 6.5, with the remaining 45 equal to 0.4.
+eigenvalues are 6.5, with the remaining 45 equal to 0.4 (Table
+\ref{eigens}). The Monte Carlo data set constructed using this matrix
+will be referred to as Market 3.
 
 The final \emph{ad hoc} correlation matrix has three layers of
 overlapping risk clusters. The first layer has 10 distinctive clusters,
@@ -823,7 +833,8 @@ same third layer cluster but not clustered in layers one and two have a
 correlation coefficient of 0.3. Finally, those who do not share any
 cluster have a correlation coefficient of 0.05. Its largest eigenvalue
 is 14.36, but they diminish fairly quickly as its third largest is only
-3.3.
+3.3 (Table \ref{eigens}). The Monte Carlo data set constructed using
+this matrix will be referred to as Market 4.
 
 See Table \ref{eigens} for a list of each correlation matrices largest
 ten eigenvalues.
@@ -853,7 +864,8 @@ of freedom and a correlation matrix shown in Figure \ref{corr_emp}. Note
 that the assets were ordered by hierarchical clustering so the reader
 can easily visualize the risk clusters. The correlation matrix's largest
 eigenvalue is 18.6 and they quickly diminish to below zero by its 8th
-largest eigenvalue.
+largest eigenvalue (Table \ref{eigens}). The Monte Carlo data set
+constructed using this matrix will be referred to as Market 5.
 
 \begin{figure}
 \centering
@@ -889,32 +901,44 @@ Diagonal & No Clusters & Five Clusters & Overlapping Clusters & Emperical \\
 This section outlines the methodology behind the Monte Carlo simulation
 performed as part of this study.
 
-This work uses a generalized version of the Monte Carlo procedure
-developed in Wang \emph{et al.}
-(\protect\hyperlink{ref-wang2012}{2012}). This framework was build into
-the R package \emph{MCmarket} which was used to carry out the
-simulations in this project (Potgieter,
-\protect\hyperlink{ref-MCmarket}{2020}). The following briefly outlines
-the construction of the simulated markets:
+A generalized version of the Monte Carlo procedure developed in Wang
+\emph{et al.} (\protect\hyperlink{ref-wang2012}{2012}) was used to
+simulate the five market types. This framework was build into the R
+package \emph{MCmarket} which was used to conduct this project's Monte
+Carlo simulations (Potgieter, \protect\hyperlink{ref-MCmarket}{2020}).
+The following briefly describes this process:
 
 An Elliptical t copula with 4.5 degrees of freedom is used, in
-conjunction with one of each of the five previously discussed
-correlation matrices, to specify the each market types multivariate
-distribution. 300 random uniformly distributed draws, corresponding to
-300 trading days, were then taken from the specified multivariate
-distributions described by the t copula. The random uniformly
-distributed observations are then transformed, via the inverted normal
-cumulative distribution function, into normally distributed observations
-(Wang \emph{et al.}, \protect\hyperlink{ref-wang2012}{2012}: 3).
-\textbf{The expected returns are set by randomly selecting 50
-observations from the normal distribution with a mean of 0.02 and sd of
-0.01. While the asset sd's are set by }
+conjunction with a 50 by 50 correlation matrix (Section \ref{corrs}), to
+simulate 300 random uniformly distributed draws (corresponding to 300
+trading days) across the 50 assets. The simulated series each adhere to
+the correlation structure described in their respicetive correlation
+matrix. These uniformly distributed observations were then transformed
+into normally distributed observations, via the inverted normal
+cumulative distribution function (Potgieter,
+\protect\hyperlink{ref-MCmarket}{2020}; Wang \emph{et al.},
+\protect\hyperlink{ref-wang2012}{2012}: 3).
+
+The expected returns and standard deviations of these simulated
+variables were set via empirical return data from a random subset of 50
+of the largest 100 S\&P500 stocks (discussed in Section \ref{emp_corr})
+between 1 January 2020 and 1 January 2021. Maximum likelihood estimation
+was used to fit the multivariate t distribution to the return series
+using the method developed by Liu \& Rubin
+(\protect\hyperlink{ref-liu1995}{1995}). This produced a series of
+estimated means and variances which were used to calibrate the expected
+returns and standard deviations of the simulated variables.
+
+This process was repeated 10000 times for each of the five correlation
+matrices/ market types set out in section \ref{corr_struc}. Thereby
+creating 5 data sets each containing 10000 markets with 50 assets and
+300 periods.
 
 \hypertarget{back-tests}{%
 \subsection{Back Tests}\label{back-tests}}
 
 This section describes the back testing procedure used to calculate the
-returns obtained by the respective EW, MV, IV, ERC and MD portfolios.
+returns obtained by the EW, MV, IV, ERC and MD portfolios.
 
 To remain consistent with the literature, a long-only weight constraint
 was applied to all portfolio's. An additional constraint limiting the
@@ -925,68 +949,290 @@ who do so. Therefore, these constraints act to provide a fair playing
 ground for the portfolio's to compete. The back testing procedure works
 as follows:
 
-The first 100 periods are used to estimate the covariance matrix using
+The first 100 periods are used to estimate the a covariance matrix using
 the maximum likelihood methodology described in Liu \& Rubin
 (\protect\hyperlink{ref-liu1995}{1995}). Interestingly, the assumption
-regarding the multivariate t distribution are correct by definition as
-the distribution used to for the monte Carlo simulations. This
-covariance matrix is then used as the sole input when calculating the
-respective portfolio weights. These weights are then used to calculate
-portfolio returns over the next 50 periods, when each portfolio is
-replaced by looking back another 100 periods to recalculated the
-covariance matrix. This process is repeated until the data is exhausted.
-Since 300 periods were simulated for each market each portfolio is
-weighted four times and 200 periods of returns are calculated for each
-portfolio within each market.
+regarding the returns adhering to the multivariate t distribution is
+correct by definition since this is the distribution used in the
+simulations. This covariance matrix is then used as the sole input when
+calculating the weights for the respective risk-based portfolios. The
+portfolio's then hold these weights over the next 50 periods, when they
+are rebalanced by looking back 100 periods, calculating the covariance
+matrix and the new portfolio returns. This process is repeated until all
+periods in the data set are exhausted. Since there are 300 periods in
+each market, each portfolio is weighted four times and 200 periods of
+daily returns are calculated for each portfolio.
 
 \hypertarget{portfolio-analytics}{%
 \subsection{Portfolio Analytics}\label{portfolio-analytics}}
 
-This section describes the portfolio performance metrics used to
-evaluate and compare the respective portfolio's.
+This section describes the portfolio performance, risk and concentration
+metrics used to evaluate and compare portfolio performance. The Sharp
+ratio is used to evaluate risk adjusted return, standard deviation,
+downside deviation and value at risk are used to access portfolio risk.
+Finally, the effective number of constitutes, calculated as the inverse
+of the Herfindahl-Hirschman index (HHI), and the effective number of
+bets, calculated following Meucci
+(\protect\hyperlink{ref-meucci2010}{2010}), are calculated to compare
+portfolio concentration (Rhoades,
+\protect\hyperlink{ref-rhoades1993}{1993}).
 
-SD simple and widely accepted method of measuring portfolio volatility.
+Since Markowitz (\protect\hyperlink{ref-markowitz}{1952}) variance of
+returns has been the standard measure for risk in the financial industry
+({\textbf{???}}). With the standard deviation simply being the
+square-root of the variance, it too is widely used. Standard deviation
+also benefits due to its relative ease in interpretation. Standard
+deviation is also key in calculating the next two portfolio performance
+metrics described in this study, namely the Sharp ratio and value at
+risk (VaR).
 
-The 95\% Value at risk (VaR) is another risk metric used to evaluate the
-portfolio risk. It is one of the financial industry standards for
-measuring the downside risk (Peterson \& Carl,
-\protect\hyperlink{ref-PerformanceAnalytics}{2020}). It can be
-interpreted as the maximum return expected from in the worst 5\% of
-scenarios, that is, in such a scenario, one should expect to loose at
-least their 95\% value at risk. The Gaussian VaR is calculated by
-assuming that returns are normally \(N(\mu,\sigma)\) distributed, where
-\(\mu\) and \(\sigma\) are estimated using historical data. In this
-study this assumption is correct by definition and will therefore result
-in an accurate estimate of downside risk. However, one must be careful
-when extrapolating these results as fairly contentious in real world
-returns.
+The Sharp ratio is a measure of a portfolio's risk adjusted returns.
+Generally speaking, the Sharp ratio is calculated by dividing the
+portfolio return by some measure of portfolio risk, it is therefore
+interpreted as the return per unit of risk. In this work standard
+deviation is used as the measure of risk.
 
-The 95\% conditional value at risk (CVaR) or expected shortfall (ES) is
-another downside risk measure used to compare portfolio's. It is
-interpreted as the expected loss given that the portfolio is in the work
-5\% of scenarios.
+The 95\% VaR is another risk metric used to evaluate portfolio risk
+performance in this study. It is one of the financial industry standards
+for measures for downside risk and can be interpreted as the maximum
+return expected from in the worst 5\% of scenarios (Peterson \& Carl,
+\protect\hyperlink{ref-PerformanceAnalytics}{2020}). That is, in the
+worst 5\% of scenarios, one should expect to loose at least this amount.
+The particular version of VaR used here is the Gaussian VaR, which is
+calculated by assuming that returns are normally \(N(\mu,\sigma)\)
+distributed, where \(\mu\) and \(\sigma\) are estimated using historical
+data. The probability distribution assumptions allows one to attach a
+probability values to possible future portfolio returns. This assumption
+can be dangerous in practice, however in this study it correct by
+definition as the return series were each simulated to be normally
+distributed. It should therefore result in an accurate estimate of
+downside risk.
 
-The sharp ratio is calculated by dividing the portfolio return by some
-risk measure and is therefore interpreted as the return per unit of
-risk. In this work risk is measured as the sd of portfolio returns.
+The HHI estimates portfolio concentration by by summing the the
+portfolio weights squared (Rhoades,
+\protect\hyperlink{ref-rhoades1993}{1993}). A portfolio with small
+weights allocated evenly across a large number of securities will have
+an HHI of approximately zero, while a portfolio with all its capital
+invested in a single security will have the maximum HHI of 10000. The
+effective number of constitutes (ENC) can then be calculated as the
+inverse of the HHI, where an equally weighted portfolio with have an ENC
+equal to the number of securities and more concentrated portfolio's will
+have a ENC less than the number of securities. Weight based measures of
+portfolio diversification are severely limited in that they are
+oblivious to covariation between portfolio components. The ENC can
+therefore be misleading in financial applications where portfolio
+components are known to exhibit significant dependence.
 
+Meucci (\protect\hyperlink{ref-meucci2010}{2010}) attempted to rectify
+this issue when he introduced a new method to evaluate portfolio
+diversification that considers the portfolio's risk structure. He used a
+principle component (PC) approach to estimate the total number of
+orthogonal bets in a portfolio, which he simply referred to as principle
+portfolios. With this he estimated a portfolio diversification
+distribution as the percentage of total portfolio variation attributed
+to each principle portfolio. The effective number of orthogonal bets
+(ENB) can then be calculated as the dispersion of the diversification
+distribution (Meucci, \protect\hyperlink{ref-meucci2010}{2010}: 10). \#
+Meucci (2009) uses a PC based approach - where if each principal
+component is loaded with the same weight, we have optimal
+diversification.
+
+\begin{quote}
 The maximum drawdown is calculated by first, calculating portfolio
 cumulative returns and the maximum cumulative return achieved. The
 maximum drawdown is then the maximum amount that the cumulative return
 dips below its maximum, it is measured as a percentage of the maximum
 cumulative return (Peterson \& Carl,
 \protect\hyperlink{ref-PerformanceAnalytics}{2020}).
+\end{quote}
 
 \hypertarget{results-and-discussion}{%
 \section{\texorpdfstring{Results and Discussion
 \label{reasults}}{Results and Discussion }}\label{results-and-discussion}}
 
-\hypertarget{diag}{%
-\subsection{Diag}\label{diag}}
+Note that the markets simulated using the diagonal correlation matrix
+described in Section \ref{adhoc} will hence forth be referred to as
+Market 1. Similarly, the markets simulated using the no cluster, five
+clusters, overlapping clusters and empirical correlation matrices will
+be respectively referred to as Market 2, Market 3, Market 4 and Market
+5. Therefore, each of the Markets 1 - 5 contain a unique correlation
+structure.
+
+\hypertarget{comparing-portfolios-within-market-types}{%
+\subsection{Comparing Portfolios Within Market
+Types}\label{comparing-portfolios-within-market-types}}
+
+\hypertarget{market-1}{%
+\subsubsection{Market 1}\label{market-1}}
+
+The portfolios compared here were estimated on the markets simulated
+using the diagonal correlation matrix (Figure \ref{corr_mats}). The
+portfolios average Sharp ratio (Sharp), standard deviation (SD),
+downside deviation and VaR across the 10 000 simulated markets are shown
+in Table \ref{rm1}.
+
+On average the EW portfolio performed the best as it achieved the
+highest Sharp ratio and the lowest standard deviation, downside
+deviation and VaR. The IV portfolio was a close second, followed by the
+ERC, MD and MV portfolios.
 
 With such a market structure it is reasonable to expect that, depending
 if the asset variance allocation is fairly evenly distribution then the
 EW, MV, IV, ERC and MD will produce fairly similar.
+
+\begin{table}[!htbp] \centering 
+  \caption{Market 1 Risk Metrics} 
+  \label{rm1} 
+\begin{tabular}{@{\extracolsep{5pt}} cccccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+Metric & EW & MV & IV & ERC & MD \\ 
+\hline \\[-1.8ex] 
+Sharp & 0.19353 & 0.13501 & 0.18341 & 0.15876 & 0.14284 \\ 
+SD & 0.00386 & 0.005 & 0.00386 & 0.00447 & 0.00494 \\ 
+Downside Deviation & 0.00235 & 0.00318 & 0.00236 & 0.00279 & 0.00312 \\ 
+VaR & -0.00545 & -0.00735 & -0.00548 & -0.00645 & -0.00722 \\ 
+\hline \\[-1.8ex] 
+\end{tabular} 
+\end{table}
+
+\begin{table}[!htbp] \centering 
+  \caption{Market 1 Portfolio Entropy Metrics} 
+  \label{em1} 
+\begin{tabular}{@{\extracolsep{5pt}} cccccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+Metric & EW & MV & IV & ERC & MD \\ 
+\hline \\[-1.8ex] 
+ENC & 50 & 25.3 & 47.1 & 30.1 & 29.1 \\ 
+ENB & 14.8 & 17.9 & 16.6 & 16.7 & 17.5 \\ 
+\hline \\[-1.8ex] 
+\end{tabular} 
+\end{table}
+
+\hypertarget{market-2}{%
+\subsubsection{Market 2}\label{market-2}}
+
+The portfolios compared here were estimated on the markets simulated
+using the no clusters correlation matrix (Figure \ref{corr_mats}). The
+portfolios average Sharp ratio (Sharp), standard deviation (SD),
+downside deviation and VaR across the 10 000 simulated markets are shown
+in Table \ref{rm2}.
+
+On average the EW, MV, IV and ERC portfolios performed very similarly
+according to the standard deviation, downside deviation and VaR metrics.
+Out of these four portfolios the ERC attained the highest sharp ratio
+and narrowly achieved the lowest scores across three risk measures.
+Despite performing the worst from a risk perspective, the MD portfolio
+attained the highest overall Sharp ratio. Thereby indicating that the MD
+managed to attain significantly higher average returns compared to the
+other portfolio's. On the other hand, despite performing well from a
+risk perspective, the MV portfolio attained a Sharp ratio significantly
+lower than the other portfolios
+
+\begin{table}[!htbp] \centering 
+  \caption{Market 2 Risk Metrics} 
+  \label{rm2} 
+\begin{tabular}{@{\extracolsep{5pt}} cccccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+Metric & EW & MV & IV & ERC & MD \\ 
+\hline \\[-1.8ex] 
+Sharp & 0.05171 & 0.03482 & 0.04955 & 0.05312 & 0.06388 \\ 
+SD & 0.01451 & 0.01434 & 0.01436 & 0.01431 & 0.0156 \\ 
+Downside Deviation & 0.00983 & 0.00985 & 0.00974 & 0.00968 & 0.01047 \\ 
+VaR & -0.02273 & -0.02273 & -0.02252 & -0.02238 & -0.02424 \\ 
+\hline \\[-1.8ex] 
+\end{tabular} 
+\end{table}
+
+\hypertarget{market-3}{%
+\subsubsection{Market 3}\label{market-3}}
+
+The portfolios compared here were estimated on the markets simulated
+using the five clusters correlation matrix (Figure \ref{corr_mats}). The
+portfolios average Sharp ratio (Sharp), standard deviation (SD),
+downside deviation and VaR across the 10 000 simulated markets are shown
+in Table \ref{rm3}.
+
+Despite there being significant and distinct risk clusters in the
+markets
+
+\begin{table}[!htbp] \centering 
+  \caption{Market 3 Risk Metrics} 
+  \label{rm3} 
+\begin{tabular}{@{\extracolsep{5pt}} cccccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+Metric & EW & MV & IV & ERC & MD \\ 
+\hline \\[-1.8ex] 
+Sharp & 0.08001 & 0.04974 & 0.07655 & 0.07605 & 0.06638 \\ 
+SD & 0.0094 & 0.01049 & 0.0093 & 0.00935 & 0.01065 \\ 
+Downside Deviation & 0.00623 & 0.00712 & 0.00618 & 0.00622 & 0.00714 \\ 
+VaR & -0.01437 & -0.01639 & -0.01425 & -0.01433 & -0.01646 \\ 
+\hline \\[-1.8ex] 
+\end{tabular} 
+\end{table}
+
+\hypertarget{market-4}{%
+\subsubsection{Market 4}\label{market-4}}
+
+\begin{table}[!htbp] \centering 
+  \caption{Market 4 Risk Metrics} 
+  \label{eigens} 
+\begin{tabular}{@{\extracolsep{5pt}} cccccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+Metric & EW & MV & IV & ERC & MD \\ 
+\hline \\[-1.8ex] 
+Sharp & 0.05409 & 0.03229 & 0.05195 & 0.0518 & 0.04758 \\ 
+SD & 0.01395 & 0.01456 & 0.01378 & 0.01379 & 0.01486 \\ 
+Downside Deviation & 0.00944 & 0.01002 & 0.00933 & 0.00934 & 0.0101 \\ 
+VaR & -0.02181 & -0.02312 & -0.02156 & -0.02159 & -0.02334 \\ 
+\hline \\[-1.8ex] 
+\end{tabular} 
+\end{table}
+
+\hypertarget{market-5}{%
+\subsubsection{Market 5}\label{market-5}}
+
+\begin{table}[!htbp] \centering 
+  \caption{Market 5 Risk Metrics} 
+  \label{eigens} 
+\begin{tabular}{@{\extracolsep{5pt}} cccccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+Metric & EW & MV & IV & ERC & MD \\ 
+\hline \\[-1.8ex] 
+Sharp & 0.05025 & 0.0396 & 0.0478 & 0.04794 & 0.0442 \\ 
+SD & 0.01508 & 0.0176 & 0.01504 & 0.01531 & 0.01746 \\ 
+Downside Deviation & 0.01023 & 0.01204 & 0.01022 & 0.01041 & 0.0119 \\ 
+VaR & -0.02371 & -0.02795 & -0.02368 & -0.02412 & -0.02764 \\ 
+\hline \\[-1.8ex] 
+\end{tabular} 
+\end{table}
+
+\hypertarget{comparing-portfolios-across-market-types}{%
+\subsection{Comparing Portfolios Across Market
+Types}\label{comparing-portfolios-across-market-types}}
+
+\hypertarget{naive}{%
+\subsubsection{Naive}\label{naive}}
+
+\hypertarget{minimum-variance}{%
+\subsubsection{Minimum Variance}\label{minimum-variance}}
+
+\hypertarget{inverse-volatility}{%
+\subsubsection{Inverse Volatility}\label{inverse-volatility}}
+
+\hypertarget{equal-risk-contribution}{%
+\subsubsection{Equal Risk Contribution}\label{equal-risk-contribution}}
+
+\hypertarget{maximum-diversification}{%
+\subsubsection{Maximum Diversification}\label{maximum-diversification}}
+
+\hypertarget{discussion}{%
+\subsection{Discussion}\label{discussion}}
 
 \hypertarget{conclusion}{%
 \section{\texorpdfstring{Conclusion
@@ -1089,6 +1335,9 @@ contribution portfolios. \emph{The Journal of Portfolio Management}.
 Markowitz, H. 1952. Portfolio selection. \emph{The Journal of Finance}.
 7(1):77--91.
 
+\leavevmode\hypertarget{ref-meucci2010}{}%
+Meucci, A. 2010. Managing diversification.
+
 \leavevmode\hypertarget{ref-PerformanceAnalytics}{}%
 Peterson, B.G. \& Carl, P. 2020. \emph{PerformanceAnalytics: Econometric
 tools for performance and risk analysis}. ed. {[}Online{]}, Available:
@@ -1098,6 +1347,10 @@ tools for performance and risk analysis}. ed. {[}Online{]}, Available:
 Potgieter, N. 2020. \emph{MCmarket: Package to simplify the monte carlo
 simulation of financial markets}. ed. Stellenbosch, South Africa:
 Stellenbosch University.
+
+\leavevmode\hypertarget{ref-rhoades1993}{}%
+Rhoades, S.A. 1993. The herfindahl-hirschman index. \emph{Fed. Res.
+Bull.} 79:188.
 
 \leavevmode\hypertarget{ref-wang2012}{}%
 Wang, P., Sullivan, R.N. \& Ge, Y. 2012. Risk-based dynamic asset
@@ -1114,6 +1367,43 @@ conference on computer aided systems theory}. 3--11.
 \hypertarget{appendix}{%
 \section*{Appendix}\label{appendix}}
 \addcontentsline{toc}{section}{Appendix}
+
+\begin{table}[!htbp] \centering 
+  \caption{Asset Means and Sd's} 
+  \label{msd} 
+\begin{tabular}{@{\extracolsep{5pt}} cccccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+Asset & Mean & Sd & Asset... & Mean... & Sd... \\ 
+\hline \\[-1.8ex] 
+Asset\_1 & -0.00011 & 0.03277 & Asset\_26 & 0.00247 & 0.02671 \\ 
+Asset\_2 & 0.00023 & 0.02314 & Asset\_27 & -0.00132 & 0.04888 \\ 
+Asset\_3 & -3e-05 & 0.02359 & Asset\_28 & 0.00085 & 0.02387 \\ 
+Asset\_4 & -0.0018 & 0.03654 & Asset\_29 & 0.00024 & 0.01613 \\ 
+Asset\_5 & -0.00036 & 0.02925 & Asset\_30 & 0.00086 & 0.01884 \\ 
+Asset\_6 & 0.00052 & 0.02396 & Asset\_31 & 0.00118 & 0.03147 \\ 
+Asset\_7 & 0.00058 & 0.02451 & Asset\_32 & 0.00053 & 0.02882 \\ 
+Asset\_8 & 0.00099 & 0.02287 & Asset\_33 & 0.00166 & 0.02253 \\ 
+Asset\_9 & 0.00057 & 0.02929 & Asset\_34 & 0.00179 & 0.03002 \\ 
+Asset\_10 & 0.00049 & 0.01736 & Asset\_35 & 0.00235 & 0.02574 \\ 
+Asset\_11 & -0.00088 & 0.01907 & Asset\_36 & 0.00157 & 0.02307 \\ 
+Asset\_12 & 5e-05 & 0.0301 & Asset\_37 & 0.0017 & 0.02566 \\ 
+Asset\_13 & -0.00095 & 0.03185 & Asset\_38 & 0.00157 & 0.02262 \\ 
+Asset\_14 & -1e-04 & 0.02111 & Asset\_39 & 0.00054 & 0.03116 \\ 
+Asset\_15 & 0.00102 & 0.02555 & Asset\_40 & 0.00242 & 0.02494 \\ 
+Asset\_16 & 0.00174 & 0.02582 & Asset\_41 & 0.00246 & 0.02186 \\ 
+Asset\_17 & 0.00241 & 0.03639 & Asset\_42 & 0.00113 & 0.01951 \\ 
+Asset\_18 & 0.00033 & 0.03967 & Asset\_43 & 0.00181 & 0.02099 \\ 
+Asset\_19 & 0.00102 & 0.02636 & Asset\_44 & -0.00045 & 0.02297 \\ 
+Asset\_20 & 0.00173 & 0.02697 & Asset\_45 & 4e-05 & 0.02354 \\ 
+Asset\_21 & -0.00034 & 0.01405 & Asset\_46 & 0.00485 & 0.03553 \\ 
+Asset\_22 & 0.0011 & 0.0233 & Asset\_47 & 0.00064 & 0.02275 \\ 
+Asset\_23 & 0.00236 & 0.02663 & Asset\_48 & 1e-04 & 0.02713 \\ 
+Asset\_24 & -0.00055 & 0.03195 & Asset\_49 & 0.00071 & 0.02186 \\ 
+Asset\_25 & -0.00283 & 0.03227 & Asset\_50 & -0.00203 & 0.03131 \\ 
+\hline \\[-1.8ex] 
+\end{tabular} 
+\end{table}
 
 \hypertarget{hierarchical-risk-parity-hrp}{%
 \subsubsection{Hierarchical Risk Parity

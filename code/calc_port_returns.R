@@ -1,14 +1,14 @@
 # --------------------------------------------------------------------
 # This function creates a set of weights from a single market at a date
 # --------------------------------------------------------------------
-port_weight_calc <- function(data, method = "minvol", from_date, look_back = 100) {
+port_weight_calc <- function(data, method = "minvol", from_date, look_back = 200) {
 
 
     if (method != "naive") {
         cov <- data %>%
             filter(date < from_date & date >= from_date %m-% days(look_back)) %>%
             spread(Asset, Return) %>% select(-date) %>%
-            fit_mvt() %>% .$cov
+            fitHeavyTail::fit_mvt() %>% .$cov
     }
 
     # Calculating min var weights and making xts
@@ -28,7 +28,7 @@ port_weight_calc <- function(data, method = "minvol", from_date, look_back = 100
                         type = "minvol",
                         constraint = "user",
                         LB = rep(0, nrow(cov)),
-                        UB = rep(0.2, nrow(cov))
+                        UB = rep(0.1, nrow(cov))
                     )
                 )) %>%
                 select(-Return)
@@ -43,7 +43,7 @@ port_weight_calc <- function(data, method = "minvol", from_date, look_back = 100
                             type = "invvol",
                             constraint = "user",
                             LB = rep(0, nrow(cov)),
-                            UB = rep(0.2, nrow(cov))
+                            UB = rep(0.1, nrow(cov))
                         )
                     )) %>%
                     select(-Return)
@@ -58,7 +58,7 @@ port_weight_calc <- function(data, method = "minvol", from_date, look_back = 100
                                 type = "erc",
                                 constraint = "user",
                                 LB = rep(0, nrow(cov)),
-                                UB = rep(0.2, nrow(cov))
+                                UB = rep(0.1, nrow(cov))
                             )
                         )) %>%
                         select(-Return)
@@ -73,7 +73,7 @@ port_weight_calc <- function(data, method = "minvol", from_date, look_back = 100
                                     type = "maxdiv",
                                     constraint = "user",
                                     LB = rep(0, nrow(cov)),
-                                    UB = rep(0.2, nrow(cov))
+                                    UB = rep(0.1, nrow(cov))
                                 )
                             )) %>%
                             select(-Return)
@@ -111,6 +111,18 @@ port_returns <- function(data, weights, look_back) {
 # This function couples the first two functions in this chunk.
 # Therefore, it creates portfolio returns with periodic re-balancing.
 # ----------------------------------------------------------------------------
+
+rebal_weights <- function(data, method, rebdates, look_back, progress = TRUE) {
+
+    if (progress == TRUE) pb$tick()$print()
+
+    weights <- rebdates %>%
+        map_dfr(~port_weight_calc(data, method = method,
+                                  from_date =  .x,
+                                  look_back = look_back))
+    return(weights)
+}
+
 rebal_port_returns <- function(data, method, rebdates, look_back) {
 
     pb$tick()$print()
@@ -129,7 +141,7 @@ rebal_port_returns <- function(data, method, rebdates, look_back) {
 # This function maps rebal_port_returns over the Universe columns of the dataset
 # Therefore, it creates portfolio returns with periodic re-balancing, for each universe
 # ----------------------------------------------------------------------------
-port_rets_universal <- function(data_universal, method, rebdates, look_back = 100) {
+port_rets_universal <- function(data_universal, method, rebdates, look_back = 200) {
     # Tick to progress bar
 
     data_universal  %>% map(~rebal_port_returns(.x,

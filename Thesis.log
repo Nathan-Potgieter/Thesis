@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2021.1.13)  15 JAN 2021 13:20
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2021.1.13)  20 JAN 2021 14:05
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -640,6 +640,12 @@ Package: ltcaption 2020/05/30 v1.4b longtable captions (AR)
 LaTeX Warning: Label `methadology' multiply defined.
 
 
+LaTeX Warning: Label `eigens' multiply defined.
+
+
+LaTeX Warning: Label `eigens' multiply defined.
+
+
 LaTeX Warning: Label `conclusion' multiply defined.
 
 )
@@ -804,78 +810,94 @@ File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\@ifnextchar' on input line 268.
+(hyperref)                removing `\@ifnextchar' on input line 269.
 
 [1
 
 
 {c:/Users/natha/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdfte
-x.map}] [2] [3] [4] [5] [6] [7] [8] [9]
-<Thesis_files/figure-latex/corr mats-1.pdf, id=292, 433.62pt x 361.35pt>
+x.map}] [2] [3] [4] [5] [6] [7] [8]
+LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 7
+43.
+(c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ts1lmr.fd
+File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
+) [9] [10]
+<Thesis_files/figure-latex/corr mats-1.pdf, id=351, 433.62pt x 361.35pt>
 File: Thesis_files/figure-latex/corr mats-1.pdf Graphic file (type pdf)
 <use Thesis_files/figure-latex/corr mats-1.pdf>
 Package pdftex.def Info: Thesis_files/figure-latex/corr mats-1.pdf  used on inp
-ut line 833.
+ut line 844.
 (pdftex.def)             Requested size: 433.61894pt x 361.34912pt.
-[10]
-<Thesis_files/figure-latex/unnamed-chunk-1-1.pdf, id=303, 325.215pt x 325.215pt
+[11 <./Thesis_files/figure-latex/corr mats-1.pdf>]
+<Thesis_files/figure-latex/unnamed-chunk-1-1.pdf, id=367, 325.215pt x 325.215pt
 >
 File: Thesis_files/figure-latex/unnamed-chunk-1-1.pdf Graphic file (type pdf)
 <use Thesis_files/figure-latex/unnamed-chunk-1-1.pdf>
 Package pdftex.def Info: Thesis_files/figure-latex/unnamed-chunk-1-1.pdf  used 
-on input line 860.
+on input line 872.
 (pdftex.def)             Requested size: 325.2142pt x 325.2142pt.
-[11 <./Thesis_files/figure-latex/corr mats-1.pdf>] [12 <./Thesis_files/figure-l
-atex/unnamed-chunk-1-1.pdf>] [13] [14] [15] [16] [17]
+[12 <./Thesis_files/figure-latex/unnamed-chunk-1-1.pdf>]
+
+LaTeX Warning: Reference `corrs' on page 13 undefined on input line 912.
+
+
+LaTeX Warning: Reference `emp_corr' on page 13 undefined on input line 924.
+
+[13] [14] [15] [16] [17] [18] [19] [20] [21]
 
 Package hyperref Warning: Difference (2) between bookmark levels is greater 
-(hyperref)                than one, level fixed on input line 1120.
+(hyperref)                than one, level fixed on input line 1410.
 
+[22]
 No file Thesis.bbl.
-[18] (./Thesis.aux)
+[23] (./Thesis.aux)
+
+LaTeX Warning: There were undefined references.
+
 
 LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `Thesis.out' has not changed.
-(rerunfilecheck)             Checksum: 3B6AF862FBF739F2041E9A2716D6D440;1583.
+(rerunfilecheck)             Checksum: 67C702D25E2E32FEAD14D033A7F5BA9D;2501.
  ) 
 Here is how much of TeX's memory you used:
- 12430 strings out of 481252
- 225026 string characters out of 5914123
- 519984 words of memory out of 5000000
- 28994 multiletter control sequences out of 15000+600000
- 479222 words of font info for 77 fonts, out of 8000000 for 9000
+ 12531 strings out of 481252
+ 227026 string characters out of 5914123
+ 526940 words of memory out of 5000000
+ 29053 multiletter control sequences out of 15000+600000
+ 479587 words of font info for 78 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 83i,12n,88p,274b,821s stack positions out of 5000i,500n,10000p,200000b,80000s
-{c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-math
-sy.enc}{c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm
--mathit.enc}{c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/
-lm/lm-rm.enc}{c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips
-/lm/lm-mathex.enc}{c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/
-dvips/lm/lm-ec.enc}<c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/typ
-e1/public/lm/lmbx10.pfb><c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/font
-s/type1/public/lm/lmbx9.pfb><c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/
-fonts/type1/public/lm/lmex10.pfb><c:/Users/natha/AppData/Roaming/TinyTeX/texmf-
-dist/fonts/type1/public/lm/lmmi10.pfb><c:/Users/natha/AppData/Roaming/TinyTeX/t
-exmf-dist/fonts/type1/public/lm/lmmi6.pfb><c:/Users/natha/AppData/Roaming/TinyT
-eX/texmf-dist/fonts/type1/public/lm/lmmi8.pfb><c:/Users/natha/AppData/Roaming/T
-inyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/natha/AppData/Roami
-ng/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/Users/natha/AppData/R
-oaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr6.pfb><c:/Users/natha/AppDat
-a/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb><c:/Users/natha/App
-Data/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr9.pfb><c:/Users/natha/
-AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb><c:/Users/n
-atha/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri7.pfb><c:/Use
-rs/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri9.pfb><c:
-/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pf
-b><c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy
-6.pfb><c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/
-lmsy8.pfb><c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public
-/lm/lmtt9.pfb>
-Output written on Thesis.pdf (18 pages, 397408 bytes).
+ 83i,12n,88p,273b,821s stack positions out of 5000i,500n,10000p,200000b,80000s
+{c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.
+enc}{c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ma
+thsy.enc}{c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/
+lm-mathit.enc}{c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvip
+s/lm/lm-rm.enc}{c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvi
+ps/lm/lm-mathex.enc}{c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/en
+c/dvips/lm/lm-ec.enc}<c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/t
+ype1/public/lm/lmbx10.pfb><c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fo
+nts/type1/public/lm/lmbx9.pfb><c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dis
+t/fonts/type1/public/lm/lmex10.pfb><c:/Users/natha/AppData/Roaming/TinyTeX/texm
+f-dist/fonts/type1/public/lm/lmmi10.pfb><c:/Users/natha/AppData/Roaming/TinyTeX
+/texmf-dist/fonts/type1/public/lm/lmmi6.pfb><c:/Users/natha/AppData/Roaming/Tin
+yTeX/texmf-dist/fonts/type1/public/lm/lmmi8.pfb><c:/Users/natha/AppData/Roaming
+/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/natha/AppData/Roa
+ming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/Users/natha/AppData
+/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr6.pfb><c:/Users/natha/AppD
+ata/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb><c:/Users/natha/A
+ppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr9.pfb><c:/Users/nath
+a/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb><c:/Users
+/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri7.pfb><c:/U
+sers/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri9.pfb><
+c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.
+pfb><c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lm
+sy6.pfb><c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/l
+m/lmsy8.pfb><c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/publ
+ic/lm/lmtt9.pfb>
+Output written on Thesis.pdf (23 pages, 409752 bytes).
 PDF statistics:
- 471 PDF objects out of 1000 (max. 8388607)
- 424 compressed objects within 5 object streams
- 108 named destinations out of 1000 (max. 500000)
- 203 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 593 PDF objects out of 1000 (max. 8388607)
+ 540 compressed objects within 6 object streams
+ 146 named destinations out of 1000 (max. 500000)
+ 299 words of extra memory for PDF output out of 10000 (max. 10000000)
 
