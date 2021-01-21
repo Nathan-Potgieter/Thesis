@@ -458,7 +458,13 @@ to as the naive portfolio. Meanwhile its simplicity means that it has
 been widely used as a benchmark. Equal weighting is optimal from a mean
 variance standpoint when there is no correlation between securities and
 each possesses the same variance. In which case, the EW is theoretically
-equivalent to the MV portfolio.
+equivalent to the MV portfolio. The EW's robustness to estimation errors
+and surprisingly good historical performance has lead to it being
+incorporated into hybrid portfolio strategies (Tu \& Zhou,
+\protect\hyperlink{ref-tu2011}{2011}). These strategies form a balance
+between the rules based approach of the EW and the optimization
+approaches from more sophisticated portfolios and have been shown to
+outperform both its EW and more sophisticated constituents.
 
 \hypertarget{minimum-variance-mv}{%
 \paragraph{Minimum Variance (MV)}\label{minimum-variance-mv}}
@@ -557,19 +563,18 @@ possible sharp ratio.
 \paragraph{Equal Risk Contribution
 (ERC)}\label{equal-risk-contribution-erc}}
 
-The ERC portfolio is similar to the IV, however when balancing risk
-contributions it does account for the covariance between securities (De
-Carvalho \emph{et al.},
+The principle behind the ERC portfolio is similar to that of the IV,
+however when balancing risk contributions the ERC does account for the
+covariance between securities (De Carvalho \emph{et al.},
 \protect\hyperlink{ref-leote}{2012}\protect\hyperlink{ref-leote}{a}).
-The basic idea behind the ERC is to weight the portfolio such that each
-security contributes equally to overall portfolio risk, this should in
-turn maximize risk diversification (Maillard,
-\protect\hyperlink{ref-maillard2010}{2010}). In practice the ERC acts
-similar to a weight constrained MV portfolio, with constraints
-preventing high levels of portfolio concentration. Following Maillard
-(\protect\hyperlink{ref-maillard2010}{2010}), the weights of an ERC
-portfolio \(x=(x_1,x_2,...,x_n)\) consisting of n assets can be
-calculated as follows:
+The ERC allocates capital such that each security contributes equally to
+overall portfolio risk, which in theory should maximize risk
+diversification (Maillard, \protect\hyperlink{ref-maillard2010}{2010}).
+In practice the ERC acts similar to a weight constrained MV portfolio,
+with constraints preventing high levels of portfolio concentration.
+Following Maillard (\protect\hyperlink{ref-maillard2010}{2010}), the
+weights of an ERC portfolio \(x=(x_1,x_2,...,x_n)\) consisting of n
+assets can be calculated as follows:
 
 let \(\sigma_i^2\) resemble asset i's variance, \(\sigma_{ij}\) the
 covariance between asset i and j and \(\sum\) be the markets variance
@@ -606,8 +611,8 @@ Carvalho \emph{et al.}
 found that, if all securities posses the same sharp ratio , then the ERC
 and ERB have identical portfolio weights. If in addition the correlation
 coefficients between all securities are equal, then the ERC and ERB
-merge into the EW portfolio and each are mean variance efficient with
-the maximum attainable sharp ratio (De Carvalho \emph{et al.},
+merge into the EW portfolio, with each being mean variance efficient
+with the maximum attainable sharp ratio (De Carvalho \emph{et al.},
 \protect\hyperlink{ref-leote}{2012}\protect\hyperlink{ref-leote}{a}).
 
 \hypertarget{maximum-diversification-md}{%
@@ -616,23 +621,28 @@ the maximum attainable sharp ratio (De Carvalho \emph{et al.},
 
 Choueifaty \& Coignard (\protect\hyperlink{ref-choueifaty2008}{2008})
 originally designed the MD portfolio to maximize some diversification
-ratio (DR), which he defined as the sum of each securities risk bucket
-divided by portfolio volatility (De Carvalho \emph{et al.},
+ratio (D), which he defined as the sum of each securities risk bucket
+(\(w'.V\)) divided by portfolio volatility (De Carvalho \emph{et al.},
 \protect\hyperlink{ref-leote}{2012}\protect\hyperlink{ref-leote}{a}). If
-we define \(w=(w_1,...w_N)^T\) as a vector of portfolio weights, V as a
-vector of asset volatilities and \(\sum\) as the covariance matrix. Then
-the DR can be expresses as:
+we define V as a vector of asset volatilities and \(\sum\) as the
+covariance matrix and \(w^*\) as the vector of MD portfolio weight. Then
+the \(w*\) can be expresses as:
 
 \begin{center} 
-$DR= \frac{w'.V}{\sqrt{w'Vw}}$ 
+$w^* =arg\ max(DR)\ \ \ \ with \ \ \ \  DR= \frac{w'.V}{\sqrt{w'Vw}}$ 
 \end{center}
 
-Much like the IV and ERC portfolios, the MD portfolio attempts to
-diversify its portfolio by allocating equal risk to each security
-(Choueifaty \& Coignard, \protect\hyperlink{ref-choueifaty2008}{2008}).
-The MD portfolio accomplishes this by over-weighting low volatility
-securities and those that are less correlated (De Carvalho \emph{et
-al.},
+De Carvalho \emph{et al.}
+(\protect\hyperlink{ref-leote}{2012}\protect\hyperlink{ref-leote}{a})
+found that in practice the MV achieves a diversification ratio similar
+to that of the MD and that the difference between the two arise from the
+difference between the two arise from the MV's larger exposure to low
+residual volatility securities. Much like the IV and ERC portfolios, the
+MD portfolio attempts to diversify its portfolio by allocating equal
+risk to each security (Choueifaty \& Coignard,
+\protect\hyperlink{ref-choueifaty2008}{2008}). The MD portfolio
+accomplishes this by over-weighting low volatility and low correlation
+securities (De Carvalho \emph{et al.},
 \protect\hyperlink{ref-leote}{2012}\protect\hyperlink{ref-leote}{a}).
 For further detail regarding the theoretical results and properties of
 the MD portfolio see Choueifaty \& Coignard
@@ -643,41 +653,34 @@ the MD portfolio see Choueifaty \& Coignard
 Findings}\label{empirical-backtests-and-monte-carlo-findings}}
 
 Choueifaty \emph{et al.} (\protect\hyperlink{ref-choueifaty2013}{2013})
-conducted an empirical back test comparing the relative performance of
-numerous portfolio optimisers between 1999 and 2010. They used
-historical data from the MSCI world index and considered the largest
-50\% of assets at each semi-annual rebalance date. To reduce the noise
-in estimation, at each rebalance date covariance matrices were estimated
+used empirical back testing to compare the relative performance of
+numerous portfolio optimisers. They used historical data from the MSCI
+world index and considered the largest 50\% of assets at each
+semi-annual rebalance date between 1999 and 2010. To reduce the noise in
+estimation, at each rebalance date covariance matrices were estimated
 using the previous years worth of data (Choueifaty \emph{et al.},
 \protect\hyperlink{ref-choueifaty2013}{2013}). These were then used as
-the primary inputs in estimating the respective long-only portfolio
-weights. The MV portfolio achieved an annual return of 6.7\% and
-outperformed the ERC and EW portfolio's who returned 6.3\% and 5.8\%
-respectively. Unsurprisingly, the MV portfolio possessed the lowest
-daily volatility (10\%) followed by the ERC and then the EW portfolio's
-(with 12.9\% and 16.4\% respectively). Accordingly the MV portfolio
-scored the highest sharp ratio (0.36) followed by the ERC and EW
-portfolio's (0.24 and 0.16 respectively). According to De Carvalho
-\emph{et al.}
-(\protect\hyperlink{ref-leote}{2012}\protect\hyperlink{ref-leote}{a})
-the performance of the EW portfolio primarily depends on the premium on
-small-capitalization stocks, thereby suggesting that the relatively poor
-performance of the EW portfolio in Choueifaty \emph{et al.}
-(\protect\hyperlink{ref-choueifaty2013}{2013}), can be attributed to the
-relatively poor returns achieved by the smaller stocks in the MSCI world
-index.
+the primary inputs in estimating the long-only portfolio weights. The MV
+portfolio achieved an annual return of 6.7\% and outperformed the ERC
+and EW portfolios who returned 6.3\% and 5.8\% respectively. The MV
+portfolio possessed the lowest daily volatility (10\%) followed by the
+ERC and then the EW portfolio's (with 12.9\% and 16.4\% respectively).
+Accordingly the MV portfolio had the highest sharp ratio (0.36) followed
+by the ERC and EW portfolios (0.24 and 0.16 respectively).
 
-Despite the simplistic nature of the EW portfolio empirical studies,
-like those by DeMiguel \emph{et al.}
-(\protect\hyperlink{ref-demiguel2009}{2009}), who compared the EW to the
-mean-variance, MV and Bayes-Stein portfolios, tend to find a
-statistically insignificant difference in Sharp ratio between the naive
-portfolio and those of the more advanced portfolio optimisers. In this
-study the EW also performed surprisingly well from a total return
-perspective.
+Despite the EW portfolio simplistic nature empirical studies, like those
+by DeMiguel \emph{et al.} (\protect\hyperlink{ref-demiguel2009}{2009}),
+who compared the EW to the mean-variance, MV and Bayes-Stein portfolios,
+tend to find a statistically insignificant difference in Sharp ratio
+between the naive portfolio and those of the more advanced portfolio
+optimisers.In addition the EW also performed surprisingly well from a
+total return perspective. In fact many studies have found that the EW
+portfolio outperforms the mean variance and other more sophisticated
+portfolios based in financial theory (Tu \& Zhou,
+\protect\hyperlink{ref-tu2011}{2011}).
 
-Due to the aforementioned issues surrounding estimation error in a
-market's covariance matrix Ardia \emph{et al.}
+Due to the aforementioned issues surrounding covariance matrix
+estimation error, Ardia \emph{et al.}
 (\protect\hyperlink{ref-ardia2017}{2017}) set out to evaluate the impact
 of covariance matrix misspecification on the properties of risk based
 portfolio's. They used Monte Carlo methods to build six distinctive
@@ -690,9 +693,9 @@ covariance specifications on the performance of the MV, IV, ERC and MD
 portfolio's. The ERC and IV portfolios were found to be ``relatively
 robust to covariance misspecification'', the MV was found to be
 sensitive to misspecification in both the variance and covariance and
-the MD portfolio was found to be robust to misspecification in the
-variances but sensitive to misspecification in the covariances (Ardia
-\emph{et al.}, \protect\hyperlink{ref-ardia2017}{2017}: 1).
+the MD portfolio was found to be robust to variances misspecification
+but sensitive to misspecification in the covariances (Ardia \emph{et
+al.}, \protect\hyperlink{ref-ardia2017}{2017}: 1).
 
 \hypertarget{monte-carlo-methods-in-portfolio-optimisation}{%
 \subsection{Monte Carlo Methods in Portfolio
@@ -982,29 +985,28 @@ are 500 periods in each market, each portfolio is weighted 5 times and
 
 This section describes the portfolio performance and concentration
 metrics used to evaluate and compare portfolios. The Sharp ratio is used
-to evaluate the risk adjusted return, while the standard deviation,
-downside deviation and value at risk are used to access portfolio risk.
-Finally, the effective number of constitutes, calculated as the inverse
-of the Herfindahl-Hirschman index (HHI), and the effective number of
-bets, calculated following Meucci
+to evaluate the risk adjusted return, while the standard deviation (SD),
+downside deviation (DD) and value at risk (VaR) are used to access
+portfolio risk. Finally, the effective number of constitutes, calculated
+as the inverse of the Herfindahl-Hirschman index (HHI), and the
+effective number of bets, calculated following Meucci
 (\protect\hyperlink{ref-meucci2010}{2010}), are used to compare
 diversification between portfolios (Rhoades,
 \protect\hyperlink{ref-rhoades1993}{1993}).
 
 Since Markowitz (\protect\hyperlink{ref-markowitz}{1952}) variance of
 returns has been the standard measure for risk in the financial industry
-({\textbf{???}}). With the standard deviation simply being the
-square-root of the variance, it too is widely used. Standard deviation
-also benefits due to its relative ease in interpretation. Standard
-deviation is also key in calculating the next two portfolio performance
-metrics described in this study, namely the Sharp ratio and value at
-risk (VaR).
+(Meucci, \protect\hyperlink{ref-meucci2010}{2010}). With SD simply being
+the square-root of the variance, it too is widely used and benefits due
+to its relative ease in interpretation. SD is also key in calculating
+the next two portfolio performance metrics described in this study,
+namely the Sharp ratio and value at risk (VaR).
 
 The Sharp ratio is a measure of a portfolio's risk adjusted returns.
 Generally speaking, the Sharp ratio is calculated by dividing the
 portfolio return by some measure of portfolio risk, it is therefore
-interpreted as the return per unit of risk. In this work standard
-deviation is used as the measure of risk.
+interpreted as the return per unit of risk. In this work SD is used as
+the measure of risk.
 
 The 95\% VaR is another risk metric used to evaluate portfolio risk
 performance in this study. It is one of the financial industry standards
@@ -1069,25 +1071,33 @@ Types}\label{comparing-portfolios-within-market-types}}
 \subsubsection{Market 1}\label{market-1}}
 
 The portfolios compared here were estimated on the markets simulated
-using the diagonal correlation matrix (Figure \ref{corr_mats}). The
-portfolios average Sharp ratio (Sharp), standard deviation (SD),
-downside deviation and VaR across the 10 000 simulated markets are shown
-in Table \ref{rm1}.
+using the diagonal correlation matrix (Figure \ref{corr_mats}).
+According to the portfolio risk metrics reported in Table \ref{rm1} the
+EW portfolio performed the best overall. It achieved the highest average
+Sharp ratio and the lowest average SD, DD and VaR. The IV portfolio was
+a close second, it has the second highest Sharp ratio, tied for lowest
+SD, narrowly achieved the achieved the second lowest DD and VaR. The ERC
+ranked the third best overall, followed by the MD and finally the MV.
 
-The EW portfolio performed the best overall as it achieved the highest
-average Sharp ratio and the lowest average standard deviation, downside
-deviation and VaR. The IV portfolio was a close second with the second
-highest Sharp ratio, tied for lowest standard deviation, and achieved
-the second lowest average downside deviation and VaR. The ERC is ranked
-the third best, followed by the, MD and finally the MV.
+Since this market type has real no correlation structure it is
+unsurprising that the two portfolios that neglect using covariance
+information have performed relatively well. However, since the variance
+does differ between assets it would have been reasonable to assume that
+the IV portfolio would be less volatile than the EW. The fact that these
+two portfolios were approximately equal in terms of volatility may be
+due to asset return variances are not being sufficiently different
+and/or the IV portfolio's out of sample variance forecast was not
+accurate enough to reduce portfolio risk t below that of the EW
+portfolio.
 
-With a diagonal matrix characterizing the market correlation structure
-structure it is reasonable to expect that, the EW and IV to perform
-well. the asset variance allocation is fairly evenly distribution then
-the EW, MV, IV, ERC and MD will produce fairly similar.
+Furthermore, it seems that the portfolios that used both covariance
+information, namely the MV, ERC and MD, were punished for doing so. They
+likely suffered from poor out out sample performance due to allocating
+weights based on noise in their respective covariance matrix
+estimates.load
 
 \begin{table}[!htbp] \centering 
-  \caption{Market 1 Risk Metrics} 
+  \caption{Market 1 - Portfolio Risk Metrics} 
   \label{rm1} 
 \begin{tabular}{@{\extracolsep{5pt}} cccccc} 
 \\[-1.8ex]\hline 
@@ -1102,15 +1112,41 @@ VaR & -0.00545 & -0.00735 & -0.00548 & -0.00645 & -0.00722 \\
 \end{tabular} 
 \end{table}
 
+\textbf{Table \ref{em1} contains the average portfolio concentration
+metrics. Since this market's underlying correlation matrix expresses no
+dependence between assets, each assets return's are in theory
+orthogonal. Therefore, the EW portfolio should produce an ENB of 50,
+however, the ENB reported is 17.5. This can not simply be due to it
+being a noisy measure since the ENB reported in Table \ref{em1} is an
+average across the 1000 ENBs estimated for each portfolio. This miss
+measurement likely due to a persistent bias that arises then rotating
+the returns matrix based on noise rather than signal. Since the
+underlying correlation structure implies that the returns are
+orthogonal, but finite sample estimates of the correlation matrix will
+inevitably contain some noise, it is likely that the ENB estimate is
+finding spurious principle components which is making it an unreliable
+measure of diversification.}
+
+It is also interesting it see that the ENC and ENB are at odds.
+Portfolio's rated as highly diversified by the ENC measure are are rated
+as relatively undiversified by the ENB and \emph{vice verse}.
+Additionally, the ENC measure coincides with the portfolio risk measures
+from Table \ref{rm1}, in that those with a high ENC were less volitlie.
+Meanwhile, those with the most ENB were also the most volatile. This
+suggests that, when operating in a market where all correlation between
+assets are estimated to be approximately zero, the ENB can be very
+misleading and that the ENB is most likely a better tool for measuring
+concentration.
+
 \begin{table}[!htbp] \centering 
-  \caption{Market 1 Portfolio Entropy Metrics} 
+  \caption{Market 1 - Portfolio Concentration Metrics} 
   \label{em1} 
 \begin{tabular}{@{\extracolsep{5pt}} cccccc} 
 \\[-1.8ex]\hline 
 \hline \\[-1.8ex] 
 Metric & EW & MV & IV & ERC & MD \\ 
 \hline \\[-1.8ex] 
-ENC & 50 & 25.3 & 47.1 & 30.1 & 29.1 \\ 
+ENC & 50 & 27.2 & 47.3 & 35.6 & 28.2 \\ 
 ENB & 17.5 & 22.8 & 20.1 & 18.9 & 21 \\ 
 \hline \\[-1.8ex] 
 \end{tabular} 
@@ -1120,34 +1156,68 @@ ENB & 17.5 & 22.8 & 20.1 & 18.9 & 21 \\
 \subsubsection{Market 2}\label{market-2}}
 
 The portfolios compared here were estimated on the markets simulated
-using the no clusters correlation matrix (Figure \ref{corr_mats}). The
-portfolios average Sharp ratio (Sharp), standard deviation (SD),
-downside deviation and VaR across the 10 000 simulated markets are shown
-in Table \ref{rm2}.
+using the no clusters correlation matrix (Figure \ref{corr_mats}).
+Unlike Market 1 the average portfolio risk metrics in Table \ref{rm2} do
+not indicate any clear winner. Despite having the highest average SD The
+MD portfolio achieved the highest Sharp ratio. Meanwhile the ERC
+performed best in the the SD, DD and VaR measures while obtaining the
+second highest Sharp ratio.
+
+Since this market type exhibits significant correlation between its
+constituents it is unsurprising to observe the EW and IV portfolios fall
+out, in favor of the more sophisticated ERC and MD portfolios.
+
+The MV portfolio has the second lowest SD, but second highest DD and
+lowest sharp ratio. This demonstrates its failour to mitigate its
+downside risk exposure (measured by DD and VaR) which is arguably far
+more important than reducing volatility in general. Despite the MV
+having the second lowest SD, it attained the lowest overall Sharp ratio,
+indicating that it performed exceedingly poorly from a total return
+perspective. Due to these reasons the MV portfolio is ranked as Market
+2's clear looser. \textbf{Hight condition number inverse}
+
+The EW and IV portfolios performed very similarly in Market 2. The equal
+weight has the higher sharp ratio of the two, while the IV has the
+performs better when considering SD, DD and VaR. It therefore seems that
+the EW portfolio finds itself sightly closer to the top right quadrant
+of the efficient frontier, where it earns higher returns with greater
+risk compared to the IV portfolio.
+
+In Market 2 the MD portfolio acts as a bit of a wild card, it has the
+highest sharp ratio by a significant margin, but performs the worst
+across all three risk metrics. Thereby indicating that compaired to the
+other portfolios, the MD earned exceptionally high returns. In
+comparison the ERC seems to be the safer option as it
+
+Therefore, form a pure mitigation perspective the ERC is the clear
+winner and MD the clear looser.
+
+The portfolios average Sharp ratio (Sharp), SD (SD), DD and VaR across
+the 10 000 simulated markets are shown in Table \ref{rm2}.
 
 On average the EW, MV, IV and ERC portfolios performed very similarly
-according to the standard deviation, downside deviation and VaR metrics.
-Out of these four portfolios the ERC attained the highest sharp ratio
-and narrowly achieved the lowest scores across three risk measures.
-Despite performing the worst from a risk perspective, the MD portfolio
-attained the highest overall Sharp ratio. Thereby indicating that the MD
-managed to attain significantly higher average returns compared to the
-other portfolio's. On the other hand, despite performing well from a
-risk perspective, the MV portfolio attained a Sharp ratio significantly
-lower than the other portfolios
+according to the SD, DD and VaR metrics. Out of these four portfolios
+the ERC attained the highest sharp ratio and narrowly achieved the
+lowest scores across three risk measures. Despite performing the worst
+from a risk perspective, the MD portfolio attained the highest overall
+Sharp ratio. Thereby indicating that the MD managed to attain
+significantly higher average returns compared to the other portfolio's.
+On the other hand, despite performing well from a risk perspective, the
+MV portfolio attained a Sharp ratio significantly lower than the other
+portfolios
 
 \begin{table}[!htbp] \centering 
-  \caption{Market 2 Risk Metrics} 
+  \caption{Market 2 - Portfolio Risk Metrics} 
   \label{rm2} 
 \begin{tabular}{@{\extracolsep{5pt}} cccccc} 
 \\[-1.8ex]\hline 
 \hline \\[-1.8ex] 
 Metric & EW & MV & IV & ERC & MD \\ 
 \hline \\[-1.8ex] 
-Sharp & 0.05171 & 0.03482 & 0.04955 & 0.05312 & 0.06388 \\ 
-SD & 0.01451 & 0.01434 & 0.01436 & 0.01431 & 0.0156 \\ 
-Downside Deviation & 0.00983 & 0.00985 & 0.00974 & 0.00968 & 0.01047 \\ 
-VaR & -0.02273 & -0.02273 & -0.02252 & -0.02238 & -0.02424 \\ 
+Sharp & 0.05158 & 0.03432 & 0.04948 & 0.053 & 0.06484 \\ 
+SD & 0.01454 & 0.01446 & 0.01438 & 0.01431 & 0.01508 \\ 
+Downside Deviation & 0.00985 & 0.00993 & 0.00976 & 0.00969 & 0.01011 \\ 
+VaR & -0.02276 & -0.02289 & -0.02255 & -0.02238 & -0.02338 \\ 
 \hline \\[-1.8ex] 
 \end{tabular} 
 \end{table}
@@ -1157,9 +1227,8 @@ VaR & -0.02273 & -0.02273 & -0.02252 & -0.02238 & -0.02424 \\
 
 The portfolios compared here were estimated on the markets simulated
 using the five clusters correlation matrix (Figure \ref{corr_mats}). The
-portfolios average Sharp ratio (Sharp), standard deviation (SD),
-downside deviation and VaR across the 10 000 simulated markets are shown
-in Table \ref{rm3}.
+portfolios average Sharp ratio (Sharp), standard deviation (SD), DD and
+VaR across the 10 000 simulated markets are shown in Table \ref{rm3}.
 
 Despite there being significant and distinct risk clusters in the
 markets
@@ -1172,10 +1241,10 @@ markets
 \hline \\[-1.8ex] 
 Metric & EW & MV & IV & ERC & MD \\ 
 \hline \\[-1.8ex] 
-Sharp & 0.08001 & 0.04974 & 0.07655 & 0.07605 & 0.06638 \\ 
-SD & 0.0094 & 0.01049 & 0.0093 & 0.00935 & 0.01065 \\ 
-Downside Deviation & 0.00623 & 0.00712 & 0.00618 & 0.00622 & 0.00714 \\ 
-VaR & -0.01437 & -0.01639 & -0.01425 & -0.01433 & -0.01646 \\ 
+Sharp & 0.07949 & 0.05165 & 0.07608 & 0.07602 & 0.07098 \\ 
+SD & 0.00941 & 0.01034 & 0.00932 & 0.00933 & 0.01011 \\ 
+Downside Deviation & 0.00625 & 0.00701 & 0.0062 & 0.00621 & 0.00675 \\ 
+VaR & -0.01439 & -0.01613 & -0.01428 & -0.0143 & -0.01555 \\ 
 \hline \\[-1.8ex] 
 \end{tabular} 
 \end{table}
@@ -1366,6 +1435,11 @@ Stellenbosch University.
 \leavevmode\hypertarget{ref-rhoades1993}{}%
 Rhoades, S.A. 1993. The herfindahl-hirschman index. \emph{Fed. Res.
 Bull.} 79:188.
+
+\leavevmode\hypertarget{ref-tu2011}{}%
+Tu, J. \& Zhou, G. 2011. Markowitz meets talmud: A combination of
+sophisticated and naive diversification strategies. \emph{Journal of
+Financial Economics}. 99(1):204--215.
 
 \leavevmode\hypertarget{ref-wang2012}{}%
 Wang, P., Sullivan, R.N. \& Ge, Y. 2012. Risk-based dynamic asset

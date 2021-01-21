@@ -981,16 +981,15 @@ load("data/rebdates.rda")
 source("code/calc_port_returns.R")
 source("code/Effective_Number_of_constituits.R")
 
-naive_enc_m2 <- market_2 %>% map( ~ ENC(.x, method = "naive"))
 minvol_enc_m2 <- market_2 %>% map( ~ ENC(.x, method = "minvol"))
 invvol_enc_m2 <- market_2 %>% map( ~ ENC(.x, method = "invvol"))
 erc_enc_m2 <- market_2 %>% map( ~ ENC(.x, method = "erc"))
 maxdiv_enc_m2 <- market_2 %>% map( ~ ENC(.x, method = "maxdiv"))
-enc_m2 <- list(naive_enc_m2,
-               minvol_enc_m2,
-               invvol_enc_m2,
-               erc_enc_m2,
-               maxdiv_enc_m2)
+enc_m2 <- list(naive = 50, # saving calculation time
+               minvol = minvol_enc_m2,
+               invvol = invvol_enc_m2,
+               erc = erc_enc_m2,
+               maxdiv = maxdiv_enc_m2)
 save(enc_m2)
 
 # Entropy - ENB
@@ -1034,7 +1033,7 @@ enb_m2 <- list(naive = naive_enb_m2,
                maxdiv = maxdiv_enb_m2)
 
 save(enb_m2, file = "data/enb_m2.rda")
-
+rm(market_2)
 ```
 
 ### Market 3
@@ -1095,18 +1094,15 @@ minvol_enc_m3 <- market_3 %>% map( ~ ENC(.x, method = "minvol"))
 invvol_enc_m3 <- market_3 %>% map( ~ ENC(.x, method = "invvol"))
 erc_enc_m3 <- market_3 %>% map( ~ ENC(.x, method = "erc"))
 maxdiv_enc_m3 <- market_3 %>% map( ~ ENC(.x, method = "maxdiv"))
-enc_m3 <- list(naive_enc_m3,
-               minvol_enc_m3,
-               invvol_enc_m3,
-               erc_enc_m3,
-               maxdiv_enc_m3)
+enc_m3 <- list(naive = 50, # saving calculation time
+               minvol = minvol_enc_m3,
+               invvol = invvol_enc_m3,
+               erc = erc_enc_m3,
+               maxdiv = maxdiv_enc_m3)
 save(enc_m3)
 
 # Entropy - ENB
-load("data/market_3.rda")
-load("data/rets_m3.rda")
 
-# Entropy
 load("data/market_3.rda")
 load("data/rets_m3.rda")
 
@@ -1204,11 +1200,11 @@ minvol_enc_m4 <- market_4 %>% map( ~ ENC(.x, method = "minvol"))
 invvol_enc_m4 <- market_4 %>% map( ~ ENC(.x, method = "invvol"))
 erc_enc_m4 <- market_4 %>% map( ~ ENC(.x, method = "erc"))
 maxdiv_enc_m4 <- market_4 %>% map( ~ ENC(.x, method = "maxdiv"))
-enc_m4 <- list(naive_enc_m4,
-               minvol_enc_m4,
-               invvol_enc_m4,
-               erc_enc_m4,
-               maxdiv_enc_m4)
+enc_m4 <- list(naive = 50, # saving calculation time
+               minvol = minvol_enc_m4,
+               invvol = invvol_enc_m4,
+               erc = erc_enc_m4,
+               maxdiv = maxdiv_enc_m4)
 save(enc_m4)
 
 # Entropy - ENB
@@ -1313,11 +1309,11 @@ minvol_enc_m5 <- market_5 %>% map(~ ENC(.x, method = "minvol"))
 invvol_enc_m5 <- market_5 %>% map(~ ENC(.x, method = "invvol"))
 erc_enc_m5 <- market_5 %>% map(~ ENC(.x, method = "erc"))
 maxdiv_enc_m5 <- market_5 %>% map(~ ENC(.x, method = "maxdiv"))
-enc_m5 <- list(naive_enc_m5,
-               minvol_enc_m5,
-               invvol_enc_m5,
-               erc_enc_m5,
-               maxdiv_enc_m5)
+enc_m5 <- list(naive = 50, # saving calculation time
+               minvol = minvol_enc_m5,
+               invvol = invvol_enc_m5,
+               erc = erc_enc_m5,
+               maxdiv = maxdiv_enc_m5)
 save(enc_m5)
 
 # Entropy - ENB
