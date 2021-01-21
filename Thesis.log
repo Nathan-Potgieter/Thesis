@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2021.1.13)  21 JAN 2021 17:23
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2021.1.13)  21 JAN 2021 19:41
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -849,7 +849,7 @@ LaTeX Warning: Reference `(' on page 13 undefined on input line 945.
 [13] [14] [15] [16] [17] [18] [19] [20] [21] [22]
 
 Package hyperref Warning: Difference (2) between bookmark levels is greater 
-(hyperref)                than one, level fixed on input line 1499.
+(hyperref)                than one, level fixed on input line 1491.
 
 [23]
 No file Thesis.bbl.
@@ -897,10 +897,10 @@ pfb><c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lm
 sy6.pfb><c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/l
 m/lmsy8.pfb><c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/publ
 ic/lm/lmtt9.pfb>
-Output written on Thesis.pdf (24 pages, 415885 bytes).
+Output written on Thesis.pdf (24 pages, 415628 bytes).
 PDF statistics:
- 614 PDF objects out of 1000 (max. 8388607)
- 560 compressed objects within 6 object streams
+ 613 PDF objects out of 1000 (max. 8388607)
+ 559 compressed objects within 6 object streams
  151 named destinations out of 1000 (max. 500000)
  299 words of extra memory for PDF output out of 10000 (max. 10000000)
 
