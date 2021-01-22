@@ -436,11 +436,13 @@ stargazer::stargazer(
 
 The portfolios compared here were evaluated across the markets simulated using the no clusters correlation matrix (Figure \ref{corr_mats}). Unlike Market 1 the average portfolio risk metrics in Table \ref{rm2} do not indicate a clear winner.  Despite having the highest average SD the MD portfolio achieved the highest Sharp ratio. The ERC performed best in the SD, DD and VaR measures while obtaining the second highest Sharp ratio. The EW and IV portfolios were similar in their performance and the MV performed poorly. 
 
-In Market 2, the MV portfolio has the lowest overall Sharp ratio, the third highest SD, the second highest DD and the lowest VaR. Despite it managing to attain a fairly low average SD, its poor performance across the other risk measures demonstrates a crucial failure to mitigate downside risk exposure (measured by DD and VaR), which is arguably far more important than reducing volatility in general. and attain a fair return for its level of risk. Furthermore, the MV portfolios low Sharp ratio indicates that indicating that it performed exceedingly poorly from a total return perspective and did not receive adequate compensation for its risk. Therefore, the MV portfolio is ranked as Market 2's clear looser.
+Due to the presence of significant correlation between assets, the average measures for ENB (Table \ref{em2}) are all significantly lower compared to Market 1. Due to the significant correlation between assets ENB is the better measure of portfolio diversification. 
 
-The EW and IV portfolios performed very similarly in Market 2. The EW has the higher Sharp ratio of the two, while the IV performs better in the SD, DD and VaR measures. Due its its high sharp ratio, it seems as if the the EW portfolio finds itself sightly closer to the top right quadrant of the efficient frontier, where it earns higher returns with greater risk compared to the IV portfolio. 
+In Market 2, the MV portfolio has the lowest overall Sharp ratio, the third highest SD, the second highest DD and the lowest VaR. Despite it managing to attain a fairly low average SD, its poor performance across the other risk measures demonstrates a crucial failure to mitigate downside risk exposure (measured by DD and VaR), which is arguably far more important than reducing volatility in general. and attain a fair return for its level of risk. Furthermore, the MV portfolios low Sharp ratio indicates that indicating that it performed exceedingly poorly from a total return perspective and did not receive adequate compensation for its risk. The ENB measure indicates that it managed to spread its risk relatively well across risk sources, but it was relatively highly concentrated in a few number of constitutes. Despite its interesting concentration results, the MV portfolio is ranked as Market 2's clear looser. 
 
-The MD portfolio acts as Market 2's wild card. It has the highest average sharp ratio by a significant margin, but performs the worst in the SD and DD risk metrics. Despite it having the largest SD, the MD is on par with the best VaR. This indicates that, compared to the other portfolios, the MD earned exceptionally high returns. 
+The EW and IV portfolios performed very similarly in Market 2. The EW has the higher Sharp ratio of the two, while the IV performs better in the SD, DD and VaR measures. Due its its high sharp ratio, it seems as if the the EW portfolio finds itself sightly closer to the top right quadrant of the efficient frontier, where it earns higher returns with greater risk compared to the IV portfolio. They each invested in a high number of effective constitutes, as shown by ENC in Table \ref{em2} , indicating that they were well diversified across assets. In comparison to other the other portfolios, they have a small ENB, however this does not seem to have translated into increased portfolio volatility. A low ENB may be an indication that these portfolios are not well diversified across risk sources. 
+
+The MD portfolio acts as Market 2's wild card. It has the highest average sharp ratio by a significant margin, but performs the worst in the SD and DD risk metrics. Despite it having the largest SD, the MD is on par with the best VaR. This indicates that, compared to the other portfolios, the MD earned exceptionally high returns. Interestingly it has a relatively high ENB 
 
 In comparison the ERC seems to be the safer and more consistent option. It scored the best over all across the three risk metrics and achieved the second highest Sharp ratio. Therefore, from a risk mitigation perspective the ERC is the clear winner, however the high returns obtained by the MD portfolio may entice less risk averse investors. 
 
@@ -463,7 +465,7 @@ stargazer::stargazer(
 )
 ```
 
-```{r market 2 entropy, eval=FALSE, include=FALSE, results='asis'}
+```{r market 2 entropy, results='asis'}
 
 load("data/enc_m2.rda")
 load("data/enb_m2.rda")
@@ -510,7 +512,7 @@ stargazer::stargazer(
 )
 ```
 
-```{r market 3 entropy, eval=FALSE, include=FALSE, results='asis'}
+```{r market 3 entropy, results='asis'}
 
 load("data/enc_m3.rda")
 load("data/enb_m3.rda")
@@ -530,7 +532,13 @@ stargazer::stargazer(
 
 ### Market 4
 
-The portfolios compared here were evaluated across the markets simulated using the overlapping clusters correlation matrix (Figure \ref{corr_mats}). There is therefore some positive correlation between all assets in the underlying correlation structure. Despite this the EW and IV portfolios, which are oblivious to covariance information, attained significant risk reduction. The IV and ERC, the performed about equally well across all the metrics in Table \ref{rm4}. The MV and MD were the performed worst, but the MD shows significant improvement over the MV is all aspects. 
+The portfolios compared here were evaluated across the markets simulated using the overlapping clusters correlation matrix (Figure \ref{corr_mats}). There is therefore some positive correlation between all assets in the underlying correlation structure. Despite this the EW and IV portfolios, which are oblivious to covariance information, attained significant risk reduction. The IV and ERC portfolios performed about equally well across all the metrics in Table \ref{rm4}. The MV and MD performed worst, however, the MD was the better of the two. 
+
+In Market 4, the EW portfolio achieved the highest average Sharp ratio, and ranked third best in the SD, DD and VaR metrics. It performed fairly well from a pure risk perspective; it was only beat by the IV and ERC portfolios. Its high Sharp ratio indicated that it was compensated well for its risk and is therefore closer to the top right quadrant of the efficient frontier in comparison to the ERC and IV portfolios. 
+
+The MV is the clear looser in this market with it receiving the worst scores across all the metrics in Table \ref{rm4}. Its in ability to maintain low risk out of sample suggests that it suffered from estimation error. 
+
+
 
 ```{r market 4, results = 'asis'}
 source("code/table_risk_metrics.R")

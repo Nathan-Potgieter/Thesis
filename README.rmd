@@ -1105,6 +1105,7 @@ save(enc_m3, file = "data/enc_m3.rda")
 
 load("data/market_3.rda")
 load("data/rets_m3.rda")
+source("code/Effective_Number_of_bets.R")
 
 
 naive_enb_m3 <-
@@ -1215,6 +1216,7 @@ load("data/rets_m4.rda")
 # Entropy
 load("data/market_4.rda")
 load("data/rets_m4.rda")
+source("code/Effective_Number_of_bets.R")
 
 
 naive_enb_m4 <-

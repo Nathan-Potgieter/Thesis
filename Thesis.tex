@@ -1221,6 +1221,20 @@ VaR & -0.02276 & -0.02289 & -0.02255 & -0.02238 & -0.02338 \\
 \end{tabular} 
 \end{table}
 
+\begin{table}[!htbp] \centering 
+  \caption{Market 2 - Portfolio Concentration Metrics} 
+  \label{em2} 
+\begin{tabular}{@{\extracolsep{5pt}} cccccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+Metric & EW & MV & IV & ERC & MD \\ 
+\hline \\[-1.8ex] 
+ENC & 50 & 12.2 & 47.5 & 47.4 & 13.9 \\ 
+ENB & 1.1 & 1.8 & 1.1 & 1.2 & 2 \\ 
+\hline \\[-1.8ex] 
+\end{tabular} 
+\end{table}
+
 \hypertarget{market-3}{%
 \subsubsection{Market 3}\label{market-3}}
 
@@ -1276,6 +1290,20 @@ VaR & -0.01439 & -0.01613 & -0.01428 & -0.0143 & -0.01555 \\
 \end{tabular} 
 \end{table}
 
+\begin{table}[!htbp] \centering 
+  \caption{Market 3 - Portfolio Concentration Metrics} 
+  \label{em3} 
+\begin{tabular}{@{\extracolsep{5pt}} cccccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+Metric & EW & MV & IV & ERC & MD \\ 
+\hline \\[-1.8ex] 
+ENC & 50 & 14.6 & 47.6 & 46 & 17.8 \\ 
+ENB & 1.3 & 3.7 & 1.4 & 1.5 & 2.2 \\ 
+\hline \\[-1.8ex] 
+\end{tabular} 
+\end{table}
+
 \hypertarget{market-4}{%
 \subsubsection{Market 4}\label{market-4}}
 
@@ -1284,10 +1312,21 @@ using the overlapping clusters correlation matrix (Figure
 \ref{corr_mats}). There is therefore some positive correlation between
 all assets in the underlying correlation structure. Despite this the EW
 and IV portfolios, which are oblivious to covariance information,
-attained significant risk reduction. The IV and ERC, the performed about
-equally well across all the metrics in Table \ref{rm4}. The MV and MD
-were the performed worst, but the MD shows significant improvement over
-the MV is all aspects.
+attained significant risk reduction. The IV and ERC portfolios performed
+about equally well across all the metrics in Table \ref{rm4}. The MV and
+MD performed worst, however, the MD was the better of the two.
+
+In Market 4, the EW portfolio achieved the highest average Sharp ratio,
+and ranked third best in the SD, DD and VaR metrics. It performed fairly
+well from a pure risk perspective; it was only beat by the IV and ERC
+portfolios. Its high Sharp ratio indicated that it was compensated well
+for its risk and is therefore closer to the top right quadrant of the
+efficient frontier in comparison to the ERC and IV portfolios.
+
+The MV is the clear looser in this market with it receiving the worst
+scores across all the metrics in Table \ref{rm4}. Its in ability to
+maintain low risk out of sample suggests that it suffered from
+estimation error.
 
 \begin{table}[!htbp] \centering 
   \caption{Market 4 - Portfolio Risk Metrics} 
@@ -1313,7 +1352,10 @@ using the empirical correlation matrix correlation matrix (Figure
 \ref{corr_emp}). This is therefore the most realistic of the five
 correlation matrices, it exhibits significant correlation between
 assets, with some distinctive risk clustering. The IV and ERC portfolios
-performed similarly across the metrics in Table \ref{rm5}
+performed similarly across the metrics in Table \ref{rm5}. The MV and MD
+portfolios performed the worst. The EW dis well from a risk return
+standpoint, but was out performed by the IV and ERC in terms of risk
+mitigation.
 
 \begin{table}[!htbp] \centering 
   \caption{Market 5 Risk Metrics} 
