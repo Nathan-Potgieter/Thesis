@@ -36,7 +36,7 @@ table_risk_metrics <- function(perf_data) {
 }
 
 table_entropy <- function(enc, enb) {
-    tibble(Metric = c("ENC", "ENB")) %>%
+    tibble(Metric = c("Inv HHI", "Entropy")) %>%
         mutate(
             EW = c(enc$naive %>% reduce(mean),
                    enb$naive %>% reduce(mean)) %>% round(1),
