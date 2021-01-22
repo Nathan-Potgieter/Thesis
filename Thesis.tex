@@ -936,8 +936,8 @@ equal. All in all, this process created 5 data sets each containing 10
 
 The expected returns and standard deviation of these simulated variables
 were calibrated using a random subset of 50 of the largest 100 S\&P500
-stocks (discussed in Section \ref{emp_corr}) between 1 January 2020 and
-1 January 2021. Maximum likelihood estimation was used to fit the
+stocks (discussed in Section \ref{emp}) between 1 January 2020 and 1
+January 2021. Maximum likelihood estimation was used to fit the
 multivariate t distribution to the return series using the method
 developed by Liu \& Rubin (\protect\hyperlink{ref-liu1995}{1995}). This
 produced a series of estimated means and variances which were used to
@@ -1074,16 +1074,16 @@ affected by changes in correlation structure.
 \paragraph{Note on Potfolio Concerntration
 Metrics}\label{note-on-potfolio-concerntration-metrics}}
 
-Tables \ref{em1}, \ref{em2}, \ref{em3}, \ref{em4} and \ref{em5} contains
-the average portfolio concentration metrics across the five markets.
-This section briefly touches on some interesting trends and caveats
-regarding these measures.
+The average inverse HHI and entropy portfolio concentration metrics
+across the five markets can be found in Tables \ref{rm1}, \ref{rm2},
+\ref{rm3}, \ref{rm4} and \ref{rm5}. This section briefly touches on some
+interesting trends and caveats regarding these measures.
 
 Since Market 1's underlying correlation matrix expresses no dependence
 between assets (Diagonal matrix in Figure \ref{corr_mats}), the assets
 return's are orthogonal. Therefore, in theory the EW portfolio should
 have an entropy of 50, however, reported entropy is 17.5 (see Table
-\ref{em1}). This is a large miss and can not simply be due to it being a
+\ref{rm1}). This is a large miss and can not simply be due to it being a
 noisy measure. The entropy reported are an average across 10 000
 estimates and hence the majority of estimation noise should have
 canceled out. Rather, it is likely due to a persistent bias that arises
@@ -1127,18 +1127,6 @@ Sharp & 0.19353 & 0.13501 & 0.18341 & 0.15876 & 0.14284 \\
 SD & 0.00386 & 0.005 & 0.00386 & 0.00447 & 0.00494 \\ 
 Downside Deviation & 0.00235 & 0.00318 & 0.00236 & 0.00279 & 0.00312 \\ 
 VaR & -0.00545 & -0.00735 & -0.00548 & -0.00645 & -0.00722 \\ 
-\hline \\[-1.8ex] 
-\end{tabular} 
-\end{table}
-
-\begin{table}[!htbp] \centering 
-  \caption{Market 1 - Portfolio Concentration Metrics} 
-  \label{em1} 
-\begin{tabular}{@{\extracolsep{5pt}} cccccc} 
-\\[-1.8ex]\hline 
-\hline \\[-1.8ex] 
-Metric & EW & MV & IV & ERC & MD \\ 
-\hline \\[-1.8ex] 
 Inv HHI & 50 & 27.2 & 47.3 & 35.6 & 28.2 \\ 
 Entropy & 17.5 & 22.8 & 20.1 & 18.9 & 21 \\ 
 \hline \\[-1.8ex] 
@@ -1186,18 +1174,6 @@ Sharp & 0.05158 & 0.03432 & 0.04948 & 0.053 & 0.06484 \\
 SD & 0.01454 & 0.01446 & 0.01438 & 0.01431 & 0.01508 \\ 
 Downside Deviation & 0.00985 & 0.00993 & 0.00976 & 0.00969 & 0.01011 \\ 
 VaR & -0.02276 & -0.02289 & -0.02255 & -0.02238 & -0.02338 \\ 
-\hline \\[-1.8ex] 
-\end{tabular} 
-\end{table}
-
-\begin{table}[!htbp] \centering 
-  \caption{Market 2 - Portfolio Concentration Metrics} 
-  \label{em2} 
-\begin{tabular}{@{\extracolsep{5pt}} cccccc} 
-\\[-1.8ex]\hline 
-\hline \\[-1.8ex] 
-Metric & EW & MV & IV & ERC & MD \\ 
-\hline \\[-1.8ex] 
 Inv HHI & 50 & 12.2 & 47.5 & 47.4 & 13.9 \\ 
 Entropy & 1.1 & 1.8 & 1.1 & 1.2 & 2 \\ 
 \hline \\[-1.8ex] 
@@ -1205,7 +1181,7 @@ Entropy & 1.1 & 1.8 & 1.1 & 1.2 & 2 \\
 \end{table}
 
 Due to the presence of significant correlation between assets, the ENB
-estimates (Table \ref{em2}) are all significantly lower compared to
+estimates (Table \ref{rm2}) are all significantly lower compared to
 Market 1. The correlation structure in the underlying correlation matrix
 makes the ENB a better measure of portfolio diversification than what it
 was in Market 1.
@@ -1221,7 +1197,7 @@ risk. Particularly since it performed exceedingly poorly from a total
 return perspective. The ENB measure indicates that it managed to spread
 its risk relatively well across risk sources, but the inverse HHI
 indicates relatively high concentrated in a few number of constitutes
-(Table \ref{em2}). Despite its interesting concentration results, MV is
+(Table \ref{rm2}). Despite its interesting concentration results, MV is
 considered the worst performing portfolio in Market 2.
 
 The EW and IV portfolios performed very similarly in Market 2. This
@@ -1231,7 +1207,7 @@ DD and VaR measures. Due its its high sharp ratio, it seems as if the
 the EW portfolio finds itself sightly closer to the top right quadrant
 of the efficient frontier, where it earns higher returns with greater
 risk compared to the IV portfolio. They each have a high inverse HHI
-(Table \ref{em2}) , indicating that they were well diversified across
+(Table \ref{rm2}) , indicating that they were well diversified across
 assets. In comparison to other the other portfolios, they have low
 entropy measure, however this does not seem to have translated into
 increased portfolio volatility. The low entropy scores indicate that
@@ -1280,18 +1256,6 @@ Sharp & 0.07949 & 0.05165 & 0.07608 & 0.07602 & 0.07098 \\
 SD & 0.00941 & 0.01034 & 0.00932 & 0.00933 & 0.01011 \\ 
 Downside Deviation & 0.00625 & 0.00701 & 0.0062 & 0.00621 & 0.00675 \\ 
 VaR & -0.01439 & -0.01613 & -0.01428 & -0.0143 & -0.01555 \\ 
-\hline \\[-1.8ex] 
-\end{tabular} 
-\end{table}
-
-\begin{table}[!htbp] \centering 
-  \caption{Market 3 - Portfolio Concentration Metrics} 
-  \label{em3} 
-\begin{tabular}{@{\extracolsep{5pt}} cccccc} 
-\\[-1.8ex]\hline 
-\hline \\[-1.8ex] 
-Metric & EW & MV & IV & ERC & MD \\ 
-\hline \\[-1.8ex] 
 Inv HHI & 50 & 14.6 & 47.6 & 46 & 17.8 \\ 
 Entropy & 1.3 & 3.7 & 1.4 & 1.5 & 2.2 \\ 
 \hline \\[-1.8ex] 
@@ -1304,15 +1268,17 @@ the the underlying market structure the EW portfolio achieved relatively
 high level of risk diversification. It has the highest average Sharp
 ratio suggesting that it performed will from a total return stand point.
 According to its entropy measure, it is the least diversified across
-risk sources.
+risk sources. This finding holds across Markets 3, 4 and 5 and will
+therefore not be repeated (see Tables \ref{rm4} and \ref{rm5}).
 
 On average the MV portfolio performed exceedingly poorly, its has by far
 the lowest Sharp ratio and is the worst performer across the SD, DD and
 VaR measures. Its in ability to to to maintain a low average out of
 sample SD indicates that it suffers from estimation error. The inverse
-HHI and entropy metrics in Table \ref{cm3} indicate that the MV
+HHI and entropy metrics in Table \ref{rm3} indicate that the MV
 portfolio is the least diversified across assets and the most
-diversified across sorces of risk.
+diversified across sources of risk. This also holds in Market 4 (see
+\ref{rm4}).
 
 The IV and ERC portfolios were strong contenders for for place. Their
 scores were close across all four of the measures in Table \ref{rm3}.
@@ -1323,7 +1289,7 @@ fairly well compensated per unit if risk. These two portfolios are also
 similar in their concentration estimates. They are both highly
 diversified across asset and poorly diversified across risk sources.
 
-The MD portfolio performed worse than the EW, IV and EW portfolios. It
+The MD portfolio performed worse than the EW, IV and ERC portfolios. It
 has a significantly lower Sharp ratio, higher SD, DD and a lower VaR.
 However, when comparing its relative performance across all five
 portfolios, the MD does not seem too bad as its greatly outperformed the
@@ -1354,52 +1320,26 @@ Sharp & 0.05368 & 0.03225 & 0.05155 & 0.05154 & 0.05006 \\
 SD & 0.01397 & 0.01447 & 0.0138 & 0.0138 & 0.01443 \\ 
 Downside Deviation & 0.00946 & 0.00996 & 0.00935 & 0.00936 & 0.00979 \\ 
 VaR & -0.02184 & -0.02294 & -0.02159 & -0.0216 & -0.0226 \\ 
-\hline \\[-1.8ex] 
-\end{tabular} 
-\end{table}
-
-\begin{table}[!htbp] \centering 
-  \caption{Market 4 - Portfolio Concentration Metrics} 
-  \label{em4} 
-\begin{tabular}{@{\extracolsep{5pt}} cccccc} 
-\\[-1.8ex]\hline 
-\hline \\[-1.8ex] 
-Metric & EW & MV & IV & ERC & MD \\ 
-\hline \\[-1.8ex] 
 Inv HHI & 50 & 13 & 47.6 & 46.7 & 13.7 \\ 
-Entropy & 1.1 & 1.8 & 1.1 & 1.2 & 2 \\ 
+Entropy & 1.1 & 2 & 1.1 & 1.1 & 1.6 \\ 
 \hline \\[-1.8ex] 
 \end{tabular} 
 \end{table}
-
-In Market 4, the EW portfolio achieved the highest average Sharp ratio,
-and ranked third best in the SD, DD and VaR metrics. Therefore, it
-performed fairly well from a pure risk perspective and was only beat by
-the IV and ERC portfolios. Its high Sharp ratio indicates that it was
-compensated well for holding risk is therefore closer to the top right
-quadrant of the efficient frontier in comparison to the ERC and IV
-portfolios.
-
-The MV is the clear looser in this market with it receiving the worst
-scores across all the metrics in Table \ref{rm4}. Its in ability to
-maintain low risk out of sample suggests that it suffered from
-estimation error. Is low HHI score suggests that it is not well
-diversified across assets, meanwhile its relatively high entropy score
-indicates that it is well diversified across risk sources.
 
 The IV and ERC performed very similarly in this market, they are
 approximately tied as the best performing assets across the SD, DD and
 VaR measures and tied the second highest Sharp ratio. They are both well
 diversified across assets, but are relatively highly concentrated across
-risk sources (Table \ref{em4}).
+risk sources (Table \ref{rm4}).
 
 The MD portfolio is the second worst performing portfolio in Market 2.
-It ranks second to last across all four metrics in Table \ref{rm4}. Its
-Sharp ratio is not substantially lower than that of the IV and ERC
-portfolios suggesting that the MD was compensated fairly well for its
-risk. The MD has a fairly low inverse HHI, but is more diversified than
-the MV across assets. Additionally, it has the highest entropy. This
-suggests that it is more optimally diversified than the MV portfolio.
+It ranks second to last across Sharp ratio, SD, DD and VaR metrics
+(Table \ref{rm4}). Its Sharp ratio is not substantially lower than that
+of the IV and ERC, thereby indicating that the MD was compensated fairly
+for holding risk. The MD has a fairly low inverse HHI, but is more
+diversified than the MV across assets. Additionally, it has the highest
+entropy. This suggests that it is more optimally diversified than the MV
+portfolio.
 
 \hypertarget{market-5}{%
 \subsubsection{Market 5}\label{market-5}}
@@ -1414,7 +1354,7 @@ worst. The EW has the highest sharp ratio, but was out performed by the
 IV and ERC in terms of risk mitigation.
 
 \begin{table}[!htbp] \centering 
-  \caption{Market 5 Risk Metrics} 
+  \caption{Market 5 - Portfolio Risk Metrics} 
   \label{rm5} 
 \begin{tabular}{@{\extracolsep{5pt}} cccccc} 
 \\[-1.8ex]\hline 
@@ -1425,9 +1365,20 @@ Sharp & 0.04708 & 0.03473 & 0.04526 & 0.04511 & 0.04556 \\
 SD & 0.01585 & 0.01684 & 0.01564 & 0.01579 & 0.0171 \\ 
 Downside Deviation & 0.01078 & 0.01157 & 0.01065 & 0.01076 & 0.01164 \\ 
 VaR & -0.02497 & -0.02676 & -0.02466 & -0.0249 & -0.02697 \\ 
+Inv HHI & 50 & 13 & 47.5 & 43.6 & 12.5 \\ 
+Entropy & 1.1 & 1.6 & 1.2 & 1.2 & 1.5 \\ 
 \hline \\[-1.8ex] 
 \end{tabular} 
 \end{table}
+
+In Market 5 the MV portfolio has the lowest Sharp ratio and ranked
+second worst in the SD, DD and VaR measures. The fact that the
+relatively more simple EW and IV portfolios achieved a lower average SD
+again suggests that its out of sample performance is suffering due to
+estimation error.
+
+The IV portfolio has the is tied with the EW for the lowest SD, has the
+second lowest DD
 
 \hypertarget{comparing-portfolios-across-market-types}{%
 \subsection{\texorpdfstring{Comparing Portfolios Across Market Types
@@ -1436,10 +1387,11 @@ VaR & -0.02497 & -0.02676 & -0.02466 & -0.0249 & -0.02697 \\
 This section compares the relative portfolio performance across market
 types, thereby investigating the link between correlation structure and
 portfolio performance. Tables \ref{ew}, \ref{mv}, \ref{iv}, \ref{erc}
-and \ref{md} provide normalized performance metrics for each portfolio
+and \ref{md} provide normalized Sharp ratio, SD, DD, and VaR performance
+metrics, as well as the concentration scores, for the each portfolio
 across the five market types. Values were normalized by subtracting the
-mean score, across the portfolios within each market, and dividing by
-the standard deviation.
+mean portfolio score within each market, and dividing by the standard
+deviation.
 
 \begin{table}[!htbp] \centering 
   \caption{Equal Weight} 
@@ -1449,10 +1401,12 @@ the standard deviation.
 \hline \\[-1.8ex] 
 Metric & Market 1 & Market 2 & Market 3 & Market 4 & Market 5 \\ 
 \hline \\[-1.8ex] 
-Sharp & 1 & 0.5655 & 1 & 1 & 1 \\ 
-SD & 0 & 0.2987 & 0.0882 & 0.2537 & 0.1438 \\ 
-Downside Deviation & 0 & 0.381 & 0.0617 & 0.1803 & 0.1313 \\ 
-VaR & 1 & 0.62 & 0.9405 & 0.8148 & 0.8658 \\ 
+Sharp & 1.2192 & 0.0858 & 0.7753 & 0.6666 & 0.7076 \\ 
+SD & -1.0181 & -0.0457 & -0.6014 & -0.3728 & -0.5851 \\ 
+Downside Deviation & -1.029 & -0.1105 & -0.6266 & -0.4497 & -0.6218 \\ 
+VaR & 1.0309 & 0.0837 & 0.6304 & 0.4427 & 0.6113 \\ 
+Inv HHI & 50 & 50 & 50 & 50 & 50 \\ 
+Entropy & 20.362 & 1.3586 & 3.2539 & 1.101 & 1.1167 \\ 
 \hline \\[-1.8ex] 
 \end{tabular} 
 \end{table}
@@ -1465,10 +1419,12 @@ VaR & 1 & 0.62 & 0.9405 & 0.8148 & 0.8658 \\
 \hline \\[-1.8ex] 
 Metric & Market 1 & Market 2 & Market 3 & Market 4 & Market 5 \\ 
 \hline \\[-1.8ex] 
-Sharp & 0 & 0 & 0 & 0 & 0 \\ 
-SD & 1 & 0.1948 & 1 & 1 & 0.8219 \\ 
-Downside Deviation & 1 & 0.5714 & 1 & 1 & 0.9293 \\ 
-VaR & 0 & 0.49 & 0 & 0 & 0.0909 \\ 
+Sharp & -1.0958 & -1.4968 & -1.7213 & -1.7695 & -1.7667 \\ 
+SD & 1.0325 & -0.3068 & 1.3139 & 1.1305 & 0.885 \\ 
+Downside Deviation & 1.0541 & 0.3807 & 1.4084 & 1.3636 & 1.0157 \\ 
+VaR & -1.0528 & -0.2563 & -1.4008 & -1.3346 & -0.9931 \\ 
+Inv HHI & 27.4705 & 11.4806 & 14.0377 & 12.2394 & 12.1014 \\ 
+Entropy & 21.9552 & 2.0646 & 5.3911 & 2.2467 & 1.7717 \\ 
 \hline \\[-1.8ex] 
 \end{tabular} 
 \end{table}
@@ -1481,10 +1437,12 @@ VaR & 0 & 0.49 & 0 & 0 & 0.0909 \\
 \hline \\[-1.8ex] 
 Metric & Market 1 & Market 2 & Market 3 & Market 4 & Market 5 \\ 
 \hline \\[-1.8ex] 
-Sharp & 0.8271 & 0.4967 & 0.8775 & 0.9006 & 0.8526 \\ 
-SD & 0 & 0.0909 & 0 & 0 & 0 \\ 
-Downside Deviation & 0.012 & 0.1667 & 0 & 0 & 0 \\ 
-VaR & 0.9842 & 0.83 & 1 & 1 & 1 \\ 
+Sharp & 0.8189 & -0.1067 & 0.4696 & 0.4245 & 0.343 \\ 
+SD & -1.0181 & -0.5679 & -0.7867 & -0.8839 & -0.8969 \\ 
+Downside Deviation & -1.0039 & -0.6632 & -0.7604 & -0.8486 & -0.8913 \\ 
+VaR & 0.998 & 0.633 & 0.7588 & 0.8466 & 0.8891 \\ 
+Inv HHI & 47.2773 & 47.3 & 47.2838 & 47.287 & 47.2623 \\ 
+Entropy & 21.2181 & 1.3726 & 3.3521 & 1.1399 & 1.1482 \\ 
 \hline \\[-1.8ex] 
 \end{tabular} 
 \end{table}
@@ -1497,10 +1455,12 @@ VaR & 0.9842 & 0.83 & 1 & 1 & 1 \\
 \hline \\[-1.8ex] 
 Metric & Market 1 & Market 2 & Market 3 & Market 4 & Market 5 \\ 
 \hline \\[-1.8ex] 
-Sharp & 0.4058 & 0.6121 & 0.8754 & 0.9001 & 0.8405 \\ 
-SD & 0.5351 & 0 & 0.0098 & 0 & 0.1027 \\ 
-Downside Deviation & 0.5301 & 0 & 0.0123 & 0.0164 & 0.1111 \\ 
-VaR & 0.4737 & 1 & 0.9892 & 0.9926 & 0.8961 \\ 
+Sharp & -0.1563 & 0.216 & 0.4642 & 0.4233 & 0.3129 \\ 
+SD & 0.0791 & -0.7963 & -0.7661 & -0.8839 & -0.6741 \\ 
+Downside Deviation & 0.0753 & -1.093 & -0.7337 & -0.8124 & -0.6633 \\ 
+VaR & -0.0658 & 1.0776 & 0.7354 & 0.8305 & 0.674 \\ 
+Inv HHI & 35.9119 & 46.3298 & 44.9382 & 46.1096 & 42.7687 \\ 
+Entropy & 21.1598 & 1.4843 & 3.3722 & 1.1407 & 1.1584 \\ 
 \hline \\[-1.8ex] 
 \end{tabular} 
 \end{table}
@@ -1513,10 +1473,12 @@ VaR & 0.4737 & 1 & 0.9892 & 0.9926 & 0.8961 \\
 \hline \\[-1.8ex] 
 Metric & Market 1 & Market 2 & Market 3 & Market 4 & Market 5 \\ 
 \hline \\[-1.8ex] 
-Sharp & 0.1338 & 1 & 0.6943 & 0.8311 & 0.8769 \\ 
-SD & 0.9474 & 1 & 0.7745 & 0.9403 & 1 \\ 
-Downside Deviation & 0.9277 & 1 & 0.679 & 0.7213 & 1 \\ 
-VaR & 0.0684 & 0 & 0.3135 & 0.2519 & 0 \\ 
+Sharp & -0.786 & 1.3016 & 0.0122 & 0.2551 & 0.4031 \\ 
+SD & 0.9245 & 1.7167 & 0.8403 & 1.0102 & 1.2711 \\ 
+Downside Deviation & 0.9035 & 1.486 & 0.7122 & 0.7471 & 1.1608 \\ 
+VaR & -0.9102 & -1.538 & -0.7237 & -0.7852 & -1.1813 \\ 
+Inv HHI & 29.1668 & 12.8975 & 16.211 & 14.2876 & 13.2099 \\ 
+Entropy & 21.1969 & 2.3394 & 4.5327 & 1.5828 & 1.6707 \\ 
 \hline \\[-1.8ex] 
 \end{tabular} 
 \end{table}
@@ -1527,6 +1489,9 @@ out, in favor of the more sophisticated ERC and MD portfolios.
 
 \hypertarget{discussion}{%
 \subsection{Discussion}\label{discussion}}
+
+MD seems to perform well from a return when risk structures are not
+clean. At the same time obtains higher SD.
 
 \hypertarget{conclusion}{%
 \section{\texorpdfstring{Conclusion

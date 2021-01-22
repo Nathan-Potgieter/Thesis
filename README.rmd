@@ -1410,7 +1410,7 @@ load("data/enb_m5.rda")
 
 
 EW_norm <- tibble(
-  Metric = c("Sharp", "SD", "Downside Deviation", "VaR"),
+  Metric = c("Sharp", "SD", "Downside Deviation", "VaR", "Inv HHI", "Entropy"),
   "Market 1" = c(norm_m1$EW, unlist(enc_m1$naive) %>% mean(), unlist(enb_m1$naive) %>% mean()),
   "Market 2" = c(norm_m2$EW, unlist(enc_m2$naive) %>% mean(), unlist(enb_m2$naive) %>% mean()),
   "Market 3" = c(norm_m3$EW, unlist(enc_m3$naive) %>% mean(), unlist(enb_m3$naive) %>% mean()),
@@ -1418,7 +1418,7 @@ EW_norm <- tibble(
   "Market 5" = c(norm_m5$EW, unlist(enc_m5$naive) %>% mean(), unlist(enb_m5$naive) %>% mean())
 )
 MV_norm <- tibble(
-  Metric = c("Sharp", "SD", "Downside Deviation", "VaR"),
+  Metric =  c("Sharp", "SD", "Downside Deviation", "VaR", "Inv HHI", "Entropy"),
   "Market 1" = c(norm_m1$MV, unlist(enc_m1$minvol) %>% mean(), unlist(enb_m1$minvol) %>% mean()),
   "Market 2" = c(norm_m2$MV, unlist(enc_m2$minvol) %>% mean(), unlist(enb_m2$minvol) %>% mean()),
   "Market 3" = c(norm_m3$MV, unlist(enc_m3$minvol) %>% mean(), unlist(enb_m3$minvol) %>% mean()),
@@ -1426,7 +1426,7 @@ MV_norm <- tibble(
   "Market 5" = c(norm_m5$MV, unlist(enc_m5$minvol) %>% mean(), unlist(enb_m5$minvol) %>% mean())
 )
 IV_norm <- tibble(
-  Metric = c("Sharp", "SD", "Downside Deviation", "VaR"),
+  Metric =  c("Sharp", "SD", "Downside Deviation", "VaR", "Inv HHI", "Entropy"),
   "Market 1" = c(norm_m1$IV, unlist(enc_m1$invvol) %>% mean(), unlist(enb_m1$invvol) %>% mean()),
   "Market 2" = c(norm_m2$IV, unlist(enc_m2$invvol) %>% mean(), unlist(enb_m2$invvol) %>% mean()),
   "Market 3" = c(norm_m3$IV, unlist(enc_m3$invvol) %>% mean(), unlist(enb_m3$invvol) %>% mean()),
@@ -1434,7 +1434,7 @@ IV_norm <- tibble(
   "Market 5" = c(norm_m5$IV, unlist(enc_m5$invvol) %>% mean(), unlist(enb_m5$invvol) %>% mean())
 )
 ERC_norm <- tibble(
-  Metric = c("Sharp", "SD", "Downside Deviation", "VaR"),
+  Metric =  c("Sharp", "SD", "Downside Deviation", "VaR", "Inv HHI", "Entropy"),
   "Market 1" = c(norm_m1$ERC, unlist(enc_m1$erc) %>% mean(), unlist(enb_m1$erc) %>% mean()),
   "Market 2" = c(norm_m2$ERC, unlist(enc_m2$erc) %>% mean(), unlist(enb_m2$erc) %>% mean()),
   "Market 3" = c(norm_m3$ERC, unlist(enc_m3$erc) %>% mean(), unlist(enb_m3$erc) %>% mean()),
@@ -1442,7 +1442,7 @@ ERC_norm <- tibble(
   "Market 5" = c(norm_m5$ERC, unlist(enc_m5$erc) %>% mean(), unlist(enb_m5$erc) %>% mean())
 )
 MD_norm <- tibble(
-  Metric = c("Sharp", "SD", "Downside Deviation", "VaR"),
+  Metric =  c("Sharp", "SD", "Downside Deviation", "VaR", "Inv HHI", "Entropy"),
   "Market 1" = c(norm_m1$MD, unlist(enc_m1$maxdiv) %>% mean(), unlist(enb_m1$maxdiv) %>% mean()),
   "Market 2" = c(norm_m2$MD, unlist(enc_m2$maxdiv) %>% mean(), unlist(enb_m2$maxdiv) %>% mean()),
   "Market 3" = c(norm_m3$MD, unlist(enc_m3$maxdiv) %>% mean(), unlist(enb_m3$maxdiv) %>% mean()),
