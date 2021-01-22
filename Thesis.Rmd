@@ -350,7 +350,7 @@ This section outlines the process behind the Monte Carlo simulations performed a
 
 A generalized version of the Monte Carlo procedure developed in @wang2012 was used to simulate five distinctive market types. This framework was build into the R package _MCmarket_ which was used to conduct this project's Monte Carlo simulations [@MCmarket]. The following briefly describes the process:
 
-An Elliptical t copula with 4.5 degrees of freedom is used, in conjunction with a 50 by 50 correlation matrix (Section \ref{corrs}), to simulate 500 random uniformly distributed draws (corresponding to 500 trading days or approximately two years worth of trading days) across the 50 assets. The uniformly distributed observations were then transformed into normally distributed observations, via the inverted normal cumulative distribution function [@wang2012, pp. 3; @MCmarket]. This process was repeated 10 000 times for each of the five correlation matrices/ market types set out in section \ref{corr_struc}. The correlation matrix is the only distinguishing factor between market types as all other factors remain equal. All in all, this process created 5 data sets each containing 10 000 markets with 50 assets and 500 periods. 
+An Elliptical t copula with 4.5 degrees of freedom is used, in conjunction with a 50 by 50 correlation matrix, to simulate 500 random uniformly distributed draws (corresponding to 500 trading days or approximately two years worth of trading days) across the 50 assets. The uniformly distributed observations were then transformed into normally distributed observations, via the inverted normal cumulative distribution function [@wang2012, pp. 3; @MCmarket]. This process was repeated 10 000 times for each of the five correlation matrices/ market types set out in section \ref{corr_struc}. The correlation matrix is the only distinguishing factor between market types as all other factors remain equal. All in all, this process created 5 data sets each containing 10 000 markets with 50 assets and 500 periods. 
 
 The expected returns and standard deviation of these simulated variables were calibrated using a random subset of 50 of the largest 100 S&P500 stocks (discussed in Section \ref{emp_corr}) between 1 January 2020 and 1 January 2021. Maximum likelihood estimation was used to fit the multivariate t distribution to the return series using the method developed by @liu1995. This produced a series of estimated means and variances which were used to calibrate the expected returns and standard deviations of the simulated variables (see Table \ref(msd)).
 
@@ -370,7 +370,7 @@ Since @markowitz variance of returns has been the standard measure for risk in t
 
 The Sharp ratio is a measure of a portfolio's risk adjusted returns. Generally speaking, the Sharp ratio is calculated by dividing the portfolio return by some measure of portfolio risk, it is therefore interpreted as the return per unit of risk. In this work SD is used as the measure of risk. 
 
-The 95% VaR is another risk metric used to evaluate portfolio risk performance in this study. It is one of the financial industry standards for measures for downside risk and can be interpreted as the maximum return expected from in the worst 5% of scenarios [@PerformanceAnalytics]. That is, in the worst 5% of scenarios, one should expect to loose at least this amount. The particular version of VaR used here is the Gaussian VaR, which is calculated by assuming that returns are normally $N(\mu,\sigma)$ distributed, where $\mu$ and $\sigma$ are estimated using historical data. The probability distribution assumptions allows one to attach a probability values to possible future portfolio returns. This assumption can be dangerous in practice, however in this study it correct by definition as the return series were each simulated to be normally distributed. It should therefore result in an accurate estimate of downside risk.
+The 95% VaR is another risk metric used to evaluate portfolio risk performance in this study. It is one of the financial industry standards for measures for downside risk and can be interpreted as the maximum return expected from in the worst 5% of scenarios [@PerformanceAnalytics]. That is, in the worst 5% of scenarios, one should expect to loose at least this amount. The particular version of VaR used here is the Gaussian VaR, which is calculated by assuming that returns are normally $N(\mu,\sigma)$ distributed, where $\mu$ and $\sigma$ are estimated using historical data. The probability distribution assumptions allows one to attach a probability values to possible future portfolio returns. This assumption can be dangerous in practice, however in this study it correct by definition as the return series were each simulated to be normally distributed. It should therefore result in an accurate estimate of downside risk. Note that in this study, a higher VaR is viewed as a good thing as this implies that a smaller amount is at risk (i.e. a VaR of -0.01 is preferred to -0.02, where -0.01 is interpreted as being the higher measure for VaR). 
 
 The HHI estimates portfolio concentration by  by summing the the portfolio weights squared [@rhoades1993]. A portfolio with small weights allocated evenly across a large number of securities will have an HHI of approximately zero, while a portfolio with all its capital invested in a single security will have the maximum HHI of 10000. The effective number of constitutes (ENC) can then be calculated as the inverse of the HHI, where an equally weighted portfolio with have an ENC equal to the number of securities and more concentrated portfolio's will have a ENC less than the number of securities. Weight based measures of portfolio diversification are severely limited in that they are oblivious to covariation between portfolio components. The ENC can therefore be misleading in financial applications where portfolio components are known to exhibit significant dependence. 
 
@@ -384,7 +384,7 @@ Note that the markets simulated using the diagonal correlation matrix described 
 
 ### Market 1
 
-The portfolios compared here were estimated on the markets simulated using the diagonal correlation matrix (Figure \ref{corr_mats}). Since there is no correlation between assets in this market type, its simulated markets are argubaly the least realistic. According to the portfolio risk metrics reported in Table \ref{rm1} the EW portfolio performed the best overall. It achieved the highest average Sharp ratio and the lowest average SD, DD and VaR. The IV portfolio was a close second, it has the second highest Sharp ratio, tied the lowest SD, narrowly placing second lowest in the DD and VaR metrics. The ERC ranked the third best overall, followed by the MD and finally the MV.
+The portfolios compared here were evaluated across the markets simulated using the diagonal correlation matrix (Figure \ref{corr_mats}). Since there is no correlation between assets in this market type, its simulated markets are argubaly the least realistic. According to the portfolio risk metrics reported in Table \ref{rm1} the EW portfolio performed the best overall. It achieved the highest average Sharp ratio and the lowest average SD, DD and VaR. The IV portfolio was a close second, it has the second highest Sharp ratio, tied the lowest SD, narrowly placing second lowest in the DD and VaR metrics. The ERC ranked the third best overall, followed by the MD and finally the MV.
 
 Since this market type has real no correlation structure it is unsurprising that the two portfolios that neglect using covariance information have performed relatively well. However, since the variance does differ between assets it would have been reasonable to assume that the IV portfolio would be less volatile than the EW. The fact that it is not may be due to (1) asset return variances are not being sufficiently different and/or (2) the IV portfolio's out of sample variance forecast not being accurate enough to reduce the IV portfolio's out of sample risk to below that of the EW portfolio.
 
@@ -407,9 +407,11 @@ stargazer::stargazer(
 )
 ```
 
-__Table \ref{em1} contains the average portfolio concentration metrics. Since this market's underlying correlation matrix expresses no dependence between assets, each assets return's are in theory orthogonal. Therefore, the EW portfolio should  produce an ENB of 50, however, the ENB reported is 17.5. This can not simply be due to it being a noisy measure since the ENB reported in Table \ref{em1} is an average across the 1000 ENBs estimated for each portfolio. This miss measurement likely due to a persistent bias that arises then rotating the returns matrix based on noise rather than signal. Since the underlying correlation structure implies that the returns are orthogonal, but finite sample estimates of the correlation matrix will inevitably contain some noise, it is likely that the ENB estimate is finding spurious principle components which is making it an unreliable measure of diversification.__
+__Table \ref{em1} contains the average portfolio concentration metrics for Market 1. Since this market's underlying correlation matrix expresses no dependence between assets, the assets return's are orthogonal. Therefore, in theory the EW portfolio should have an ENB of 50, however, the ENB reported is 17.5. This is a large miss and can not simply be due to it being a noisy measure. Since the ENB reported in Table \ref{em1} is an average across the 1000 ENBs the majority of estimation noise would have been canceled out. Instead, it is likely due to a persistent bias that arises then rotating the returns matrix based on noise rather than signal. Since the underlying correlation structure implies that the returns are orthogonal, but finite sample estimates of the correlation matrix will inevitably contain some noise, it is likely that the ENB is estiated with spurious principle components, this makes it an unreliable measure of diversification.__
 
 It is also interesting it see that the ENC and ENB are at odds. Portfolio's rated as highly diversified by the ENC measure are are rated as relatively undiversified by the ENB and _vice verse_. Additionally, the ENC measure coincides with the portfolio risk measures from Table \ref{rm1}, in that those with a high ENC were less volitlie. Meanwhile, those with the most ENB were also the most volatile. This suggests that, when operating in a market where all correlation between assets are estimated to be approximately zero, the ENB can be very misleading and that the ENB is most likely a better tool for measuring concentration. 
+
+Based on the ENC it seems like the EW and IV portfolios are the most diversifies, across both securities and risk sources. Meanwhile the MV and MD portfolios are the least diversified.
 
 
 ```{r market 1 entropy, results='asis'}
@@ -432,7 +434,7 @@ stargazer::stargazer(
 
 ### Market 2
 
-The portfolios compared here were estimated on the markets simulated using the no clusters correlation matrix (Figure \ref{corr_mats}). Unlike Market 1 the average portfolio risk metrics in Table \ref{rm2} do not indicate a clear winner.  Despite having the highest average SD the MD portfolio achieved the highest Sharp ratio. The ERC performed best in the SD, DD and VaR measures while obtaining the second highest Sharp ratio. The EW and IV portfolios were similar in their performance and the MV performed poorly. 
+The portfolios compared here were evaluated across the markets simulated using the no clusters correlation matrix (Figure \ref{corr_mats}). Unlike Market 1 the average portfolio risk metrics in Table \ref{rm2} do not indicate a clear winner.  Despite having the highest average SD the MD portfolio achieved the highest Sharp ratio. The ERC performed best in the SD, DD and VaR measures while obtaining the second highest Sharp ratio. The EW and IV portfolios were similar in their performance and the MV performed poorly. 
 
 In Market 2, the MV portfolio has the lowest overall Sharp ratio, the third highest SD, the second highest DD and the lowest VaR. Despite it managing to attain a fairly low average SD, its poor performance across the other risk measures demonstrates a crucial failure to mitigate downside risk exposure (measured by DD and VaR), which is arguably far more important than reducing volatility in general. and attain a fair return for its level of risk. Furthermore, the MV portfolios low Sharp ratio indicates that indicating that it performed exceedingly poorly from a total return perspective and did not receive adequate compensation for its risk. Therefore, the MV portfolio is ranked as Market 2's clear looser.
 
@@ -442,7 +444,6 @@ The MD portfolio acts as Market 2's wild card. It has the highest average sharp 
 
 In comparison the ERC seems to be the safer and more consistent option. It scored the best over all across the three risk metrics and achieved the second highest Sharp ratio. Therefore, from a risk mitigation perspective the ERC is the clear winner, however the high returns obtained by the MD portfolio may entice less risk averse investors. 
 
-The MV portfolio
 
 ```{r market 2, results = 'asis'}
 source("code/table_risk_metrics.R")
@@ -468,7 +469,7 @@ load("data/enc_m2.rda")
 load("data/enb_m2.rda")
 entropy_m2 <- table_entropy(enc = enc_m2, enb = enb_m2)
 stargazer::stargazer(
-  entropy_m1,
+  entropy_m2,
   header = FALSE,
   title = "Market 2 - Portfolio Concentration Metrics",
   type = "latex",
@@ -481,9 +482,15 @@ stargazer::stargazer(
 
 ### Market 3
 
-The portfolios compared here were estimated on the markets simulated using the five clusters correlation matrix (Figure \ref{corr_mats}). This market structure has not produced a clear winner. On average the EW, IV, ERC and MD portfolios performed quite similarly, however the MV portfolio seems to be the clear looser. It is the worst performer across all the metrics in Table \ref{rm3}. The IV and ERC portfolios performed similarly. The EW portfolio scored the highest average Sharp ratio while maintaining relatively low risk. The MD portfolio performed poorly compared to the EW, IV and ERC portfolios, but still outperformed the MV by a comfortable margin.
+The portfolios compared here were evaluated across the markets simulated using the five clusters correlation matrix (Figure \ref{corr_mats}). This market structure has not produced a clear winner. On average the EW, IV, ERC and MD portfolios performed quite similarly, however the MV portfolio seems to be the clear looser. It is the worst performer across all the metrics in Table \ref{rm3}. The IV and ERC portfolios performed similarly. The EW portfolio scored the highest average Sharp ratio while maintaining relatively low risk. The MD portfolio performed poorly compared to the EW, IV and ERC portfolios, but still outperformed the MV by a comfortable margin.
 
-The EW portfolio scored the third lowest SD, DD and VaR across Market 3. Therefore, despite there being significant and distinct risk clusters in the the underlying market structure the EW portfolio achieved fairly relatively successful risk diversification. It has the highest average Sharp ratio and therefore received relatively high returns per unit of risk.
+The EW portfolio has the third lowest SD, DD and VaR across Market 3. Therefore, despite there being significant and distinct risk clusters in the the underlying market structure the EW portfolio achieved relatively high level of risk diversification. It has the highest average which suggest that is earned the highest average return.
+
+On average the MV portfolio performed exceedingly poorly, its has by far the lowest Sharp ratio and  was the worst performer across the SD, DD and VaR measures. Its in ability to to to maintain a low average out of sample SD indicates that it suffers from estimation error. (concentration ratios)
+
+The IV and ERC portfolios were strong contenders for for place. Their scores were close across all four of the measures in Table \ref{rm3}. They seemed about equal in their ability to mitigate risk. The IV has a slightly lower SD, the ERC a slightly lower DD and the IV a slightly higher VaR. Their Sharp ratios also seem to suggest that they were compensated about evenly per unit if risk. (concentration ratios)
+
+The MD portfolio performed worse than the EW, IV and EW portfolios. It has a significantly lower Sharp ratio, higher SD, DD and a lower VaR. However, when comparing its relative performance across all five portfolios, the MD does not seem too bad as its greatly outperformed the MV portfolio across all metrics. 
 
 ```{r market 3, results = 'asis'}
 source("code/table_risk_metrics.R")
@@ -494,7 +501,7 @@ risk_metrics_m3 <- table_risk_metrics(perf_m3)
 stargazer::stargazer(
   risk_metrics_m3,
   header = FALSE,
-  title = "Market 3 Risk Metrics",
+  title = "Market 3 - Portfolio Risk Metrics",
   type = "latex",
   summary = FALSE,
   rownames = FALSE,
@@ -503,8 +510,27 @@ stargazer::stargazer(
 )
 ```
 
+```{r market 3 entropy, eval=FALSE, include=FALSE, results='asis'}
+
+load("data/enc_m3.rda")
+load("data/enb_m3.rda")
+
+entropy_m3 <- table_entropy(enc = enc_m3, enb = enb_m3)
+stargazer::stargazer(
+  entropy_m3,
+  header = FALSE,
+  title = "Market 3 - Portfolio Concentration Metrics",
+  type = "latex",
+  summary = FALSE,
+  rownames = FALSE,
+  label = "em3",
+  digits.extra = 2
+)
+```
 
 ### Market 4
+
+The portfolios compared here were evaluated across the markets simulated using the overlapping clusters correlation matrix (Figure \ref{corr_mats}). There is therefore some positive correlation between all assets in the underlying correlation structure. Despite this the EW and IV portfolios, which are oblivious to covariance information, attained significant risk reduction. The IV and ERC, the performed about equally well across all the metrics in Table \ref{rm4}. The MV and MD were the performed worst, but the MD shows significant improvement over the MV is all aspects. 
 
 ```{r market 4, results = 'asis'}
 source("code/table_risk_metrics.R")
@@ -515,11 +541,29 @@ risk_metrics_m4 <- table_risk_metrics(perf_m4)
 stargazer::stargazer(
   risk_metrics_m4,
   header = FALSE,
-  title = "Market 4 Risk Metrics",
+  title = "Market 4 - Portfolio Risk Metrics",
   type = "latex",
   summary = FALSE,
   rownames = FALSE,
-  label = "eigens",
+  label = "rm4",
+  digits.extra = 2
+)
+```
+
+```{r market 4 entropy, eval=FALSE, include=FALSE, results='asis'}
+
+load("data/enc_m4.rda")
+load("data/enb_m4.rda")
+
+entropy_m4 <- table_entropy(enc = enc_m4, enb = enb_m2)
+stargazer::stargazer(
+  entropy_m4,
+  header = FALSE,
+  title = "Market 4 - Portfolio Concentration Metrics",
+  type = "latex",
+  summary = FALSE,
+  rownames = FALSE,
+  label = "em4",
   digits.extra = 2
 )
 ```
@@ -527,6 +571,7 @@ stargazer::stargazer(
 
 ### Market 5
 
+The portfolios compared here were evaluated across the markets simulated using the empirical correlation matrix correlation matrix (Figure \ref{corr_emp}). This is therefore the most realistic of the five correlation matrices, it exhibits significant correlation between assets, with some distinctive risk clustering. The IV and ERC portfolios performed similarly across the metrics in Table \ref{rm5}. The MV and MD portfolios performed the worst. The EW dis well from a risk return standpoint, but was out performed by the IV and ERC in terms of risk mitigation. 
 
 ```{r market 5, results = 'asis'}
 source("code/table_risk_metrics.R")
@@ -541,7 +586,25 @@ stargazer::stargazer(
   type = "latex",
   summary = FALSE,
   rownames = FALSE,
-  label = "eigens",
+  label = "rm5",
+  digits.extra = 2
+)
+```
+
+```{r market 5 entropy, eval=FALSE, include=FALSE, results='asis'}
+
+load("data/enc_m5.rda")
+load("data/enb_m5.rda")
+
+entropy_m5 <- table_entropy(enc = enc_m5, enb = enb_m5)
+stargazer::stargazer(
+  entropy_m5,
+  header = FALSE,
+  title = "Market 5 - Portfolio Concentration Metrics",
+  type = "latex",
+  summary = FALSE,
+  rownames = FALSE,
+  label = "em5",
   digits.extra = 2
 )
 ```
@@ -636,6 +699,7 @@ stargazer::stargazer(
 )
 
 ```
+
 ### Maximum Diversification
 
 ```{r MD performance, results = 'asis'}

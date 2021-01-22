@@ -920,12 +920,12 @@ Monte Carlo simulations (Potgieter,
 the process:
 
 An Elliptical t copula with 4.5 degrees of freedom is used, in
-conjunction with a 50 by 50 correlation matrix (Section \ref{corrs}), to
-simulate 500 random uniformly distributed draws (corresponding to 500
-trading days or approximately two years worth of trading days) across
-the 50 assets. The uniformly distributed observations were then
-transformed into normally distributed observations, via the inverted
-normal cumulative distribution function (Potgieter,
+conjunction with a 50 by 50 correlation matrix, to simulate 500 random
+uniformly distributed draws (corresponding to 500 trading days or
+approximately two years worth of trading days) across the 50 assets. The
+uniformly distributed observations were then transformed into normally
+distributed observations, via the inverted normal cumulative
+distribution function (Potgieter,
 \protect\hyperlink{ref-MCmarket}{2020}; Wang \emph{et al.},
 \protect\hyperlink{ref-wang2012}{2012}: 3). This process was repeated 10
 000 times for each of the five correlation matrices/ market types set
@@ -1022,7 +1022,10 @@ probability values to possible future portfolio returns. This assumption
 can be dangerous in practice, however in this study it correct by
 definition as the return series were each simulated to be normally
 distributed. It should therefore result in an accurate estimate of
-downside risk.
+downside risk. Note that in this study, a higher VaR is viewed as a good
+thing as this implies that a smaller amount is at risk (i.e.~a VaR of
+-0.01 is preferred to -0.02, where -0.01 is interpreted as being the
+higher measure for VaR).
 
 The HHI estimates portfolio concentration by by summing the the
 portfolio weights squared (Rhoades,
@@ -1070,7 +1073,7 @@ Types}\label{comparing-portfolios-within-market-types}}
 \hypertarget{market-1}{%
 \subsubsection{Market 1}\label{market-1}}
 
-The portfolios compared here were estimated on the markets simulated
+The portfolios compared here were evaluated across the markets simulated
 using the diagonal correlation matrix (Figure \ref{corr_mats}). Since
 there is no correlation between assets in this market type, its
 simulated markets are argubaly the least realistic. According to the
@@ -1116,19 +1119,19 @@ VaR & -0.00545 & -0.00735 & -0.00548 & -0.00645 & -0.00722 \\
 \end{table}
 
 \textbf{Table \ref{em1} contains the average portfolio concentration
-metrics. Since this market's underlying correlation matrix expresses no
-dependence between assets, each assets return's are in theory
-orthogonal. Therefore, the EW portfolio should produce an ENB of 50,
-however, the ENB reported is 17.5. This can not simply be due to it
-being a noisy measure since the ENB reported in Table \ref{em1} is an
-average across the 1000 ENBs estimated for each portfolio. This miss
-measurement likely due to a persistent bias that arises then rotating
-the returns matrix based on noise rather than signal. Since the
-underlying correlation structure implies that the returns are
-orthogonal, but finite sample estimates of the correlation matrix will
-inevitably contain some noise, it is likely that the ENB estimate is
-finding spurious principle components which is making it an unreliable
-measure of diversification.}
+metrics for Market 1. Since this market's underlying correlation matrix
+expresses no dependence between assets, the assets return's are
+orthogonal. Therefore, in theory the EW portfolio should have an ENB of
+50, however, the ENB reported is 17.5. This is a large miss and can not
+simply be due to it being a noisy measure. Since the ENB reported in
+Table \ref{em1} is an average across the 1000 ENBs the majority of
+estimation noise would have been canceled out. Instead, it is likely due
+to a persistent bias that arises then rotating the returns matrix based
+on noise rather than signal. Since the underlying correlation structure
+implies that the returns are orthogonal, but finite sample estimates of
+the correlation matrix will inevitably contain some noise, it is likely
+that the ENB is estiated with spurious principle components, this makes
+it an unreliable measure of diversification.}
 
 It is also interesting it see that the ENC and ENB are at odds.
 Portfolio's rated as highly diversified by the ENC measure are are rated
@@ -1140,6 +1143,10 @@ suggests that, when operating in a market where all correlation between
 assets are estimated to be approximately zero, the ENB can be very
 misleading and that the ENB is most likely a better tool for measuring
 concentration.
+
+Based on the ENC it seems like the EW and IV portfolios are the most
+diversifies, across both securities and risk sources. Meanwhile the MV
+and MD portfolios are the least diversified.
 
 \begin{table}[!htbp] \centering 
   \caption{Market 1 - Portfolio Concentration Metrics} 
@@ -1158,7 +1165,7 @@ ENB & 17.5 & 22.8 & 20.1 & 18.9 & 21 \\
 \hypertarget{market-2}{%
 \subsubsection{Market 2}\label{market-2}}
 
-The portfolios compared here were estimated on the markets simulated
+The portfolios compared here were evaluated across the markets simulated
 using the no clusters correlation matrix (Figure \ref{corr_mats}).
 Unlike Market 1 the average portfolio risk metrics in Table \ref{rm2} do
 not indicate a clear winner. Despite having the highest average SD the
@@ -1167,36 +1174,36 @@ the SD, DD and VaR measures while obtaining the second highest Sharp
 ratio. The EW and IV portfolios were similar in their performance and
 the MV performed poorly.
 
-Since this market type exhibits significant correlation between its
-constituents it is unsurprising to observe the EW and IV portfolios fall
-out, in favor of the more sophisticated ERC and MD portfolios.
+In Market 2, the MV portfolio has the lowest overall Sharp ratio, the
+third highest SD, the second highest DD and the lowest VaR. Despite it
+managing to attain a fairly low average SD, its poor performance across
+the other risk measures demonstrates a crucial failure to mitigate
+downside risk exposure (measured by DD and VaR), which is arguably far
+more important than reducing volatility in general. and attain a fair
+return for its level of risk. Furthermore, the MV portfolios low Sharp
+ratio indicates that indicating that it performed exceedingly poorly
+from a total return perspective and did not receive adequate
+compensation for its risk. Therefore, the MV portfolio is ranked as
+Market 2's clear looser.
 
-The MV portfolio has the second lowest SD, but second highest DD and
-lowest sharp ratio. This demonstrates its failure to mitigate its
-downside risk exposure (measured by DD and VaR) which is arguably far
-more important than reducing volatility in general. Despite the MV
-having the second lowest SD, it attained the lowest overall Sharp ratio,
-indicating that it performed exceedingly poorly from a total return
-perspective. Due to these reasons the MV portfolio is ranked as Market
-2's clear looser.
+The EW and IV portfolios performed very similarly in Market 2. The EW
+has the higher Sharp ratio of the two, while the IV performs better in
+the SD, DD and VaR measures. Due its its high sharp ratio, it seems as
+if the the EW portfolio finds itself sightly closer to the top right
+quadrant of the efficient frontier, where it earns higher returns with
+greater risk compared to the IV portfolio.
 
-The EW and IV portfolios performed very similarly in Market 2. The equal
-weight has the higher sharp ratio of the two, while the IV has the
-performs better when considering SD, DD and VaR. It therefore seems that
-the EW portfolio finds itself sightly closer to the top right quadrant
-of the efficient frontier, where it earns higher returns with greater
-risk compared to the IV portfolio.
+The MD portfolio acts as Market 2's wild card. It has the highest
+average sharp ratio by a significant margin, but performs the worst in
+the SD and DD risk metrics. Despite it having the largest SD, the MD is
+on par with the best VaR. This indicates that, compared to the other
+portfolios, the MD earned exceptionally high returns.
 
-The MD portfolio acts as Market 2's wild card. It has the highest sharp
-ratio by a significant margin, but performs the worst in the SD an DD
-risk metrics. Despite it having the largest SD, the MD is tied for the
-largest VaR. This indicates that that compared to the other portfolios,
-the MD earned exceptionally high returns. In comparison the ERC seems to
-be the safer and more consistent option. It scored the best over all
-across the three risk metrics and achieved the second highest Sharp
-ratio. Therefore, from a risk mitigation perspective the ERC is the
-clear winner, however the high returns obtained by the MD portfolio may
-entice less risk averse investors.
+In comparison the ERC seems to be the safer and more consistent option.
+It scored the best over all across the three risk metrics and achieved
+the second highest Sharp ratio. Therefore, from a risk mitigation
+perspective the ERC is the clear winner, however the high returns
+obtained by the MD portfolio may entice less risk averse investors.
 
 \begin{table}[!htbp] \centering 
   \caption{Market 2 - Portfolio Risk Metrics} 
@@ -1217,19 +1224,44 @@ VaR & -0.02276 & -0.02289 & -0.02255 & -0.02238 & -0.02338 \\
 \hypertarget{market-3}{%
 \subsubsection{Market 3}\label{market-3}}
 
-The portfolios compared here were estimated on the markets simulated
+The portfolios compared here were evaluated across the markets simulated
 using the five clusters correlation matrix (Figure \ref{corr_mats}).
-This market structure has not produced a clear winner. The MV portfolio
-does seem to be the clear looser. It is the worst performer across all
-the metrics in Table \ref{rm3}. The IV and ERC portfolios performed
-similarly. The EW scored the highest Sharp ratio while maintaining
-relatively low risk and the MD portfolio
+This market structure has not produced a clear winner. On average the
+EW, IV, ERC and MD portfolios performed quite similarly, however the MV
+portfolio seems to be the clear looser. It is the worst performer across
+all the metrics in Table \ref{rm3}. The IV and ERC portfolios performed
+similarly. The EW portfolio scored the highest average Sharp ratio while
+maintaining relatively low risk. The MD portfolio performed poorly
+compared to the EW, IV and ERC portfolios, but still outperformed the MV
+by a comfortable margin.
 
-Despite there being significant and distinct risk clusters in the
-markets
+The EW portfolio has the third lowest SD, DD and VaR across Market 3.
+Therefore, despite there being significant and distinct risk clusters in
+the the underlying market structure the EW portfolio achieved relatively
+high level of risk diversification. It has the highest average which
+suggest that is earned the highest average return.
+
+On average the MV portfolio performed exceedingly poorly, its has by far
+the lowest Sharp ratio and was the worst performer across the SD, DD and
+VaR measures. Its in ability to to to maintain a low average out of
+sample SD indicates that it suffers from estimation error.
+(concentration ratios)
+
+The IV and ERC portfolios were strong contenders for for place. Their
+scores were close across all four of the measures in Table \ref{rm3}.
+They seemed about equal in their ability to mitigate risk. The IV has a
+slightly lower SD, the ERC a slightly lower DD and the IV a slightly
+higher VaR. Their Sharp ratios also seem to suggest that they were
+compensated about evenly per unit if risk. (concentration ratios)
+
+The MD portfolio performed worse than the EW, IV and EW portfolios. It
+has a significantly lower Sharp ratio, higher SD, DD and a lower VaR.
+However, when comparing its relative performance across all five
+portfolios, the MD does not seem too bad as its greatly outperformed the
+MV portfolio across all metrics.
 
 \begin{table}[!htbp] \centering 
-  \caption{Market 3 Risk Metrics} 
+  \caption{Market 3 - Portfolio Risk Metrics} 
   \label{rm3} 
 \begin{tabular}{@{\extracolsep{5pt}} cccccc} 
 \\[-1.8ex]\hline 
@@ -1247,9 +1279,19 @@ VaR & -0.01439 & -0.01613 & -0.01428 & -0.0143 & -0.01555 \\
 \hypertarget{market-4}{%
 \subsubsection{Market 4}\label{market-4}}
 
+The portfolios compared here were evaluated across the markets simulated
+using the overlapping clusters correlation matrix (Figure
+\ref{corr_mats}). There is therefore some positive correlation between
+all assets in the underlying correlation structure. Despite this the EW
+and IV portfolios, which are oblivious to covariance information,
+attained significant risk reduction. The IV and ERC, the performed about
+equally well across all the metrics in Table \ref{rm4}. The MV and MD
+were the performed worst, but the MD shows significant improvement over
+the MV is all aspects.
+
 \begin{table}[!htbp] \centering 
-  \caption{Market 4 Risk Metrics} 
-  \label{eigens} 
+  \caption{Market 4 - Portfolio Risk Metrics} 
+  \label{rm4} 
 \begin{tabular}{@{\extracolsep{5pt}} cccccc} 
 \\[-1.8ex]\hline 
 \hline \\[-1.8ex] 
@@ -1266,9 +1308,16 @@ VaR & -0.02184 & -0.02294 & -0.02159 & -0.0216 & -0.0226 \\
 \hypertarget{market-5}{%
 \subsubsection{Market 5}\label{market-5}}
 
+The portfolios compared here were evaluated across the markets simulated
+using the empirical correlation matrix correlation matrix (Figure
+\ref{corr_emp}). This is therefore the most realistic of the five
+correlation matrices, it exhibits significant correlation between
+assets, with some distinctive risk clustering. The IV and ERC portfolios
+performed similarly across the metrics in Table \ref{rm5}
+
 \begin{table}[!htbp] \centering 
   \caption{Market 5 Risk Metrics} 
-  \label{eigens} 
+  \label{rm5} 
 \begin{tabular}{@{\extracolsep{5pt}} cccccc} 
 \\[-1.8ex]\hline 
 \hline \\[-1.8ex] 
@@ -1285,6 +1334,10 @@ VaR & -0.02497 & -0.02676 & -0.02466 & -0.0249 & -0.02697 \\
 \hypertarget{comparing-portfolios-across-market-types}{%
 \subsection{Comparing Portfolios Across Market
 Types}\label{comparing-portfolios-across-market-types}}
+
+Since this market type exhibits significant correlation between its
+constituents it is unsurprising to see the EW and IV portfolios fall
+out, in favor of the more sophisticated ERC and MD portfolios.
 
 \hypertarget{naive}{%
 \subsubsection{Naive}\label{naive}}
