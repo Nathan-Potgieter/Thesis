@@ -1163,7 +1163,7 @@ using the no clusters correlation matrix (Figure \ref{corr_mats}).
 Unlike Market 1 the average portfolio risk metrics in Table \ref{rm2} do
 not indicate a clear winner. Despite having the highest average SD the
 MD portfolio achieved the highest Sharp ratio. The ERC performed best in
-the the SD, DD and VaR measures while obtaining the second highest Sharp
+the SD, DD and VaR measures while obtaining the second highest Sharp
 ratio. The EW and IV portfolios were similar in their performance and
 the MV performed poorly.
 
@@ -1218,9 +1218,12 @@ VaR & -0.02276 & -0.02289 & -0.02255 & -0.02238 & -0.02338 \\
 \subsubsection{Market 3}\label{market-3}}
 
 The portfolios compared here were estimated on the markets simulated
-using the five clusters correlation matrix (Figure \ref{corr_mats}). The
-portfolios average Sharp ratio (Sharp), standard deviation (SD), DD and
-VaR across the 10 000 simulated markets are shown in Table \ref{rm3}.
+using the five clusters correlation matrix (Figure \ref{corr_mats}).
+This market structure has not produced a clear winner. The MV portfolio
+does seem to be the clear looser. It is the worst performer across all
+the metrics in Table \ref{rm3}. The IV and ERC portfolios performed
+similarly. The EW scored the highest Sharp ratio while maintaining
+relatively low risk and the MD portfolio
 
 Despite there being significant and distinct risk clusters in the
 markets
@@ -1286,17 +1289,97 @@ Types}\label{comparing-portfolios-across-market-types}}
 \hypertarget{naive}{%
 \subsubsection{Naive}\label{naive}}
 
+\begin{table}[!htbp] \centering 
+  \caption{Market 5 Risk Metrics} 
+  \label{EW} 
+\begin{tabular}{@{\extracolsep{5pt}} cccccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+Metric & Market 1 & Market 2 & Market 3 & Market 4 & Market 5 \\ 
+\hline \\[-1.8ex] 
+Sharp & 1 & 0.5655 & 1 & 1 & 1 \\ 
+SD & 0 & 0.2987 & 0.0882 & 0.2537 & 0.1438 \\ 
+Downside Deviation & 0 & 0.381 & 0.0617 & 0.1803 & 0.1313 \\ 
+VaR & 1 & 0.62 & 0.9405 & 0.8148 & 0.8658 \\ 
+\hline \\[-1.8ex] 
+\end{tabular} 
+\end{table}
+
 \hypertarget{minimum-variance}{%
 \subsubsection{Minimum Variance}\label{minimum-variance}}
+
+\begin{table}[!htbp] \centering 
+  \caption{Market 5 Risk Metrics} 
+  \label{MV} 
+\begin{tabular}{@{\extracolsep{5pt}} cccccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+Metric & Market 1 & Market 2 & Market 3 & Market 4 & Market 5 \\ 
+\hline \\[-1.8ex] 
+Sharp & 0 & 0 & 0 & 0 & 0 \\ 
+SD & 1 & 0.1948 & 1 & 1 & 0.8219 \\ 
+Downside Deviation & 1 & 0.5714 & 1 & 1 & 0.9293 \\ 
+VaR & 0 & 0.49 & 0 & 0 & 0.0909 \\ 
+\hline \\[-1.8ex] 
+\end{tabular} 
+\end{table}
 
 \hypertarget{inverse-volatility}{%
 \subsubsection{Inverse Volatility}\label{inverse-volatility}}
 
+\begin{table}[!htbp] \centering 
+  \caption{Market 5 Risk Metrics} 
+  \label{IV} 
+\begin{tabular}{@{\extracolsep{5pt}} cccccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+Metric & Market 1 & Market 2 & Market 3 & Market 4 & Market 5 \\ 
+\hline \\[-1.8ex] 
+Sharp & 0.8271 & 0.4967 & 0.8775 & 0.9006 & 0.8526 \\ 
+SD & 0 & 0.0909 & 0 & 0 & 0 \\ 
+Downside Deviation & 0.012 & 0.1667 & 0 & 0 & 0 \\ 
+VaR & 0.9842 & 0.83 & 1 & 1 & 1 \\ 
+\hline \\[-1.8ex] 
+\end{tabular} 
+\end{table}
+
 \hypertarget{equal-risk-contribution}{%
 \subsubsection{Equal Risk Contribution}\label{equal-risk-contribution}}
 
+\begin{table}[!htbp] \centering 
+  \caption{Market 5 Risk Metrics} 
+  \label{ERC} 
+\begin{tabular}{@{\extracolsep{5pt}} cccccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+Metric & Market 1 & Market 2 & Market 3 & Market 4 & Market 5 \\ 
+\hline \\[-1.8ex] 
+Sharp & 0.4058 & 0.6121 & 0.8754 & 0.9001 & 0.8405 \\ 
+SD & 0.5351 & 0 & 0.0098 & 0 & 0.1027 \\ 
+Downside Deviation & 0.5301 & 0 & 0.0123 & 0.0164 & 0.1111 \\ 
+VaR & 0.4737 & 1 & 0.9892 & 0.9926 & 0.8961 \\ 
+\hline \\[-1.8ex] 
+\end{tabular} 
+\end{table}
+
 \hypertarget{maximum-diversification}{%
 \subsubsection{Maximum Diversification}\label{maximum-diversification}}
+
+\begin{table}[!htbp] \centering 
+  \caption{Market 5 Risk Metrics} 
+  \label{MD} 
+\begin{tabular}{@{\extracolsep{5pt}} cccccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+Metric & Market 1 & Market 2 & Market 3 & Market 4 & Market 5 \\ 
+\hline \\[-1.8ex] 
+Sharp & 0.1338 & 1 & 0.6943 & 0.8311 & 0.8769 \\ 
+SD & 0.9474 & 1 & 0.7745 & 0.9403 & 1 \\ 
+Downside Deviation & 0.9277 & 1 & 0.679 & 0.7213 & 1 \\ 
+VaR & 0.0684 & 0 & 0.3135 & 0.2519 & 0 \\ 
+\hline \\[-1.8ex] 
+\end{tabular} 
+\end{table}
 
 \hypertarget{discussion}{%
 \subsection{Discussion}\label{discussion}}
@@ -1485,52 +1568,6 @@ Asset\_25 & -0.00283 & 0.03227 & Asset\_50 & -0.00203 & 0.03131 \\
 \hline \\[-1.8ex] 
 \end{tabular} 
 \end{table}
-
-\hypertarget{hierarchical-risk-parity-hrp}{%
-\subsubsection{Hierarchical Risk Parity
-(HRP)}\label{hierarchical-risk-parity-hrp}}
-
-\begin{quote}
-The maximum drawdown is calculated by first, calculating portfolio
-cumulative returns and the maximum cumulative return achieved. The
-maximum drawdown is then the maximum amount that the cumulative return
-dips below its maximum, it is measured as a percentage of the maximum
-cumulative return (Peterson \& Carl,
-\protect\hyperlink{ref-PerformanceAnalytics}{2020}).
-\end{quote}
-
-Due to the multitude of robustness issues related to traditional
-portfolio optimisers, De Prado (\protect\hyperlink{ref-lopez}{2016})
-developed a new approach incorporating machine-learning methods and
-graph theory ({\textbf{???}}). De Prado
-(\protect\hyperlink{ref-lopez}{2016}) argues that the ``lack of
-hierarchical structure in a correlation matrix allows weights to vary
-freely in unintended ways'' and that this contributes to the instability
-issues. His HRP algorithm requires only a singular co-variance matrix
-and can utilize the information within without the need for the positive
-definite property (De Prado, \protect\hyperlink{ref-lopez}{2016}). This
-procedure works in three stages:
-
-De Prado (\protect\hyperlink{ref-lopez}{2016}) carried out an in-sample
-simulation study comparing the respective allocations of the long-only
-minimum variance, IVP and HRP portfolios using a co-variance matrix
-using a condition number that is ``not unfavourable'' to the minimum
-variance portfolio. The simulated data consisted of 10000 observations
-across 10 variables. The following findings were made: The minimum
-variance portfolio concentrated 92.66\% of funds in the top 5 holdings
-and assigned a zero weight to 3 assets. \emph{Conversly}, HRP only
-assigned 62.5\% of its funds to the top 5 holdings (De Prado,
-\protect\hyperlink{ref-lopez}{2016}). The minimum variance portfolio's
-objective function causes it to build highly concentrated portfolio's in
-favor of a small reduction in volatility; the HRP portfolio had only a
-slightly higher volatility (De Prado,
-\protect\hyperlink{ref-lopez}{2016}). This apparent diversification
-advantage achieved by the minimum variance portfolio is rather deceptive
-as the portfolio remains highly susceptible to idiosyncratic risk
-incidents within its top holdings (De Prado,
-\protect\hyperlink{ref-lopez}{2016}). This claim was further validated
-by the finding that HRP achieved significantly lower out of sample
-variance compared to the minimum variance portfolio.
 
 \hypertarget{appendix-a}{%
 \subsection*{Appendix A}\label{appendix-a}}

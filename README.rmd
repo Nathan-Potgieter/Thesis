@@ -990,7 +990,7 @@ enc_m2 <- list(naive = 50, # saving calculation time
                invvol = invvol_enc_m2,
                erc = erc_enc_m2,
                maxdiv = maxdiv_enc_m2)
-save(enc_m2)
+save(enc_m2, file = "data/enc_m2")
 
 # Entropy - ENB
 load("data/market_2.rda")
@@ -1099,7 +1099,7 @@ enc_m3 <- list(naive = 50, # saving calculation time
                invvol = invvol_enc_m3,
                erc = erc_enc_m3,
                maxdiv = maxdiv_enc_m3)
-save(enc_m3)
+save(enc_m3, file = "data/enc_m3.rda")
 
 # Entropy - ENB
 
@@ -1205,7 +1205,7 @@ enc_m4 <- list(naive = 50, # saving calculation time
                invvol = invvol_enc_m4,
                erc = erc_enc_m4,
                maxdiv = maxdiv_enc_m4)
-save(enc_m4)
+save(enc_m4, file = "data/enc_m4.rda")
 
 # Entropy - ENB
 load("data/market_4.rda")
@@ -1314,7 +1314,7 @@ enc_m5 <- list(naive = 50, # saving calculation time
                invvol = invvol_enc_m5,
                erc = erc_enc_m5,
                maxdiv = maxdiv_enc_m5)
-save(enc_m5)
+save(enc_m5, file = "data/enc_m5.rda")
 
 # Entropy - ENB
 load("data/market_5.rda")
@@ -1357,6 +1357,80 @@ enb_m5 <- list(naive = naive_enb_m5,
                maxdiv = maxdiv_enb_m5)
 
 save(enb_m5, file = "data/enb_m5.rda")
+
+```
+
+## Building normalized data tables for each portfolio
+```{r eval=FALSE, include=TRUE}
+normalize <- function(risk_metrics) {
+  risk_metrics %>%
+    gather(portfolio, value,-Metric) %>%
+    group_by(Metric) %>%
+    mutate(normalized = (value - min(value)) / (max(value) - min(value))) %>%
+    select(Metric, portfolio, normalized) %>%
+    spread(portfolio, normalized) %>% mutate(
+      order = case_when(
+        Metric == "Sharp" ~ 1,
+        Metric == "SD" ~ 2,
+        Metric == "Downside Deviation" ~ 3,
+        Metric == "VaR" ~ 4
+      )
+    ) %>% arrange(order)
+}
+
+norm_m1 <- normalize(risk_metrics_m1)
+norm_m2 <- normalize(risk_metrics_m2)
+norm_m3 <- normalize(risk_metrics_m3)
+norm_m4 <- normalize(risk_metrics_m4)
+norm_m5 <- normalize(risk_metrics_m5)
+
+EW_norm <- tibble(
+  Metric = c("Sharp", "SD", "Downside Deviation", "VaR"),
+  "Market 1" = norm_m1$EW,
+  "Market 2" = norm_m2$EW,
+  "Market 3" = norm_m3$EW,
+  "Market 4" = norm_m4$EW,
+  "Market 5" = norm_m5$EW
+)
+MV_norm <- tibble(
+  Metric = c("Sharp", "SD", "Downside Deviation", "VaR"),
+  "Market 1" = norm_m1$MV,
+  "Market 2" = norm_m2$MV,
+  "Market 3" = norm_m3$MV,
+  "Market 4" = norm_m4$MV,
+  "Market 5" = norm_m5$MV
+)
+IV_norm <- tibble(
+  Metric = c("Sharp", "SD", "Downside Deviation", "VaR"),
+  "Market 1" = norm_m1$IV,
+  "Market 2" = norm_m2$IV,
+  "Market 3" = norm_m3$IV,
+  "Market 4" = norm_m4$IV,
+  "Market 5" = norm_m5$IV
+)
+ERC_norm <- tibble(
+  Metric = c("Sharp", "SD", "Downside Deviation", "VaR"),
+  "Market 1" = norm_m1$ERC,
+  "Market 2" = norm_m2$ERC,
+  "Market 3" = norm_m3$ERC,
+  "Market 4" = norm_m4$ERC,
+  "Market 5" = norm_m5$ERC
+)
+MD_norm <- tibble(
+  Metric = c("Sharp", "SD", "Downside Deviation", "VaR"),
+  "Market 1" = norm_m1$MD,
+  "Market 2" = norm_m2$MD,
+  "Market 3" = norm_m3$MD,
+  "Market 4" = norm_m4$MD,
+  "Market 5" = norm_m5$MD
+)
+
+norm_table <- list(EW = EW_norm,
+                   MV = MV_norm,
+                   IV = IV_norm,
+                   ERC = ERC_norm,
+                   MD = MD_norm)
+save(norm_table, file = "data/norm_table.rda")
 
 ```
 

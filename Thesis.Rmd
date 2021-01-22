@@ -432,22 +432,24 @@ stargazer::stargazer(
 
 ### Market 2
 
-The portfolios compared here were estimated on the markets simulated using the no clusters correlation matrix (Figure \ref{corr_mats}). Unlike Market 1 the average portfolio risk metrics in Table \ref{rm2} do not indicate a clear winner.  Despite having the highest average SD the MD portfolio achieved the highest Sharp ratio. The ERC performed best in the the SD, DD and VaR measures while obtaining the second highest Sharp ratio. The EW and IV portfolios were similar in their performance and the MV performed poorly. 
+The portfolios compared here were estimated on the markets simulated using the no clusters correlation matrix (Figure \ref{corr_mats}). Unlike Market 1 the average portfolio risk metrics in Table \ref{rm2} do not indicate a clear winner.  Despite having the highest average SD the MD portfolio achieved the highest Sharp ratio. The ERC performed best in the SD, DD and VaR measures while obtaining the second highest Sharp ratio. The EW and IV portfolios were similar in their performance and the MV performed poorly. 
 
-Since this market type exhibits significant correlation between its constituents it is unsurprising to observe the EW and IV portfolios fall out, in favor of the more sophisticated ERC and MD portfolios.
+In Market 2, the MV portfolio has the lowest overall Sharp ratio, the third highest SD, the second highest DD and the lowest VaR. Despite it managing to attain a fairly low average SD, its poor performance across the other risk measures demonstrates a crucial failure to mitigate downside risk exposure (measured by DD and VaR), which is arguably far more important than reducing volatility in general. and attain a fair return for its level of risk. Furthermore, the MV portfolios low Sharp ratio indicates that indicating that it performed exceedingly poorly from a total return perspective and did not receive adequate compensation for its risk. Therefore, the MV portfolio is ranked as Market 2's clear looser.
 
-The MV portfolio has the second lowest SD, but second highest DD and lowest sharp ratio. This demonstrates its failure to mitigate its downside risk exposure (measured by DD and VaR) which is arguably far more important than reducing volatility in general. Despite the MV having the second lowest SD, it attained the lowest overall Sharp ratio, indicating that it performed exceedingly poorly from a total return perspective. Due to these reasons the MV portfolio is ranked as Market 2's clear looser.
+The EW and IV portfolios performed very similarly in Market 2. The EW has the higher Sharp ratio of the two, while the IV performs better in the SD, DD and VaR measures. Due its its high sharp ratio, it seems as if the the EW portfolio finds itself sightly closer to the top right quadrant of the efficient frontier, where it earns higher returns with greater risk compared to the IV portfolio. 
 
-The EW and IV portfolios performed very similarly in Market 2. The equal weight has the higher sharp ratio of the two, while the IV has the performs better when considering SD, DD and VaR. It therefore seems that the EW portfolio finds itself sightly closer to the top right quadrant of the efficient frontier, where it earns higher returns with greater risk compared to the IV portfolio. 
+The MD portfolio acts as Market 2's wild card. It has the highest average sharp ratio by a significant margin, but performs the worst in the SD and DD risk metrics. Despite it having the largest SD, the MD is on par with the best VaR. This indicates that, compared to the other portfolios, the MD earned exceptionally high returns. 
 
-The MD portfolio acts as Market 2's wild card. It has the highest sharp ratio by a significant margin, but performs the worst in the SD an DD risk metrics. Despite it having the largest SD, the MD is tied for the largest VaR. This indicates that that compared to the other portfolios, the MD earned exceptionally high returns. In comparison the ERC seems to be the safer and more consistent option. It scored the best over all across the three risk metrics and achieved the second highest Sharp ratio. Therefore, from a risk mitigation perspective the ERC is the clear winner, however the high returns obtained by the MD portfolio may entice less risk averse investors. 
+In comparison the ERC seems to be the safer and more consistent option. It scored the best over all across the three risk metrics and achieved the second highest Sharp ratio. Therefore, from a risk mitigation perspective the ERC is the clear winner, however the high returns obtained by the MD portfolio may entice less risk averse investors. 
 
+The MV portfolio
 
 ```{r market 2, results = 'asis'}
 source("code/table_risk_metrics.R")
 load("data/perf_m2.rda")
 
 risk_metrics_m2 <- table_risk_metrics(perf_m2)
+
 stargazer::stargazer(
   risk_metrics_m2,
   header = FALSE,
@@ -479,15 +481,16 @@ stargazer::stargazer(
 
 ### Market 3
 
-The portfolios compared here were estimated on the markets simulated using the five clusters correlation matrix (Figure \ref{corr_mats}). The portfolios average Sharp ratio (Sharp), standard deviation (SD), DD and VaR across the 10 000 simulated markets are shown in Table \ref{rm3}.
+The portfolios compared here were estimated on the markets simulated using the five clusters correlation matrix (Figure \ref{corr_mats}). This market structure has not produced a clear winner. On average the EW, IV, ERC and MD portfolios performed quite similarly, however the MV portfolio seems to be the clear looser. It is the worst performer across all the metrics in Table \ref{rm3}. The IV and ERC portfolios performed similarly. The EW portfolio scored the highest average Sharp ratio while maintaining relatively low risk. The MD portfolio performed poorly compared to the EW, IV and ERC portfolios, but still outperformed the MV by a comfortable margin.
 
-Despite there being significant and distinct risk clusters in the  markets 
+The EW portfolio scored the third lowest SD, DD and VaR across Market 3. Therefore, despite there being significant and distinct risk clusters in the the underlying market structure the EW portfolio achieved fairly relatively successful risk diversification. It has the highest average Sharp ratio and therefore received relatively high returns per unit of risk.
 
 ```{r market 3, results = 'asis'}
 source("code/table_risk_metrics.R")
 load("data/perf_m3.rda")
 
 risk_metrics_m3 <- table_risk_metrics(perf_m3)
+
 stargazer::stargazer(
   risk_metrics_m3,
   header = FALSE,
@@ -508,6 +511,7 @@ source("code/table_risk_metrics.R")
 load("data/perf_m4.rda")
 
 risk_metrics_m4 <- table_risk_metrics(perf_m4)
+
 stargazer::stargazer(
   risk_metrics_m4,
   header = FALSE,
@@ -529,6 +533,7 @@ source("code/table_risk_metrics.R")
 load("data/perf_m5.rda")
 
 risk_metrics_m5 <- table_risk_metrics(perf_m5)
+
 stargazer::stargazer(
   risk_metrics_m5,
   header = FALSE,
@@ -543,16 +548,114 @@ stargazer::stargazer(
 
 ## Comparing Portfolios Across Market Types
 
+Since this market type exhibits significant correlation between its constituents it is unsurprising to see the EW and IV portfolios fall out, in favor of the more sophisticated ERC and MD portfolios.
+
 ### Naive
+
+```{r EW performance, results = 'asis'}
+load("data/norm_table.rda")
+
+tab <- bind_cols(norm_table$EW[, 1],
+                 round(norm_table$EW[, 2:6], 4))
+  
+stargazer::stargazer(
+  tab,
+  header = FALSE,
+  title = "Market 5 Risk Metrics",
+  type = "latex",
+  summary = FALSE,
+  rownames = FALSE,
+  label = "EW",
+  digits = 4,
+  digits.extra = 2
+)
+
+```
+
 
 ### Minimum Variance
 
+```{r MV performance, results = 'asis'}
+
+tab <- bind_cols(norm_table$MV[, 1],
+                 round(norm_table$MV[, 2:6], 4))
+  
+stargazer::stargazer(
+  tab,
+  header = FALSE,
+  title = "Market 5 Risk Metrics",
+  type = "latex",
+  summary = FALSE,
+  rownames = FALSE,
+  label = "MV",
+  digits = 4,
+  digits.extra = 2
+)
+
+```
+
 ### Inverse Volatility
+
+```{r IV performance, results = 'asis'}
+
+tab <- bind_cols(norm_table$IV[, 1],
+                 round(norm_table$IV[, 2:6], 4))
+  
+stargazer::stargazer(
+  tab,
+  header = FALSE,
+  title = "Market 5 Risk Metrics",
+  type = "latex",
+  summary = FALSE,
+  rownames = FALSE,
+  label = "IV",
+  digits = 4,
+  digits.extra = 2
+)
+
+```
+
 
 ### Equal Risk Contribution
 
+```{r ERC performance, results = 'asis'}
+
+tab <- bind_cols(norm_table$ERC[, 1],
+                 round(norm_table$ERC[, 2:6], 4))
+  
+stargazer::stargazer(
+  tab,
+  header = FALSE,
+  title = "Market 5 Risk Metrics",
+  type = "latex",
+  summary = FALSE,
+  rownames = FALSE,
+  label = "ERC",
+  digits = 4,
+  digits.extra = 2
+)
+
+```
 ### Maximum Diversification
 
+```{r MD performance, results = 'asis'}
+
+tab <- bind_cols(norm_table$MD[, 1],
+                 round(norm_table$MD[, 2:6], 4))
+  
+stargazer::stargazer(
+  tab,
+  header = FALSE,
+  title = "Market 5 Risk Metrics",
+  type = "latex",
+  summary = FALSE,
+  rownames = FALSE,
+  label = "MD",
+  digits = 4,
+  digits.extra = 2
+)
+
+```
 ## Discussion
 
 # Conclusion \label{conclusion}
@@ -570,6 +673,7 @@ I hope you find this template useful. Remember, stackoverflow is your friend - u
 
 \newpage
 # Appendix {-}
+
 ```{r means and sds, results="asis"}
 load("data/emp_mu.rda")
 load("data/emp_sd.rda")
@@ -597,16 +701,6 @@ stargazer::stargazer(
 
 
 ```
-
-
-
-### Hierarchical Risk Parity (HRP)
-
-> The maximum drawdown is calculated by first, calculating portfolio cumulative returns and the maximum cumulative return achieved. The maximum drawdown is then the maximum amount that the cumulative return dips below its maximum, it is measured as a percentage of the maximum cumulative return [@PerformanceAnalytics]. 
-
-Due to the multitude of robustness issues related to traditional portfolio optimisers, @lopez developed a new approach incorporating machine-learning methods and graph theory [@arevalo]. @lopez argues that the "lack of hierarchical structure in a correlation matrix allows weights to vary freely in unintended ways" and that this contributes to the instability issues. His HRP algorithm requires only a singular co-variance matrix and can utilize the information within without the need for the positive definite property [@lopez]. This procedure works in three stages:
-
-@lopez carried out an in-sample simulation study comparing the respective allocations of the long-only minimum variance, IVP and HRP portfolios using a co-variance matrix using a condition number that is "not unfavourable" to the minimum variance portfolio. The simulated data consisted of 10000 observations across 10 variables. The following findings were made: The minimum variance portfolio concentrated 92.66% of funds in the top 5 holdings and assigned a zero weight to 3 assets. _Conversly_, HRP only assigned 62.5% of its funds to the top 5 holdings [@lopez]. The minimum variance portfolio's objective function causes it to build highly concentrated portfolio's in favor of a small reduction in volatility; the HRP portfolio had only a slightly higher volatility [@lopez]. This apparent diversification advantage achieved by the minimum variance portfolio is rather deceptive as the portfolio remains highly susceptible to idiosyncratic risk incidents within its top holdings [@lopez]. This claim was further validated by the finding that HRP achieved significantly lower out of sample variance compared to the minimum variance portfolio.
 
 
 ## Appendix A {-}
