@@ -370,14 +370,15 @@ The HHI estimates portfolio concentration, and is calculated as the sum of squar
 
 # Results and Discussion \label{reasults}
 
-This section has tow main parts, the first (Section \ref{within-market}), compares the five risk-based portfolios relative performance in each of the five market types, and the second (Section \ref{cross-market}), investigates how each portfolio's performance changes across the market types. However, a short section discussing some interesting trends and caveats regarding the portfolio concentration measures is included.
+This section has two main parts, the first (Section \ref{within-market}), compares the five risk-based portfolios relative performance in each of the five market types, and the second (Section \ref{cross-market}), investigates how each portfolio's relative performance changes across the market types. But first, a short note discussing some interesting trends and caveats regarding the portfolio concentration measures.
 
 #### A Note on the Potfolio Concerntration Metrics
 
-Each portfolios average inverse HHI and entropy across the five market types can be found in Tables \ref{rm1}, \ref{rm2}, \ref{rm3}, \ref{rm4} and \ref{rm5}. Since Market 1's underlying correlation matrix expresses no dependence between assets (Diagonal matrix in Figure \ref{corr_mats}), its assets return returns series are orthogonal. Therefore, in theory the EW portfolio should have an entropy of 50, however, reported entropy is 17.5 (see Table \ref{rm1}). The reported figure falls well short of its theoretical value, this can not simply be due to noisy measurement. The entropy figures reported are an average across the 10 000 simulated markets, and hence, the majority of noise in estimation should be canceled out. Rather, it is likely due to a persistent bias that arises then rotating the returns matrix based on noise rather than signal. Since the underlying correlation structure implies that the returns are orthogonal, but finite sample estimates of the correlation matrix will inevitably contain some noise, it is likely that entropy is estimated with spurious principle components.
-Due to the presence of significant correlation between assets, the entropy estimates in Table \ref{rm2} are all significantly lower compared to Market 1. The significant correlation structure in the underlying correlation matrix makes the entropy a better measure of portfolio diversification than what it was in Market 1. 
+Each portfolios average inverse HHI and entropy across the five market types can be found in Tables \ref{rm1}, \ref{rm2}, \ref{rm3}, \ref{rm4} and \ref{rm5}.
 
-It is also interesting it see that, throughout the five market types, the inverse HHI and entropy measures are typically at odds. Portfolio's rated as highly diversified by the inverse HHI are are rated as relatively undiversified in entropy and _vice verse_. It is also interesting to see that the inverse HHI measure better coincides  with the other portfolio risk measures. 
+Throughout the five market types, the inverse HHI and entropy measures are typically at odds. Portfolio's rated as highly diversified by the inverse HHI are are rated as relatively undiversified in entropy and _vice verse_. It is also interesting to see that the inverse HHI measure better coincides  with the other portfolio risk measures. 
+
+Furthermore, the when ranked in order of concentration score, the results tend to be consistent across the five market types. The EW's inverse HHI is the highest in all five market types and its entropy is the lowest. Conversely, the MV portfolio's inv HHI is the lowest in all Market types, while its entropy tends to be one of the highest. The IV portfolio typically ranks second for the highest inverse HHI, and lowest entropy. The ERC has the third highest inverse HHI and third highest entropy. The MD has the second lowest HHI, while its entropy consistently ranks as on of the highest. Overall, this indicates that the EW, IV and ERC portfolios diversify well across assets and poorly across risk sources, while the MD and MV portfolios diversify poorly across assets and well across sources of risk. 
 
 ## Comparing Portfolios Within Market Types \label{within-market}
 
@@ -543,7 +544,13 @@ The MD portfolio received the second highest Sharp ratio, the highest SD and DD,
 
 ## Comparing Portfolios Across Market Types \label {cross-market}
 
-This section compares the relative portfolio performance across market types, thereby investigating the link between correlation structure and portfolio performance. Tables \ref{ew}, \ref{mv}, \ref{iv}, \ref{erc} and \ref{md} provide standardized Sharp ratio, SD, DD, and VaR performance metrics, as well as the concentration scores, for the each portfolio across the five market types. Values were standardized via the usual z-score transformation.. 
+This section compares the relative portfolio performance across the five market types, thereby, investigating the link between correlation structure and portfolio performance. Each portfolio's standardized Sharp ratio, SD, DD, and VaR performance metrics, as well as the inverse HHI and entropy concentration scores, across the five market types are provided in tables \ref{ew}, \ref{mv}, \ref{iv}, \ref{erc} and \ref{md}. Values were standardized via the usual z-score transformation and can therefore, be interpreted as standard deviations. Section \ref{entropych} discusses how each portfolios entropy changes between the five markets and Section \ref{perf} discusses the relative portfolio performance across market types, 
+
+### Entropy Across Market Types \label{entropych}
+
+All portfolios had their highest entropy score in Market 1 an second highest in Market three. These markets simply had the most scope for diversification. Therefore, the interesting changes in entropy occur between markets 2, 4 and 5. When moving from Market 2 to 4, the EW, IV, ERC and MD portfolios experienced a decline in their entropy score, while the MV portfolio's improved. Looking at the change in entropy when moving from Market 2 to Market 5, the IV and ERC experience improvements and the EW, MV, and MD declines. Finally, when moving from Market 4 to 5, the EW, IV, ERC and MD all experience improvements, while the the MV suffers a decline. 
+
+### Performance Metrics Across Market Types \label{perf}
 
 ```{r EW performance, results = 'asis'}
 load("data/norm_table.rda")
@@ -565,6 +572,10 @@ stargazer::stargazer(
 
 ```
 
+The EW portfolio performed better than average, across all five market types, in the Sharp ratio, SD, DD and VaR metrics. According to the standardized scores in Table \ref{ew}, the EW portfolio performed best in Market 1, followed by Market 3, Market 5 and finally, Market 2. As previously mentioned, its excellent Market 1 performance is unsurprising. However, its ability to achieve substantial risk reduction in markets characterized by significant dependence and risk clusters, demonstrates the robustness of this simple strategy. 
+
+The EW's inverse HHI is by construction equal to 50 in all markets, while its entropy declined with the number of correlated assets. The decline in entropy is simply due to a decrease in the scope for diversification and is therefore, experienced across all portfolios.
+
 ```{r MV performance, results = 'asis'}
 
 tab <- bind_cols(norm_table$MV[, 1],
@@ -583,6 +594,8 @@ stargazer::stargazer(
 )
 
 ```
+
+The MV portfolio performs below average across all five markets. It scores approximately one standard deviation below average in the Sharp ratio, SD, DD and VaR metrics in Markets 1, 3 and 4. Its Sharp ratio is at least one standard deviation below average in all five markets. It performed best in Market 2, however, even then it performed below average in Sharp ratio, DD and VaR. Therefore, across all of the market types the MV portfolio's out of sample performance suffered due to estimation error.
 
 ```{r IV performance, results = 'asis'}
 
@@ -603,6 +616,8 @@ stargazer::stargazer(
 
 ```
 
+Across the five markets, the IV portfolio performed above average in SD, DD and VaR. The IV portfolio performed best in Market 1, and worst in Market 2. Its Sharp ratio in market two was the only it was average. Overall the IV portfolio proved to be successful and robust across market types. Based on its relative performance across markets it seems to strive in markets will little or no correlation between assets, but maintains its success through a variety of market structures. 
+
 ```{r ERC performance, results = 'asis'}
 
 tab <- bind_cols(norm_table$ERC[, 1],
@@ -621,6 +636,9 @@ stargazer::stargazer(
 )
 
 ```
+
+In Markets 2, 3, 4 and 5 the ERC portfolio performed above average in Sharp Ratio, SD, DD and VaR. In Market 1 its performance was mediocre, scoring below average in Sharp ratio and VaR and above average in SD and DD. It performed best, from a downside risk mitigation perspective in Market 2 (see DD and VaR). Overall, it seems like was not a good match for the ERC, however, across Markets 2, 3, 4 and 5 its relative performance was fairly consistent. This suggests that the ERC is able to perform well across a variety of markets, if there is significant correlation between assets.
+
 
 ```{r MD performance, results = 'asis'}
 
@@ -641,15 +659,19 @@ stargazer::stargazer(
 
 ```
 
-Since this market type exhibits significant correlation between its constituents it is unsurprising to see the EW and IV portfolios fall out, in favor of the more sophisticated ERC and MD portfolios.
+From a risk mitigation perspective, the MD portfolio consistently performed well below average. It has a standardized score of greater than 0.7 for SD and DD, and less that -0.7 for VaR. Meanwhile, it managed to achieve above average Sharp ratios in Markets 2, 3 , 4 and 5, suggesting that made returns well above average in these markets. In Markets 1, 3 and 4, the MD portfolio performed quite poorly across all measures, in Market 2 it received it highest standardized Sharp ratio while performing its worst across the SD, DD and VaR measures. In Market 5 it has a fairly good Sharp ratio, but had poor risk mitigation (see SD, DD and VaR). Overall, it doesn't see, like any of the market structures were a particularly good match for the MD portfolio. 
 
 ## Discussion
+
+Overall, across all market types the more simple EW and IV portfolios outperformed the more sophisticated MV, ERC and MD portfolios.  
 
 MD seems to perform well from a return when risk structures are not clean. At the same time obtains higher SD. 
 
 # Conclusion \label{conclusion}
 
 MV and MD tend to diversify well across risk sources bu concentrating their hidings in a small number of assets. The MD managed this while maintaining a high Sharp ratio, while the MV did suffered from a low Sharp across all simulations. 
+
+Since this market type exhibits significant correlation between its constituents it is unsurprising to see the EW and IV portfolios fall out, in favor of the more sophisticated ERC and MD portfolios.
 
 
 <!-- Make title of bibliography here: -->
@@ -694,7 +716,7 @@ stargazer::stargazer(
 
 ## Appendix A {-}
 
-Some appendix information here
+Since Market 1's underlying correlation matrix expresses no dependence between assets (Diagonal matrix in Figure \ref{corr_mats}), its assets return returns series are orthogonal. This presents an interesting problem for entropy.  Therefore, in theory the EW portfolio should have an entropy of 50, however, reported entropy is 17.5 (see Table \ref{rm1}). The reported figure falls well short of its theoretical value, this can not simply be due to noisy measurement. The entropy figures reported are an average across the 10 000 simulated markets, and hence, the majority of noise in estimation should be canceled out. Rather, it is likely due to a persistent bias that arises then rotating the returns matrix based on noise rather than signal. Since the underlying correlation structure implies that the returns are orthogonal, but finite sample estimates of the correlation matrix will inevitably contain some noise, it is likely that entropy is estimated with spurious principle components.
 
 ## Appendix B {-}
 
