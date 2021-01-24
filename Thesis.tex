@@ -193,14 +193,23 @@ Risk-Based Portfolios}
 \begin{abstract}
 \small{
 This work uses Monte Carlo methods to design and simulate five
-distinctive markets types, with each market type possesing a unique
-correlation structure in its return matrix. The equal weight, minimum
-variance, inverse variance, equal risk contribution and maximum
-diversification risk-based portfolios are evaluated in each of the
-simulated markets. The relative performance of each portfolio is
-compaired within market types and the relationship between portfolio
-return characteristics and the market's correlation structure is
-investigated \textbf{FINDINGS}
+distinctive markets types, with each market type's return matrix
+possesing a unique correlation structure. The risk-based equal weight,
+minimum variance, inverse variance, equal risk contribution and maximum
+diversification portfolios are evaluated in each of the simulated
+markets. The relative performance of each portfolio is compaired within
+market types and the relationship between portfolio return
+characteristics and the market's correlation structure is investigated.
+The minimum variance portfolio consistently performed below average in
+all markets. The equal weight, inverse variance and equal risk
+contriution portfolios perfomed best overall. The equal weight and
+inverse variance consinstently performed well across market types. The
+equal risk contribution only performed well in markets with significant
+correlation between assets. In these environments its performance was
+akin to that of the inverse variance portfolio. The maximum
+diversification portfolio failed in maintain low volatility in all
+market types, but showed some potential in its ability to earn a high
+average Sharp ratio.
 }
 \end{abstract}
 
@@ -1603,33 +1612,34 @@ diversifies well across risk sources and poorly across assets.
 \section{\texorpdfstring{Conclusion
 \label{conclusion}}{Conclusion }}\label{conclusion}}
 
-This work used Monte Carlo methods to calculate the returns of five
+This work used Monte Carlo methods to calculate the returns of various
 risk-based portfolios across a set of five unique market types, thereby,
-enabling a the successful and comprehensive comparison of said
-portfolios relative performance across each market type. Overall, the EW
-and IV portfolios performed well across a range of market types, while
-the ERC performed well in those with a high condition number. In all
-market types, the MV portfolio proved unable to maintain low out of
-sample volatility and performed poorly from a total return perspective.
-Thereby demonstrating that it is sensitive to estimation error in the
-covariance matrix. The EW and IV portfolios were found to perform above
-average across all market types. They performed their best in the market
-with the ``Diagonal Matrix'' correlation structure and their worst in
-the worst in the market with the ``No Clusters'' correlation matrix. The
-ERC portfolio performed poorly in the market with the ``Diagonal
-Matrix'' correlation structure and its performance improved in markets
-with higher condition number correlation matrices. In markets with
-significant correlations in their market structure the ERC and IV
-performed similarly. In all market types, the MD portfolio proved to be
-unsuccessful in reducing volatility, however, in some market structures
-it showed potential to achieve a high average Sharp ratio. The average
-inverse HHI and entropy measures showed that the EW, IV and ERC
-portfolios diversify well across assets and poorly across risk sources.
-Conversely, the MV and MD portfolios diversify well across risk sources
-and poorly across assets. These results indicate the potential for
-incorporating simple heuristic approaches, like those of the EW and IV
-portfolios, in the development of future risk-based portfolio
-algorithms.
+enabling the successful and comprehensive comparison of said portfolios
+relative performance across each market type. Overall, the EW and IV
+portfolios performed well across all market types, while the only ERC
+performed well in those with high condition numbers. In all market
+types, the MV portfolio proved unable to maintain low out of sample
+volatility and performed poorly from a total return perspective.
+Thereby, demonstrating that it is particularly sensitive to covariance
+matrix estimation. The EW and IV portfolios were found to perform above
+average across all market types. They performed their best in the
+markets simulated with the ``Diagonal Matrix'' correlation structure,
+and their worst in the worst in the markets simulated with the ``No
+Clusters'' correlation matrix. Overall, this simple portfolios proved to
+be the most robust across market types. The ERC portfolio performed
+poorly in the market with the ``Diagonal Matrix'' correlation structure
+and its performance improved in markets with higher condition number
+correlation matrices. In markets with significant correlations in their
+market structure the ERC and IV portfolios performed similarly. In all
+market types, the MD portfolio proved to be unsuccessful in reducing
+volatility, however, in some market structures it showed potential to
+achieve a high average Sharp ratio. The average inverse HHI and entropy
+measures showed that the EW, IV and ERC portfolios diversify well across
+assets and poorly across risk sources. Conversely, the MV and MD
+portfolios diversify well across risk sources and poorly across assets.
+These results indicate the potential for incorporating simple heuristic
+approaches, like those of the EW and IV portfolios, in the development
+of future risk-based portfolio algorithms.
 
 \newpage
 
