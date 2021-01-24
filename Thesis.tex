@@ -1049,9 +1049,9 @@ orthogonal bets within a portfolio.
 \label{reasults}}{Results and Discussion }}\label{results-and-discussion}}
 
 This section has two main parts, the first (Section
-\ref{within-market}), compares the five risk-based portfolios relative
-performance in each of the five market types, and the second (Section
-\ref{cross-market}), investigates how each portfolio's relative
+\ref{within-market}), compares the relative performance of the five
+risk-based portfolios in each of the five market types, and the second
+(Section \ref{cross-market}), investigates how each portfolio's relative
 performance changes across the market types. But first, a short note
 discussing some interesting trends and caveats regarding the portfolio
 concentration measures.
@@ -1060,21 +1060,20 @@ concentration measures.
 \paragraph{A Note on the Potfolio Concerntration
 Metrics}\label{a-note-on-the-potfolio-concerntration-metrics}}
 
-Each portfolios average inverse HHI and entropy across the five market
-types can be found in Tables \ref{rm1}, \ref{rm2}, \ref{rm3}, \ref{rm4}
-and \ref{rm5}.
+The average inverse HHI and entropy for each portfolio, across the five
+market types can be found in Tables \ref{rm1}, \ref{rm2}, \ref{rm3},
+\ref{rm4} and \ref{rm5}. Throughout the five market types, the inverse
+HHI and entropy measures are typically at odds. Portfolio's rated as
+highly diversified by the inverse HHI are are rated as relatively
+undiversified in entropy and \emph{vice verse}. An interesting
+observation is that the inverse HHI measure better coincides with the
+other portfolio risk measures.
 
-Throughout the five market types, the inverse HHI and entropy measures
-are typically at odds. Portfolio's rated as highly diversified by the
-inverse HHI are are rated as relatively undiversified in entropy and
-\emph{vice verse}. It is also interesting to see that the inverse HHI
-measure better coincides with the other portfolio risk measures.
-
-Furthermore, the when ranked in order of concentration score, the
-results tend to be consistent across the five market types. The EW's
-inverse HHI is the highest in all five market types and its entropy is
-the lowest. Conversely, the MV portfolio's inv HHI is the lowest in all
-Market types, while its entropy tends to be one of the highest. The IV
+Furthermore, when ranked in order of concentration score, the results
+tend to be consistent across the five market types. The EW's inverse HHI
+is the highest in all five market types and its entropy is the lowest.
+Conversely, the MV portfolio's inv HHI is the lowest in all Market
+types, while its entropy tends to be one of the highest. The IV
 portfolio typically ranks second for the highest inverse HHI, and lowest
 entropy. The ERC has the third highest inverse HHI and third highest
 entropy. The MD has the second lowest HHI, while its entropy
@@ -1118,23 +1117,29 @@ Entropy & 17.5 & 22.8 & 20.1 & 18.9 & 21 \\
 \end{tabular} 
 \end{table}
 
-Since this market type has real no correlation structure it is
-unsurprising that the two portfolios that neglect using covariance
-information have performed relatively well. The EW and IV portfolios
-effectively assume that there is no correlation between assets. In
-Market 1 this assumption is correct by construction. However, since the
-variance does differ between assets it would have been reasonable to
-assume that the IV portfolio would be the least volatile. The fact that
-it is not may be because asset return variances are not sufficiently
-different to punish the EW ignorance and/or the IV portfolio's out of
-sample variance forecast is not accurate enough to effectively reduce
-risk out of sample.
+The EW portfolio ranked first overall in Sharp ratio, SD, DD and VaR.
+The IV portfolio lagged just behind, ranking second overall across the
+measures. The ERC was ranked third across the aforementioned metrics,
+followed by the MD and finally the MV.
+
+Since Market 1 has real no correlation structure it is unsurprising that
+the two portfolios that neglect using covariance information have
+performed relatively well. The EW and IV portfolios effectively assume
+that there is no correlation between assets. In Market 1 this assumption
+is correct by construction. However, since the variance does differ
+between assets it would have been reasonable to assume that the IV
+portfolio would be the least volatile. The fact that it is not may be
+because asset return variances are not sufficiently different to punish
+the EW ignorance and/or the IV portfolio's out of sample variance
+forecast is not accurate enough to effectively reduce risk out of
+sample.
 
 The MV, ERC and MD portfolios performed poorly compared to the EW and IV
 portfolios. This is likely be due to there being no real dependence in
 the underlying market's correlation structure. Therefore, these
 portfolios are more noisy in comparison, and likely use spurious
-covariance information when allocating capital.
+covariance information when allocating capital. Out of the three the ERC
+portfolio is the best by a wide margin.
 
 \hypertarget{market-2}{%
 \subsubsection{Market 2}\label{market-2}}
@@ -1142,11 +1147,11 @@ covariance information when allocating capital.
 The portfolios compared here were evaluated within the markets simulated
 using the `No Clusters' correlation matrix (Figure \ref{corr_mats}).
 Unlike in Market 1 the portfolio risk metrics in Table \ref{rm2} do not
-indicate a clear winner. Despite having the highest average SD, the MD
-portfolio achieved the highest Sharp ratio. The ERC performed best in
-the SD, DD and VaR measures while obtaining the second highest Sharp
-ratio. The EW and IV portfolios were similar in their performance and
-the MV performed poorly.
+rank the portfolios in a clear order. Despite having the highest average
+SD, the MD portfolio achieved the highest Sharp ratio. The ERC performed
+best in the SD, DD and VaR measures while obtaining the second highest
+Sharp ratio. The EW and IV portfolios were similar in their performance
+and the MV performed poorly.
 
 \begin{table}[!htbp] \centering 
   \caption{Market 2 - Portfolio Risk Metrics} 
@@ -1169,30 +1174,28 @@ Entropy & 1.1 & 1.8 & 1.1 & 1.2 & 2 \\
 In Market 2, the MV portfolio has the lowest overall Sharp ratio, the
 third highest SD, the second highest DD and the worst VaR. Despite it
 managing to attain a fairly low average SD, its poor performance across
-the other risk measures demonstrates a crucial failure to mitigate
-downside risk exposure (measured by DD and VaR). The mitigation of
-downside risk is arguably far more important than reducing volatility in
-general. Additionally, its relatively low sharp ratio indicates that it
-was not well compensated for for holding its risk. In fact, it seems to
-have performed performed exceedingly poorly from a total return
-perspective. Its entropy score indicates that it diversifies relatively
-well across risk sources. However, its inverse HHI suggests that it is
-highly concentrated in a few number of assets (Table \ref{rm2}). Despite
-its interesting concentration results, MV is considered the worst
-performing portfolio in Market 2.
+the other risk measures (i.e.~DD and VaR) demonstrates a crucial failure
+to mitigate downside risk exposure. Critically, the mitigation of
+downside risk is arguably more important than simply reducing
+volatility. Its low sharp ratio indicates that it was not well
+compensated for holding its risk and performed exceedingly poorly from a
+total return perspective. Its entropy score indicates that it is
+diversified relatively well across risk sources. However, its inverse
+HHI suggests that it is highly concentrated in a few number of assets
+(Table \ref{rm2}).
 
 The EW and IV portfolios performed very similarly in Market 2. This is a
 recurring theme thought the market types (for example see Tables
 \ref{rm3} and \ref{rm4}). The EW has the higher Sharp ratio of the two,
 while the IV performs better in the SD, DD and VaR measures. Therefore,
-it seems as if the the EW portfolio finds itself sightly closer to the
+it seems like the the EW portfolio finds itself sightly closer to the
 top right quadrant of the efficient frontier, where it earns higher
-returns with greater risk compared to the IV portfolio. They each have a
-high inverse HHI, indicating that they were well diversified across
-assets. In comparison to the other portfolios, they have a low entropy
-measure and are therefore, are not well diversified across risk sources.
-This has however, not translated into higher average portfolio
-volatility.
+returns with greater risk compared to the IV portfolio. Both portfolios
+have a high inverse HHI, indicating that they were well diversified
+across assets. While, in comparison to the other portfolios, they have a
+low entropy measure and are therefore, are not well diversified across
+risk sources. This has however, not translated into higher average
+portfolio volatility.
 
 The MD portfolio acts as Market 2's wild card. It has the highest
 average Sharp ratio by a significant margin, but performs the worst in
@@ -1200,16 +1203,16 @@ the SD and DD risk metrics. Despite it having the largest SD, the MD is
 on par with the best VaR. This indicates that, compared to the other
 portfolios, the MD earned exceptionally high returns. Interestingly, it
 has the highest entropy score and is therefore well diversified across
-risk sources. Comparatively, it has a low inverse HHI and in therefore
-highly concentrated in a few number of assets.
+risk sources. Comparatively, it has a low inverse HHI and is therefore,
+highly concentrated in a small number of assets.
 
-In comparison, the ERC seems to be the safer and more consistent option.
-It scored the best overall across the three risk metrics and achieved
-the second highest Sharp ratio. Therefore, from a risk mitigation
-perspective the ERC is the clear winner. However, the high returns
-obtained by the MD portfolio may entice less risk averse investors.
-Compared to the MD, the ERC is well diversified across assets and poorly
-diversified across risk sources.
+Compared to the MD portfolio, the ERC seems to be safer and consistent.
+The ERC scored the best overall across the three risk metrics and
+achieved the second highest Sharp ratio. Therefore, from a risk
+mitigation perspective the ERC is the clear winner. However, the high
+returns obtained by the MD portfolio may entice less risk averse
+investors. Compared to the MD, the ERC is well diversified across assets
+and poorly diversified across risk sources.
 
 \hypertarget{market-3}{%
 \subsubsection{Market 3}\label{market-3}}
@@ -1217,13 +1220,13 @@ diversified across risk sources.
 The portfolios compared here were evaluated within the markets simulated
 using the `Five Clusters' correlation matrix (Figure \ref{corr_mats}).
 This market structure has not produced a clear winner. On average the
-EW, IV, ERC and MD portfolios performed quite similarly, while, the MV
-portfolio seems to be the clear looser. The MV is the worst performer
-across the Sharp, SD, DD and VaR measures (Table \ref{rm3}). The IV and
-ERC portfolios performed very similarly. The EW portfolio scored the
-highest average Sharp ratio while maintaining relatively low risk. The
-MD portfolio performed poorly compared to the EW, IV and ERC portfolios,
-but still outperformed the MV by a comfortable margin.
+EW, IV, ERC and MD portfolios performed quite similarly, meanwhile, the
+MV portfolio is the clear looser. The MV is the worst performer across
+the Sharp, SD, DD and VaR measures (Table \ref{rm3}). The IV and ERC
+portfolios performed very similarly. The EW portfolio the highest
+average Sharp ratio and maintains relatively low risk. The MD portfolio
+performed poorly compared to the EW, IV and ERC portfolios, but still
+outperformed the MV by a comfortable margin.
 
 \begin{table}[!htbp] \centering 
   \caption{Market 3 - Portfolio Risk Metrics} 
@@ -1243,18 +1246,18 @@ Entropy & 1.3 & 3.7 & 1.4 & 1.5 & 2.2 \\
 \end{tabular} 
 \end{table}
 
-The EW portfolio has the third lowest SD, DD and VaR across Market 3.
+In Market 3, the EW portfolio has the third lowest SD, DD and VaR.
 Therefore, despite there being significant and distinct risk clusters in
-the the underlying market structure the EW portfolio achieved relatively
+the underlying market structure the EW portfolio achieved a relatively
 high level of diversification. It has the highest average Sharp ratio,
 suggesting that it performed well from a total return stand point.
 According to its entropy measure, it is the least diversified across
-risk sources. This finding holds across Markets 3, 4 and 5 and will
+risk sources. The above findings hold in Markets 3, 4 and 5 and will
 therefore not be repeated (see Tables \ref{rm4} and \ref{rm5}).
 
-On average the MV portfolio performed exceedingly poorly, its has by far
-the lowest Sharp ratio and is the worst performer across the SD, DD and
-VaR measures. Its inability to to maintain a low average out of sample
+On average the MV portfolio performed exceedingly poorly, its has the
+lowest Sharp ratio by far and is the worst performer across the SD, DD
+and VaR measures. Its inability to maintain a low average out of sample
 SD indicates that it suffers from estimation error. The inverse HHI and
 entropy metrics in Table \ref{rm3} indicate that the MV portfolio is the
 least diversified across assets and the most diversified across sources
@@ -1262,20 +1265,20 @@ of risk. These findings hold in Market 4 and are not repeated (see
 \ref{rm4}).
 
 The IV and ERC portfolios were strong contenders for first place. Their
-scores were close across all 6 measures in Table \ref{rm3}, and
-therefore, were about equal in their ability to mitigate risk. The IV
-has a slightly lower SD, the ERC a slightly lower DD and the IV has a
-slightly higher VaR. Their Sharp ratios also seem to suggest that they
-were fairly well compensated per unit of risk. Their respective inverse
-HHI and entropy scores indicate that they are well diversified across
-asset and poorly diversified across risk sources.
+scores were close across all 6 measures (Table \ref{rm3}). They were
+about equal in their ability to mitigate risk. The IV has a slightly
+lower SD, the ERC slightly lower DD and the IV slightly higher VaR.
+Their Sharp ratios also seem to suggest that they were fairly well
+compensated for holding risk. Their respective inverse HHI and entropy
+scores indicate that they are well diversified across assets and poorly
+diversified across risk sources.
 
 The MD portfolio performed worse than the EW, IV and ERC portfolios. It
-has a lower Sharp ratio, higher SD, DD and a low VaR. However, it
+has a lower Sharp ratio, higher SD, DD and a lower VaR. However, it
 underperformed these portfolios by a fairly small margin, and did
-substantially better than the MV portfolio. It is relatively highly
-concentrated across assets and fairly well diversified across risk
-sources.
+substantially better than the MV portfolio in this regard. It is
+relatively highly concentrated across assets and fairly well diversified
+across risk sources.
 
 \hypertarget{market-4}{%
 \subsubsection{Market 4}\label{market-4}}
@@ -1286,8 +1289,9 @@ using the `Overlapping Clusters' correlation matrix (Figure
 between all assets in the underlying correlation structure. Despite this
 the EW and IV portfolios, which are oblivious to asset covariance,
 managed significant risk reduction. The IV and ERC portfolios performed
-about equally well across all the metrics in Table \ref{rm4}. The MV and
-MD performed worst, however, the MD was the better of the two.
+about equally well across all the metrics in Table \ref{rm4}. The MV
+performed the worst, the MD narrowly outperformed it in the SD, DD and
+VaR measures.
 
 \begin{table}[!htbp] \centering 
   \caption{Market 4 - Portfolio Risk Metrics} 
@@ -1308,29 +1312,29 @@ Entropy & 1.1 & 2 & 1.1 & 1.1 & 1.6 \\
 \end{table}
 
 The IV and ERC performed very similarly in this market. They are
-approximately tied as the best performing assets across the SD, DD and
-VaR measures. They are also approximately tie with the second highest
-Sharp ratio. They are both well diversified across assets, but
+approximately tied as the best performing portfolios across the SD, DD
+and VaR measures. They are also approximately tie with the second
+highest Sharp ratio. They are both well diversified across assets, but
 relatively highly concentrated across risk sources (Table \ref{rm4}).
 
 The MD portfolio is the second worst performing portfolio in Market 2.
 It ranks second to last across Sharp ratio, SD, DD and VaR metrics
 (Table \ref{rm4}). Its Sharp ratio is not substantially lower than that
 of the IV and ERC, thereby indicating that the MD was compensated fairly
-for holding risk. The MD has a fairly low inverse HHI and has the the
-highest entropy.
+for holding risk. The MD has a relatively low inverse HHI and has the
+the highest entropy.
 
 \hypertarget{market-5}{%
 \subsubsection{Market 5}\label{market-5}}
 
 The portfolios compared here were evaluated within the markets simulated
 using the `Empirical Correlation Matrix' (Figure \ref{corr_emp}). This
-is therefore the most realistic of the five correlation matrices. It
+is therefore, the most realistic of the five correlation matrices. It
 exhibits significant correlation between assets, with some noticeable
-risk clusters. The IV and ERC portfolios performed similarly across the
-metrics in Table \ref{rm5}. The MV and MD portfolios performed the
-worst. The EW has the highest sharp ratio, but was out performed by the
-IV and ERC in terms of risk mitigation.
+risk clusters. The IV and ERC portfolios performed similarly across all
+metrics (Table \ref{rm5}). The MV and MD portfolios performed the worst.
+The EW has the highest sharp ratio, but was out performed by the IV and
+ERC in terms of risk mitigation.
 
 \begin{table}[!htbp] \centering 
   \caption{Market 5 - Portfolio Risk Metrics} 
@@ -1355,22 +1359,22 @@ second worst in the SD, DD and VaR measures. It therefore, failed in its
 objective to minimize portfolio volatility, and the relatively simple EW
 and IV portfolios outperformed it in this regard. Its out of sample
 performance is therefore, suffering due to estimation error. Its inverse
-HHI indicates that in is highly concentrated in a relatively small
+HHI indicates that it is highly concentrated in a relatively small
 number of assets. Conversely, its entropy suggests it is the most
 successful portfolio in diversifying across risk sources.
 
 The IV portfolio has the third highest Sharp ratio, the lowest SD, the
-second lowest DD and the highest VaR. The IV narrowly outperformed the
-ERC in all the aforementioned metrics. Furthermore, the IV portfolio is
-well diversified across assets, as shown by its inverse HHI, meanwhile,
-its entropy score suggests it is comparatively less diversified across
-risk sources.
+second lowest DD and the highest VaR and narrowly outperformed the ERC
+in all the aforementioned metrics. Furthermore, the IV portfolio is well
+diversified across assets, as shown by its inverse HHI, meanwhile, its
+entropy score suggests it is comparatively less diversified across risk
+sources.
 
 The MD portfolio received the second highest Sharp ratio, the highest SD
 and DD, and performed the worst in VaR. Its inverse HHI indicates that
-its holding are highly concentrated in a small number of assets while
-its entropy suggests that it has done relatively well in diversifying
-across risk sources.
+it is highly concentrated in a small number of assets, while its entropy
+suggests that it has done relatively well in diversifying across risk
+sources.
 
 \hypertarget{comparing-portfolios-across-market-types}{%
 \subsection{\texorpdfstring{Comparing Portfolios Across Market Types
@@ -1379,14 +1383,14 @@ across risk sources.
 This section compares the relative portfolio performance across the five
 market types, thereby, investigating the link between correlation
 structure and portfolio performance. Each portfolio's standardized Sharp
-ratio, SD, DD, and VaR performance metrics, as well as the inverse HHI
-and entropy concentration scores, across the five market types are
-provided in tables \ref{ew}, \ref{mv}, \ref{iv}, \ref{erc} and \ref{md}.
-Values were standardized via the usual z-score transformation and can
-therefore, be interpreted as standard deviations. Section
-\ref{entropych} discusses how each portfolios entropy changes between
-the five markets and Section \ref{perf} discusses the relative portfolio
-performance across market types,
+ratio, SD, DD, and VaR performance metrics, as well as, their inverse
+HHI and entropy scores, across the five market types are provided in
+tables \ref{ew}, \ref{mv}, \ref{iv}, \ref{erc} and \ref{md}. Values were
+standardized via the usual z-score transformation and can therefore, be
+interpreted as standard deviations. Section \ref{entropych} discusses
+how each portfolios entropy changes between the five markets and Section
+\ref{perf} discusses the relative portfolio performance across market
+types,
 
 \hypertarget{entropy-across-market-types}{%
 \subsubsection{\texorpdfstring{Entropy Across Market Types
@@ -1397,11 +1401,11 @@ highest in Market three. These markets simply had the most scope for
 diversification. Therefore, the interesting changes in entropy occur
 between markets 2, 4 and 5. When moving from Market 2 to 4, the EW, IV,
 ERC and MD portfolios experienced a decline in their entropy score,
-while the MV portfolio's improved. Looking at the change in entropy when
-moving from Market 2 to Market 5, the IV and ERC experience improvements
-and the EW, MV, and MD declines. Finally, when moving from Market 4 to
-5, the EW, IV, ERC and MD all experience improvements, while the the MV
-suffers a decline.
+while the MV portfolio's entropy improved. Looking at the change in
+entropy when moving from Market 2 to Market 5, the IV and ERC experience
+improvements and the EW, MV, and MD declines. Finally, when moving from
+Market 4 to 5, the EW, IV, ERC and MD all experience improvements, while
+the the MV suffers a decline.
 
 \hypertarget{performance-metrics-across-market-types}{%
 \subsubsection{\texorpdfstring{Performance Metrics Across Market Types
@@ -1431,8 +1435,11 @@ standardized scores in Table \ref{ew}, the EW portfolio performed best
 in Market 1, followed by Market 3, Market 5 and finally, Market 2. As
 previously mentioned, its excellent Market 1 performance is
 unsurprising. However, its ability to achieve substantial risk reduction
-in markets characterized by significant dependence and risk clusters,
-demonstrates the robustness of this simple strategy.
+in markets characterized by significant dependence, demonstrates the
+effectiveness of this simple strategy. Its relative performance across
+markets indicates that it exceeds in markets with little or no
+correlation between assets and maintains its success through a variety
+of market structures.
 
 The EW's inverse HHI is by construction equal to 50 in all markets,
 while its entropy declined with the number of correlated assets. The
@@ -1486,11 +1493,12 @@ Entropy & 21.2181 & 1.3726 & 3.3521 & 1.1399 & 1.1482 \\
 
 Across the five markets, the IV portfolio performed above average in SD,
 DD and VaR. The IV portfolio performed best in Market 1, and worst in
-Market 2. Its Sharp ratio in market two was the only it was average.
-Overall the IV portfolio proved to be successful and robust across
-market types. Based on its relative performance across markets it seems
-to strive in markets will little or no correlation between assets, but
-maintains its success through a variety of market structures.
+Market 2. Its Sharp ratio in Market 2 is the only occasion it performed
+above average average. Overall the IV portfolio proved to be successful
+and robust across market types. Based on its relative performance across
+markets it seems to strive in markets with little or no correlation
+between assets, but maintains its success through a variety of market
+structures.
 
 \begin{table}[!htbp] \centering 
   \caption{Equal Risk Contribution} 
@@ -1514,11 +1522,12 @@ In Markets 2, 3, 4 and 5 the ERC portfolio performed above average in
 Sharp Ratio, SD, DD and VaR. In Market 1 its performance was mediocre,
 scoring below average in Sharp ratio and VaR and above average in SD and
 DD. It performed best, from a downside risk mitigation perspective in
-Market 2 (see DD and VaR). Overall, it seems like was not a good match
-for the ERC, however, across Markets 2, 3, 4 and 5 its relative
+Market 2 (see DD and VaR). Overall, it seems like Market 1 not a good
+match for the ERC, however, across Markets 2, 3, 4 and 5 its relative
 performance was fairly consistent. This suggests that the ERC is able to
-perform well across a variety of markets, if there is significant
-correlation between assets.
+perform well across a variety of markets with significant correlation
+between their assets. This describes practically all real world asset
+markets.
 
 \begin{table}[!htbp] \centering 
   \caption{Maximum Diversification} 
@@ -1544,7 +1553,7 @@ than 0.7 for SD and DD, and less that -0.7 for VaR. Meanwhile, it
 managed to achieve above average Sharp ratios in Markets 2, 3 , 4 and 5,
 suggesting that made returns well above average in these markets. In
 Markets 1, 3 and 4, the MD portfolio performed quite poorly across all
-measures, in Market 2 it received it highest standardized Sharp ratio
+measures. In Market 2 it received the highest standardized Sharp ratio
 while performing its worst across the SD, DD and VaR measures. In Market
 5 it has a fairly good Sharp ratio, but had poor risk mitigation (see
 SD, DD and VaR). Overall, it doesn't see, like any of the market
@@ -1553,24 +1562,74 @@ structures were a particularly good match for the MD portfolio.
 \hypertarget{discussion}{%
 \subsection{Discussion}\label{discussion}}
 
-Overall, across all market types the more simple EW and IV portfolios
-outperformed the more sophisticated MV, ERC and MD portfolios.
+The MV portfolio continued to perform well below average in all market
+types (Table \ref{mv}). It struggled to maintain out of sample low
+volatility and seemed to be particularly bad at mitigating downside
+risk. It consistently received the lowest Sharp ratio, indicating that
+on average it returned less than the other portfolios. It low average
+inverse HHI and high average entropy indicate that it diversifies well
+across sources fo risk by concentrating its holdings in a small number
+of assets.
 
-MD seems to perform well from a return when risk structures are not
-clean. At the same time obtains higher SD.
+The EW and IV portfolios performed above average in all measures, across
+all market types. They both performed their best in Market 1, worst in
+Market 2. In Markets 3, 4 an 5 the IV portfolio outperformed the MV form
+a risk mitigation perspective, however, the EW achieved a highers Sharp
+ratio (Tables \ref{ew} and \ref{iv}). They both exhibit high
+diversification across assets, but fail to diversify across sources of
+risk.
+
+The ERC portfolio showed above average performance in Markets 2, 3, 4
+and 5. It performed its worst in Market 1 and seemed to improve in
+markets with higher condition numbers. It was about equal to the IV
+portfolio in Markets 3, 4 and 5, but outperformed the IV in Market 2. Is
+concentration scores indicate that it diversifies across assets better
+than what it does across risk sources. It does, however, show
+improvement over the EW and IV in its diversification across risk
+sources.
+
+The MD portfolio's performance was often mixed within markets, however,
+it was clearly at its worst in Market 1. In Markets 2 and 5, it showed
+great promise in its ability to earn a high Sharp ratio, but at the same
+time struggled to keep its SD and DD down. This characteristic proved to
+quite interesting, in that, it often scored exceptionally well in its
+Sharp ratio, whilst performing exceedingly poorly in risk mitigation
+(for example see Market 2). It would be interesting to investigate if
+this high risk high reward attribute holds in other Monte Carlo
+environments. The MD portfolio's concentration scores suggest that it
+diversifies well across risk sources and poorly across assets.
 
 \hypertarget{conclusion}{%
 \section{\texorpdfstring{Conclusion
 \label{conclusion}}{Conclusion }}\label{conclusion}}
 
-MV and MD tend to diversify well across risk sources bu concentrating
-their hidings in a small number of assets. The MD managed this while
-maintaining a high Sharp ratio, while the MV did suffered from a low
-Sharp across all simulations.
-
-Since this market type exhibits significant correlation between its
-constituents it is unsurprising to see the EW and IV portfolios fall
-out, in favor of the more sophisticated ERC and MD portfolios.
+This work used Monte Carlo methods to calculate the returns of five
+risk-based portfolios across a set of five unique market types, thereby,
+enabling a the successful and comprehensive comparison of said
+portfolios relative performance across each market type. Overall, the EW
+and IV portfolios performed well across a range of market types, while
+the ERC performed well in those with a high condition number. In all
+market types, the MV portfolio proved unable to maintain low out of
+sample volatility and performed poorly from a total return perspective.
+Thereby demonstrating that it is sensitive to estimation error in the
+covariance matrix. The EW and IV portfolios were found to perform above
+average across all market types. They performed their best in the market
+with the ``Diagonal Matrix'' correlation structure and their worst in
+the worst in the market with the ``No Clusters'' correlation matrix. The
+ERC portfolio performed poorly in the market with the ``Diagonal
+Matrix'' correlation structure and its performance improved in markets
+with higher condition number correlation matrices. In markets with
+significant correlations in their market structure the ERC and IV
+performed similarly. In all market types, the MD portfolio proved to be
+unsuccessful in reducing volatility, however, in some market structures
+it showed potential to achieve a high average Sharp ratio. The average
+inverse HHI and entropy measures showed that the EW, IV and ERC
+portfolios diversify well across assets and poorly across risk sources.
+Conversely, the MV and MD portfolios diversify well across risk sources
+and poorly across assets. These results indicate the potential for
+incorporating simple heuristic approaches, like those of the EW and IV
+portfolios, in the development of future risk-based portfolio
+algorithms.
 
 \newpage
 
