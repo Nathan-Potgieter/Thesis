@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2021.1.13)  24 JAN 2021 22:36
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2021.1.13)  25 JAN 2021 18:08
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -804,50 +804,50 @@ File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\@ifnextchar' on input line 280.
+(hyperref)                removing `\@ifnextchar' on input line 283.
 
 [1
 
 
 {c:/Users/natha/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdfte
-x.map}] [2] [3] [4] [5] [6] [7] [8]
+x.map}] [2] [3] [4] [5] [6] [7] [8] [9] [10]
 LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 7
-60.
+67.
 (c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
-) [9] [10]
-<Thesis_files/figure-latex/corr mats-1.pdf, id=346, 433.62pt x 361.35pt>
+) [11] [12]
+<Thesis_files/figure-latex/corr mats-1.pdf, id=349, 433.62pt x 361.35pt>
 File: Thesis_files/figure-latex/corr mats-1.pdf Graphic file (type pdf)
 <use Thesis_files/figure-latex/corr mats-1.pdf>
 Package pdftex.def Info: Thesis_files/figure-latex/corr mats-1.pdf  used on inp
-ut line 853.
+ut line 860.
 (pdftex.def)             Requested size: 433.61894pt x 361.34912pt.
-[11 <./Thesis_files/figure-latex/corr mats-1.pdf>]
-<Thesis_files/figure-latex/unnamed-chunk-1-1.pdf, id=364, 325.215pt x 325.215pt
->
+[13 <./Thesis_files/figure-latex/corr mats-1.pdf>]
+<Thesis_files/figure-latex/unnamed-chunk-1-1.pdf, id=367, 289.08pt x 289.08pt>
 File: Thesis_files/figure-latex/unnamed-chunk-1-1.pdf Graphic file (type pdf)
 <use Thesis_files/figure-latex/unnamed-chunk-1-1.pdf>
 Package pdftex.def Info: Thesis_files/figure-latex/unnamed-chunk-1-1.pdf  used 
-on input line 887.
-(pdftex.def)             Requested size: 325.2142pt x 325.2142pt.
-[12 <./Thesis_files/figure-latex/unnamed-chunk-1-1.pdf>] [13] [14] [15] [16] [1
-7] [18] [19] [20] [21] [22] [23] [24] [25] [26] [27] [28] [29]
+on input line 894.
+(pdftex.def)             Requested size: 289.07928pt x 289.07928pt.
+[14] [15 <./Thesis_files/figure-latex/unnamed-chunk-1-1.pdf>] [16] [17] [18] [1
+9] [20] [21] [22] [23] [24] [25] [26] [27] [28] [29] [30] [31] [32] [33] [34] [
+35]
 No file Thesis.bbl.
-[30] (./Thesis.aux)
+[36] (./Thesis.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `Thesis.out' has not changed.
-(rerunfilecheck)             Checksum: 9BE18336AF308005451BC022E8EC60E9;2217.
+(rerunfilecheck)             Checksum: E20FD0E7476F8350D22C3B21F35A6E63;2099.
  ) 
 Here is how much of TeX's memory you used:
  12542 strings out of 481252
- 227080 string characters out of 5914123
- 528202 words of memory out of 5000000
- 29056 multiletter control sequences out of 15000+600000
+ 227046 string characters out of 5914123
+ 526367 words of memory out of 5000000
+ 29053 multiletter control sequences out of 15000+600000
  476592 words of font info for 77 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 83i,12n,88p,279b,817s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 83i,12n,88p,314b,774s stack positions out of 5000i,500n,10000p,200000b,80000s
 {c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.
 enc}{c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ma
 thsy.enc}{c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/
@@ -874,10 +874,10 @@ pfb><c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lm
 sy6.pfb><c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/l
 m/lmsy8.pfb><c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/publ
 ic/lm/lmtt9.pfb>
-Output written on Thesis.pdf (30 pages, 429333 bytes).
+Output written on Thesis.pdf (36 pages, 431965 bytes).
 PDF statistics:
- 650 PDF objects out of 1000 (max. 8388607)
- 590 compressed objects within 6 object streams
- 154 named destinations out of 1000 (max. 500000)
- 267 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 674 PDF objects out of 1000 (max. 8388607)
+ 606 compressed objects within 7 object streams
+ 157 named destinations out of 1000 (max. 500000)
+ 251 words of extra memory for PDF output out of 10000 (max. 10000000)
 
