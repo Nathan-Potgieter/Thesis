@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2021.1.13)  25 JAN 2021 18:08
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2021.1.13)  26 JAN 2021 10:49
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -637,9 +637,6 @@ Package: ltcaption 2020/05/30 v1.4b longtable captions (AR)
 \cslhangindent=\skip84
 (./Thesis.aux
 
-LaTeX Warning: Label `methadology' multiply defined.
-
-
 LaTeX Warning: Label `conclusion' multiply defined.
 
 )
@@ -838,13 +835,13 @@ No file Thesis.bbl.
 LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `Thesis.out' has not changed.
-(rerunfilecheck)             Checksum: E20FD0E7476F8350D22C3B21F35A6E63;2099.
+(rerunfilecheck)             Checksum: 5BDA944DF7C7584A86000671F94C80B7;2104.
  ) 
 Here is how much of TeX's memory you used:
- 12542 strings out of 481252
- 227046 string characters out of 5914123
- 526367 words of memory out of 5000000
- 29053 multiletter control sequences out of 15000+600000
+ 12543 strings out of 481252
+ 227061 string characters out of 5914123
+ 526476 words of memory out of 5000000
+ 29054 multiletter control sequences out of 15000+600000
  476592 words of font info for 77 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  83i,12n,88p,314b,774s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -874,7 +871,7 @@ pfb><c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lm
 sy6.pfb><c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/l
 m/lmsy8.pfb><c:/Users/natha/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/publ
 ic/lm/lmtt9.pfb>
-Output written on Thesis.pdf (36 pages, 431965 bytes).
+Output written on Thesis.pdf (36 pages, 432405 bytes).
 PDF statistics:
  674 PDF objects out of 1000 (max. 8388607)
  606 compressed objects within 7 object streams

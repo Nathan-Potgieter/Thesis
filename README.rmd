@@ -1459,32 +1459,7 @@ save(norm_table, file = "data/norm_table.rda")
 
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # Apendix
-
-
-
-
-
-
-
 
 ```{r RiskPortfolios, warning=FALSE}
 pacman::p_load(PerformanceAnalytics)

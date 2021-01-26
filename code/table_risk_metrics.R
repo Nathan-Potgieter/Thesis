@@ -39,18 +39,18 @@ table_entropy <- function(enc, enb) {
     tibble(Metric = c("Inv HHI", "Entropy")) %>%
         mutate(
             EW = c(enc$naive %>% reduce(mean),
-                   enb$naive %>% reduce(mean)) %>% round(1),
+                   enb$naive %>% reduce(mean)) %>% round(4),
 
             MV = c(enc$minvol %>% reduce(mean),
-                   enb$minvol %>% reduce(mean)) %>% round(1),
+                   enb$minvol %>% reduce(mean)) %>% round(4),
 
             IV = c(enc$invvol %>% reduce(mean),
-                   enb$invvol %>% reduce(mean)) %>% round(1),
+                   enb$invvol %>% reduce(mean)) %>% round(4),
 
             ERC = c(enc$erc %>% reduce(mean),
-                    enb$erc %>% reduce(mean)) %>% round(1),
+                    enb$erc %>% reduce(mean)) %>% round(4),
 
             MD = c(enc$maxdiv %>% reduce(mean),
-                   enb$maxdiv %>% reduce(mean)) %>% round(1)
+                   enb$maxdiv %>% reduce(mean)) %>% round(4)
         )
 }

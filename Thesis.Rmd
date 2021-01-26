@@ -148,9 +148,9 @@ This work aims to use Monte Carlo Methods to uncover the relationship between a 
 
 \newpage
 
-# Litrature Review \label{lit}
+# Literature Review \label{lit}
 
-## Review of Portfolio Optimisation Algorithms
+## Review of Portfolio Optimization Algorithms
 
 ### Introduction
 
@@ -190,7 +190,7 @@ $w^*=arg\min(w'\sum w)\ \ \ s.t.\ \sum^N_iw_i=1$
 
 In some studies, the minimum variance (MV) portfolio has been found to earn cumulative returns equal to or slightly greater than market capitalization weighted portfolios, whilst maintaining a consistently lower variance and achieving a noticeable improvement in downside risk mitigation [@clarke2011]. The MV portfolio can, therefore, work well out-of-sample, however, if left unrestricted, tends to concentrate its holdings in a small number of assets [@lopez]. Its sole objective to minimize portfolio volatility is likely the the primary reason for this. When near the trough of its objective function, it achieves minor reductions in _ex ante_ volatility by greatly favoring a small number of low volatility/correlation securities [@lopez, pp. 68]]. This tendency to produce highly concentrated portfolios can be costly out-of-sample since the portfolio remains exposed to the idiosyncratic risk of its major constituents. It puts too many eggs in too few baskets. In practice, this issue can be countered by applying clever maximum and minimum portfolio weight constraints.
 
-#### Inverse-Varience (IV) Weighting
+#### Inverse-Variance (IV) Weighting
 
 The IV portfolio, referred to as the equal-risk budget (ERB) portfolio in @leote, aims to allocate an equal risk budget to each investible security. The risk budget is defined as the the product of a security's weight and volatility [@leote]. If $\sigma_i$ is defined as security i's volatility, then the portfolio risk budget can be equally distributed across N securities by setting security weights as:
 
@@ -242,7 +242,7 @@ Ever since the pioneering age of computers, people have shown a keen interest in
 
 A financial application of this can be found in @wang2012 who designed a Monte Carlo procedure that (1) models both the time-series and cross-section properties of financial market returns. This involves the use of extreme value theory to estimate a random term's probability distribution function (pdf).  (2) Samples from the modelled process to produce an ensemble of market returns, with each exerting the same risk properties. The simulated data can then be used in risk management and/or the pricing of financial securities [@wang2012; @kroese2014]. This unique ability to generate a large number of counterfactuals for an asset market with a known risk structure has made it a uniquely powerful tool in assessing the properties of portfolio optimization algorithms [@lopez2012]. @glasserman2013 is a useful source for understanding the methods and applications of Monte Carlo methods in finance.
 
-# Methadology \label{methadology}
+# Methodology \label{methadology}
 
 This work used Monte Carlo simulation methods to investigate the link between a market's correlation structure and the relative performance of the EW, MV, IV, ERC and MD portfolios.
 
@@ -308,7 +308,7 @@ my_title <-
   
 ```
 
-### Emperical \label{emp}
+## Empirical \label{emp}
  
 The empirical correlation matrix used in this study was estimated from the daily returns of a random subset of 50 of the largest 100 S&P 500 stocks, determined by market capitalization. The market capitalizations were measured on the 12 January 2020, while the S&P data were collected between 1 January 2016 and 1 January 2021.
 
@@ -316,10 +316,10 @@ The markets covariance matrix was then estimated using the _fit_mvt_ function fr
 
 In Figure \ref{corr_emp} assets were ordered by hierarchical clustering so that the reader could more easily visualize the risk clusters. The correlation matrix's largest eigenvalue is 18.6 and they quickly diminish in size to below zero by its 8th largest eigenvalue (Table \ref{eigens}). This correlation matrix has a condition number of 211.1. The Monte Carlo data set constructed using this matrix is referred to as Market 5. 
 
-```{r, fig.cap="\\label{corr_emp} Emperical Correlation Matrix", fig.width=4, fig.height=4}
+```{r, fig.cap="\\label{corr_emp} Empirical Correlation Matrix", fig.width=4, fig.height=4}
 load(file = "data/emp_corr.rda")
 colnames(emp_corr) <- rownames(emp_corr) <- NULL
-ggcorrplot::ggcorrplot(emp_corr, title = "Emperical Correlation Matrix", hc.order = TRUE) 
+ggcorrplot::ggcorrplot(emp_corr, title = "Empirical Correlation Matrix", hc.order = TRUE) 
 ```
 
 ```{r eigen tabel, results="asis"}
@@ -366,11 +366,11 @@ The HHI estimates portfolio concentration and is calculated as the sum of square
 
 \newpage
 
-# Results and Discussion \label{reasults}
+## Results and Discussion \label{reasults}
 
 This section has two main parts, the first (Section \ref{within-market}), compares the relative performance of the five risk-based portfolios in each of the five market types, and the second (Section \ref{cross-market}), investigates how each portfolio's relative performance changes across the market types. However, some interesting trends and caveats regarding the portfolio concentration measures are first discussed.
 
-#### A Note on the Potfolio Concerntration Metrics \label{cn}
+#### A Note on the Portfolio Concentration Metrics \label{cn}
 
 The average inverse HHI and entropy for each portfolio across the five market types can be found in Tables \ref{rm1}, \ref{rm2}, \ref{rm3}, \ref{rm4} and \ref{rm5}. Throughout the five market types, the inverse HHI and entropy measures are typically at odds. In other words, portfolios rated as highly diversified by the inverse HHI are rated as relatively undiversified in entropy and _vice verse_. An interesting observation is that the inverse HHI measure coincides better with the portfolio risk measures. 
 
@@ -420,6 +420,7 @@ load("data/enb_m2.rda")
 
 entropy_m2 <- table_entropy(enc = enc_m2, enb = enb_m2)
 risk_metrics_m2 <- table_risk_metrics(perf_m2)
+
 
 tab_m2 <- rbind(risk_metrics_m2, entropy_m2)
 stargazer::stargazer(
@@ -693,16 +694,16 @@ load("data/emp_sd.rda")
 moments <-
   tibble(
     Asset =  glue::glue("Asset_{1:length(emp_mu)}"),
-    Mu = emp_mu %>% as.double() %>% round(5),
-    Sd = emp_sd %>% as.double() %>% round(5)
+    Mu = emp_mu %>% as.double() %>% round(4) %>% format(scientific=F),
+    Sd = emp_sd %>% as.double() %>% round(4)%>% format(scientific=F)
   )
 moment_table <-
-  bind_cols(moments[1:25, ], moments[26:50, ]) %>% set_names( c("Asset", "Mean", "Sd", "Asset...", "Mean...", "Sd..."))
+  bind_cols(moments[1:25, ], moments[26:50, ]) %>% set_names( c("Asset", "Mean", "Sd", "Asset (cont.)", "Mean (cont.)", "Sd (cont.)"))
 
 stargazer::stargazer(
   moment_table,
   header = FALSE,
-  title = "Asset Means and Sd's",
+  title = "Calibrated Means and Standard Deviations of Simulated Assets",
   type = "latex",
   summary = FALSE,
   rownames = FALSE,
