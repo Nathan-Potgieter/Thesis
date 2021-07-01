@@ -1,5 +1,5 @@
-The Effect of Correlation Structure on Portfolio Optimisation
-Performance
+# The Effect of Correlation Structure on the Performance of Risk Optimised Portfolios
+
 ================
 Nathan Potgieter
 
